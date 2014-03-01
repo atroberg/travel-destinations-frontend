@@ -2,3 +2,5 @@
 node_modules/*
 .sass-cache/*
 phonegap/platforms/*
+phonegap/www/js/bundle.js
+phonegap/www/css/main.css
