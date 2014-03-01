@@ -1,31 +1,39 @@
+var $ = require('./lib/jquery.min.js');
 var Wikivoyage = require('./modules/wikivoyage');
 var MediawikiMobileParser = require('./modules/mediawiki_mobile_parser.js');
+var destinationTemplate = require('./templates/destination.hbs');
+var accordion = require('./modules/accordion');
 
-var testHBS = require('./templates/test.hbs');
+$(document).ready(function initApp() {
+  var $destination = $('#destination');
 
-console.log(testHBS({test: "LOTEM IPSUM"}));
+  Wikivoyage.getPage({
+    url: 'http://en.m.wikivoyage.org/wiki/Helsinki',
+    callback: function(error, data) {
 
-Wikivoyage.getPage({
-  url: 'http://en.wikivoyage.org/wiki/Helsinki',
-  callback: function(error, data) {
+      if ( error ) {
 
-    if ( error ) {
-
-    }
-
-    else {
-      var html;
-
-      try {
-        html = MediawikiMobileParser.setHtml(data)
-                    .getActualContent().removeTags(['script', 'noscript'])
-                    .fixPaths().getHtml();
-      }
-      catch (e) {
-        // TODO
       }
 
-    }
+      else {
+        var destination = {};
 
-  },
+        try {
+          var parser = MediawikiMobileParser.setHtml(data)
+                        .getActualContent().removeBanner();
+          destination.title = parser.getTitle();
+          destination.html = parser.getHtml();
+        }
+        catch (e) {
+          // TODO
+          console.log(e);
+        }
+
+        $destination.hide().html(destinationTemplate({destination: destination}));
+        accordion($destination);
+        $destination.show();
+      }
+
+    },
+  });
 });

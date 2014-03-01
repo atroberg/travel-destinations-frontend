@@ -1,38 +1,50 @@
+var $ = require('../lib/jquery.min.js');
+
 var MediawikiMobileParser = {
 
   setHtml: function(html) {
-    this.html = html;
+    html = this.removeTags(html, ['script', 'noscript']);
+    html = this.fixPaths(html);
+    this.$el = $('<div />').html(html);
+    this.title = this.getTitle();
     return this;
   },
 
+  // Return cleaned html
   getHtml: function() {
-    return this.html;
+    return this.$el.html().replace(/data-fakesrc=/g, 'src=');
+  },
+
+  getTitle: function() {
+    if ( this.title )
+      return this.title;
+    else
+      return this.$el.find('div.name:first').text();
   },
 
   getActualContent: function() {
-    var matches = this.html.match(/<div[^>]*id="content"[^>]*>([^]*?)<\/div>\s*<\/div>\s*<div[^>]*id="footer/);
-    this.html = matches[1];
+    this.$el.html(this.$el.find('#content').html());
+    return this;
 
-    // TODO: add checks if something went wrong
+    // TODO: checks if parsing worked
+  },
 
+  removeBanner: function() {
+    this.$el.find('#mf-pagebanner').remove();
     return this;
   },
 
-  removeTags: function(tags) {
-    var parentObj = this;
-
+  removeTags: function(html, tags) {
     tags.forEach(function(tag) {
       var regex = new RegExp('<' + tag + '[^>]*>.*?</\\s*' + tag + '\\s*>', 'g');
-      parentObj.html = parentObj.html.replace(regex, '');
+      html = html.replace(regex, '');
     });
 
-    return this;
+    return html;
   },
 
-  fixPaths: function() {
-    // TODO
-    // this.html = "";
-    return this;
+  fixPaths: function(html) {
+    return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http://\\$1"');
   },
 
 };
