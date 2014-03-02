@@ -1,5 +1,3 @@
-var $ = require('../lib/jquery.min.js');
-
 var MediawikiMobileParser = {
 
   setHtml: function(html) {

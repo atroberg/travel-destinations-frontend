@@ -1,0 +1,7 @@
+{{#if videos}}
+  {{#each videos}}
+    <img src="{{this.snippet.thumbnails.medium.url}}" data-href="http://www.youtube.com/watch?v={{this.id.videoId}}">
+  {{/each}}
+{{else}}
+  <p>No videos found.</p>
+{{/if}}

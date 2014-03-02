@@ -1,15 +1,32 @@
-<nav id="topbar" class="navbar navbar-default">
-  <i class="fa fa-chevron-left"></i>
+<nav>
+  <i class="back fa fa-chevron-left"></i>
   <h1>{{destination.title}}</h1>
-  <i class="fa fa-heart-o"></i>
-  <i class="fa fa-ellipsis-v"></i>
+  <div class="right">
+    <i class="fa fa-heart"></i>
+    <i class="menu fa fa-ellipsis-v"></i>
+  </div>
   <ul id="tabs_menu">
-    <li>Info</li>
+    <li class="active">Info</li>
     <li>Photos</li>
     <li>Videos</li>
     <li>Weather</li>
   </ul>
+  <div class="loading_status"><span></span></div>
 </nav>
-<div class="main_content" id="destination_content">
-  {{{destination.html}}}
+<div id="destination_tabs">
+  <div class="content tab" id="destination_content">
+    <p class="ajax_loading">
+      <i class="ajax_spinner fa fa-spinner fa-spin"></i>
+    </p>
+  </div>
+  <div class="tab" id="photos_tab">
+    <p class="ajax_loading">
+      <i class="ajax_spinner fa fa-spinner fa-spin"></i>
+    </p>
+  </div>
+  <div class="tab" id="videos_tab">
+    <p class="ajax_loading">
+      <i class="ajax_spinner fa fa-spinner fa-spin"></i>
+    </p>
+  </div>
 </div>

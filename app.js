@@ -1,39 +1,32 @@
-var $ = require('./lib/jquery.min.js');
-var Wikivoyage = require('./modules/wikivoyage');
-var MediawikiMobileParser = require('./modules/mediawiki_mobile_parser.js');
-var destinationTemplate = require('./templates/destination.hbs');
-var accordion = require('./modules/accordion');
+var loadPage = require('./modules/load_page');
 
 $(document).ready(function initApp() {
   var $destination = $('#destination');
 
-  Wikivoyage.getPage({
-    url: 'http://en.m.wikivoyage.org/wiki/Helsinki',
-    callback: function(error, data) {
+  $destination.on('click', function(e) {
+    e.preventDefault();
+  }).hammer().on('tap', 'a', function(e) {
+    
+    $el = $(this);
+    var url = $el.attr('href');
 
-      if ( error ) {
+    // Check if relative url => load from wikivoyage
+    if ( url.match(/^\/\//) === null
+          && url.match(/:\/\//) === null ) {
+      e.preventDefault();
 
-      }
+      loadPage($destination, url);
+    }
 
-      else {
-        var destination = {};
-
-        try {
-          var parser = MediawikiMobileParser.setHtml(data)
-                        .getActualContent().removeBanner();
-          destination.title = parser.getTitle();
-          destination.html = parser.getHtml();
-        }
-        catch (e) {
-          // TODO
-          console.log(e);
-        }
-
-        $destination.hide().html(destinationTemplate({destination: destination}));
-        accordion($destination);
-        $destination.show();
-      }
-
-    },
+    // open in external browser
+    else {
+      window.open(url, '_system');
+    }
   });
+
+  $destination.hammer().on('tap', '#videos_tab img', function(e) {
+    window.open($(this).attr('data-href'), '_system');
+  });
+
+  loadPage($destination, '/wiki/Helsinki');
 });

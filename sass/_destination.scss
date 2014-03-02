@@ -1,51 +1,164 @@
-#topbar h1 {
-  display:inline-block;
-}
+$accordion-title-bgcolor:#39b3d7;
+$nav-bgcolor:#39b3d7;
 
-#tabs_menu {
-  margin:0;
-  padding:0;
-}
+nav {
+  background:$nav-bgcolor;
+  color:white;
+  text-align:center;
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
 
-#tabs_menu li {
-  display:inline-block;
-}
+  h1 {
+    display:inline-block;
+    font-size:2em;
+    font-family:"RobotoRegular";
+  }
 
+  i {
+    font-size:2em;
+    margin:.15em .1em;
+  }
+
+  .back {
+    float:left;
+  } 
+
+  .right {
+    float:right;
+  }
+
+  .menu {
+    margin-left:.5em;
+    margin-right:.5em;
+  }
+
+  #tabs_menu {
+    margin:0;
+    padding:0;
+    font-size:1.3em;
+    margin-bottom:.3em;
+  }
+
+  #tabs_menu li:first-child {
+    margin-left:0;
+  }
+
+  #tabs_menu li {
+    display:inline-block;
+    padding:0 .5em;
+    margin-left:.5em;
+  }
+
+  #tabs_menu li.active {
+    font-weight:bold;
+    border-bottom:2px solid white;
+  }
+
+  .loading_status {
+    width:100%;
+    height:4px;
+    background:#B0E1EF;
+    transition:width $transition-duration;
+
+    span {
+      display:none;
+      width:10px;
+      height:10px;
+      float:right;
+      background:red;
+      border-radius:10px;
+    }
+  }
+}
 
 // Content definitions below
 
-#destination_content img {
-  max-width:95%;
+// Need to override wikivoyage
+h1, h2, h3, h4, h5, h6 {
+  font-family:inherit;
 }
 
-// Hide these elements
-.iconbox, .edit-page, .noprint {
-  display:none;
-}
-
-// Accordion: hide content by default
-#destination_content > h2 + div {
-  display:none;
-  background:#F0F0F0;
-}
-
-#destination_content > h2.expanded + div {
-  display:block;
-}
-
-#destination_content > h2 {
-  background:#E8E8E8;
-  padding:.7em 1em;
-  margin-top:.5em;
-}
-
-#destination_content > h2 i {
-  margin-right:.5em;
+#destination_tabs {
+  width:400%;
   transition:all $transition-duration;
-  -webkit-transform:rotateZ(0deg);
+  -webkit-transform:translate3d(0,0,0);
+  min-height:100%;
+  overflow:hidden;
+
+  .ajax_loading {
+    text-align:center;
+    margin-top:2em;
+
+    .ajax_spinner {
+      font-size:3em;
+      display:block;
+      margin:auto;
+      -webkit-animation:spin 1s infinite linear;
+    }
+  }
+
 }
 
-#destination_content > h2.expanded i {
-  -webkit-transform:rotateZ(90deg);
+#destination_tabs > .tab {
+  width:25%;
+  float:left;
+  margin-top:86px;
 }
 
+#destination_content {
+  margin-left:0;
+  margin-right:0;
+  margin-bottom:0;
+
+  .thumbcaption {
+    overflow:hidden;
+  }
+
+  img {
+    max-width:95%;
+  }
+
+  > div {
+    margin:.5em .9em;
+  }
+
+  // Hide these elements
+  .iconbox, .edit-page, .noprint {
+    display:none;
+  }
+
+  #region_list table td,
+  #region_list table th {
+    border:0;
+  }
+
+  // Accordion: hide content by default
+  > h2 + div {
+    display:none;
+  }
+
+  > h2.expanded + div {
+    display:block;
+  }
+
+  > h2 {
+    background:$accordion-title-bgcolor;
+    color:white;
+    padding:.7em 1em;
+    margin-top:.5em;
+    font-family:"RobotoRegular";
+  }
+
+  > h2 i {
+    margin-right:.5em;
+    transition:all $transition-duration;
+    -webkit-transform:rotateZ(0deg);
+  }
+
+  > h2.expanded i {
+    -webkit-transform:rotateZ(90deg);
+  }
+
+}

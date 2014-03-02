@@ -13,10 +13,9 @@ body {
   //font-size:18px;
 }
 
-.main_content {
-  margin:.5em;
-}
-
 #destination {
+  width:100%;
+  overflow:hidden;
+
   @import 'destination';
 }

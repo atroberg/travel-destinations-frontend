@@ -4,3 +4,5 @@ node_modules/*
 phonegap/platforms/*
 phonegap/www/js/bundle.js
 phonegap/www/css/main.css
+phonegap/plugins/*/*
+bower_components/*

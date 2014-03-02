@@ -23,14 +23,33 @@ module.exports = function(grunt) {
         }
       }
     },
+    copy: {
+      dev: {
+        files: [
+          {
+            src: 'bower_components/jquery-hammerjs/jquery.hammer.min.js',
+            dest: 'phonegap/www/js/jquery.hammer.min.js',
+          },
+          {
+            src: 'bower_components/hammerjs/hammer.min.js',
+            dest: 'phonegap/www/js/hammer.min.js',
+          },
+          {
+            src: 'bower_components/jquery/dist/jquery.min.js',
+            dest: 'phonegap/www/js/jquery.min.js',
+          },
+        ]
+      }
+    },
   });
 
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-sass');
 
   // Default task(s).
   grunt.registerTask('default', ['browserify', 'jshint']);
-  grunt.registerTask('all', ['browserify', 'jshint', 'sass']);
+  grunt.registerTask('all', ['browserify', 'jshint', 'sass', 'copy']);
 
 };
