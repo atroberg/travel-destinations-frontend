@@ -29,8 +29,8 @@ module.exports = function loadDestination($destination, path, title, onComplete)
           var destination = {};
 
           try {
-            var parser = MediawikiMobileParser.setHtml(data)
-                          .getActualContent().removeBanner();
+            var parser = MediawikiMobileParser.setHtml(data).getActualContent()
+                          .removeBanner().removeEmptySections();
             destination.title = parser.getTitle();
             destination.html = parser.getHtml();
           }

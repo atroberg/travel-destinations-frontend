@@ -139,5 +139,5 @@ $(document).ready(function initApp() {
 
 
   // TODO: for this test just init with Helsinki
-  showDestination('/wiki/Helsinki');
+  showDestination('/wiki/Berne');
 });

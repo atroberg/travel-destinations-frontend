@@ -41,6 +41,17 @@ var MediawikiMobileParser = {
     return html;
   },
 
+  removeEmptySections: function() {
+    this.$el.find('> div').each(function(i, div) {
+      if ( div.innerHTML.trim() === '' ) {
+        var $div = $(div);
+        $div.prev('h2').remove();
+        $div.remove();
+      }
+    });
+    return this;
+  },
+
   fixPaths: function(html) {
     return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http://\\$1"');
   },
