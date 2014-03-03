@@ -1,39 +1,27 @@
 module.exports = function autohideNav($el) {
 
   var scrollTop = 0;
-  var elHeight = $el.height();
-  var navVisible = false;
-  var currentPos = 0;
+  var menuVisible = true;
+  var menuHeight = $el.outerHeight();
 
-  $(window).on('scroll', function(e) {
-    var tmp = $(window).scrollTop();
+  // Binding to onscroll is resource intensive,
+  // use interval instead
+  window.setInterval(function() {
+    var newScrollTop = $(window).scrollTop();
 
-    // Are we scrolling backwards ( = up )
-    if ( tmp < scrollTop ) {
-      if ( !navVisible ) {
-        currentPos = scrollTop - elHeight;
-        $el.css('top', currentPos + 'px');
-        navVisible = true;
-      }
-      else if ( tmp <= currentPos ) {
-        $el.css({
-          position: 'fixed',
-          'top': '0px'
-        });
-      }
-    }
-    else {
-      if ( navVisible ) {
-        $el.css({
-          position: 'absolute',
-          'top': tmp + 'px'
-        });
-        navVisible = false;
-      }
+    // User scrolled down the screen => hide nav
+    if ( menuVisible && newScrollTop > scrollTop && newScrollTop > menuHeight ) {
+      $el.css('transform', 'translate3d(0,' + (-menuHeight) + 'px,0)');
+      menuVisible = false;
     }
 
-    scrollTop = tmp;
+    else if ( !menuVisible && newScrollTop < scrollTop ) {
+      $el.css('transform', 'translate3d(0,0,0)');
+      menuVisible = true;
+    }
 
-  });
+    scrollTop = newScrollTop;
+
+  }, 250);
 
 };

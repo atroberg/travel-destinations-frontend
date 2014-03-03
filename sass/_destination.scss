@@ -9,6 +9,8 @@ nav {
   top:0;
   width:100%;
   z-index:1000;
+  transition:-webkit-transform $transition-duration;
+  -webkit-transform: translate3d(0,0,0);
 
   h1 {
     display:inline-block;
