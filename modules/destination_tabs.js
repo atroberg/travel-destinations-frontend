@@ -1,51 +1,28 @@
-var flickrPhotoSearch = require('./flickr_photo_search');
-var Youtube = require('./youtube_videos');
+var DestinationTabs = {
 
-var videoTemplate = require('../templates/videos.hbs');
+  setElement: function setElement($el) {
+    this.$container = $el;
+  },
 
-module.exports = function destinationTabs($el, title) {
+  tabFunctions: {},
 
-  var $viewport = $el.find('#destination_tabs');
-  var $menu = $el.find('#tabs_menu');
-  var tabCount = $menu.find('li').length;
-  var currentTab = 0;
+  bindTabFunction: function(tab, f) {
+    this.tabFunctions[tab] = f;
+  },
 
-  var htmlCache = {};
+  htmlCache: {},
 
-  var tabFunctions = {
-    // Photos
-    1: function($tab) {
-      flickrPhotoSearch(title, function flickrPhotoCallback(error, photos) {
+  clearCache: function clearCache() {
+    this.htmlCache = {};
+  },
 
-        if ( error ) {
-          // TODO
-        }
+  currentTab: 0,
 
-        else {
-          try {
-            var imgHtml = '';
-            $.each(photos, function(index, photo) {
-              imgHtml += '<img src="' + photo.url + '">';
-            });
-            $tab.html(imgHtml);
-          }
-          catch (e) {
-            // TODO: no images found msg
-          }
-        }
+  focusToTab: function focusToTab(index) {
 
-      });
-    },
-
-    // Videos
-    2: function($tab) {
-      Youtube.search(title, function(error, videos) {
-        $tab.html(videoTemplate({videos: videos}));
-      });
-    },
-  };
-
-  function focusToTab(index) {
+    $menu = this.$container.find('nav #tabs_menu');
+    $viewport = this.$container.find('#destination_tabs');
+    var tabCount = $menu.find('li').length;
 
     if ( index > tabCount - 1 )
       index = tabCount - 1;
@@ -55,40 +32,43 @@ module.exports = function destinationTabs($el, title) {
     var value = 100 / tabCount * index;
     $viewport.css('transform', 'translate3d(' + (-value) + '%,0,0)');
 
-    if ( index !== currentTab ) {
+    if ( index !== this.currentTab ) {
         $menu.find('.active').removeClass('active');
         $menu.find('li:eq(' + index + ')').addClass('active');
 
-        var $prevTab = $viewport.find('.tab:eq(' + currentTab + ')');
-        htmlCache[currentTab] = $prevTab.html();
+        var $prevTab = $viewport.find('.tab:eq(' + this.currentTab + ')');
+        this.htmlCache[this.currentTab] = $prevTab.html();
         $prevTab.html('');
 
-        if ( htmlCache[index] ) {
+        if ( this.htmlCache[index] ) {
           var $nextTab = $viewport.find('.tab:eq(' + index + ')');
-          $nextTab.html(htmlCache[index]);
+          $nextTab.html(this.htmlCache[index]);
         }
 
         else {
-          if ( tabFunctions[index] ) {
-            var $targetTab = $viewport.find('> .tab:eq(' + index + ')');
-            console.log($targetTab);
-            tabFunctions[index]($targetTab);
+          var $targetTab = $viewport.find('> .tab:eq(' + index + ')');
+
+          try {
+            this.tabFunctions[$targetTab.attr('data-tab-function')]($targetTab);
+          }
+          catch(e) {
+            console.log(e);
           }
         }
 
-        currentTab = index;
+        this.currentTab = index;
     }
-  }
 
-  $menu.hammer().on('tap', 'li', function(e) {
-    focusToTab($(this).index());
-  });
+  },
 
-  $viewport.hammer({swipe_velocity: 0.1}).on('swipeleft', function(e) {
-    focusToTab(currentTab + 1);
-  })
-  .on('swiperight', function(e) {
-    focusToTab(currentTab - 1);
-  });
+  nextTab: function() {
+    this.focusToTab(this.currentTab + 1);
+  },
+
+  prevTab: function() {
+    this.focusToTab(this.currentTab - 1);
+  },
 
 };
+
+module.exports = DestinationTabs;

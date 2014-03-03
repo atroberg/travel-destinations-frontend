@@ -3,20 +3,16 @@ var MediawikiMobileParser = require('./mediawiki_mobile_parser.js');
 var destinationTemplate = require('./../templates/destination.hbs');
 var accordion = require('./accordion');
 var autohideNav = require('./autohide_nav');
-var destinationTabs = require('./destination_tabs');
 
 var BASE_URL = 'http://en.m.wikivoyage.org';
 
-module.exports = function loadPage($destination, path, title) {
-    title = title || decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
-
+module.exports = function loadDestination($destination, path, title) {
     $destination.html(destinationTemplate({destination:{title:title}}));
 
     var $loadingStatus = $destination.find('.loading_status');
     $loadingStatus.css('width', '0%');
 
     autohideNav($destination.find('nav:first'));
-    destinationTabs($destination, title);
 
     Wikivoyage.getPage({
       url: BASE_URL + path,
@@ -46,8 +42,8 @@ module.exports = function loadPage($destination, path, title) {
           $destinationContent = $destination.find('#destination_content');
 
           $destinationContent.hide().html(destination.html);
-          
-          accordion($destination);
+
+          accordion($destinationContent);
 
           $destinationContent.show();
         }
