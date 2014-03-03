@@ -6,7 +6,7 @@ var autohideNav = require('./autohide_nav');
 
 var BASE_URL = 'http://en.m.wikivoyage.org';
 
-module.exports = function loadDestination($destination, path, title) {
+module.exports = function loadDestination($destination, path, title, onComplete) {
     $destination.html(destinationTemplate({destination:{title:title}}));
 
     var $loadingStatus = $destination.find('.loading_status');
@@ -46,6 +46,10 @@ module.exports = function loadDestination($destination, path, title) {
           accordion($destinationContent);
 
           $destinationContent.show();
+
+          if ( typeof onComplete === 'function' ) {
+            onComplete();
+          }
         }
 
       },

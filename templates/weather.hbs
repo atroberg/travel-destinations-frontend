@@ -1,8 +1,27 @@
 {{#if forecast}}
-  {{#each forecast}}
-    <div>
-      Icon: {{this.icon}}<br>
-      Temperature: {{this.temp.day}}
-    </div>
-  {{/each}}
+  <div class="forecast">
+    <h2>Forecast</h2>
+    {{#each forecast}}
+      <div>
+        <label>{{this.dayLabel}}</label>
+        <img src="images/weather_icons/{{this.icon}}.png">
+        <span>Day: <span>{{this.temp.day}}℃</span></span>
+        <span>Night: <span>{{this.temp.night}}℃</span></span>
+      </div>
+    {{/each}}
+  </div>
+  <br>
+{{/if}}
+
+{{#if climateTable}}
+  <div class="climate_table">
+    <h2>Climate</h2>
+    {{#each climateTable}}
+      <ul>
+        {{#each this}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/each}}
+  </div>
 {{/if}}

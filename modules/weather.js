@@ -49,8 +49,6 @@ var Weather = {
               day.icon = null;
             }
 
-            day.date = new Date(day.dt);
-
             forecastList.push(day);
           });
 
@@ -64,6 +62,29 @@ var Weather = {
         options.callback(msg);
       },
     });
+  },
+
+  // Parse html from wikivoyage and return table as an array
+  getClimateTable: function getClimateTable($el) {
+    var $weatherTable = $el.find('#climate_table');
+
+    if ( $weatherTable.length <= 0 )
+      throw "no_weather_data_found";
+
+    var climateTable = [];
+
+    $weatherTable.find('tr').each(function(i, row) {
+      $row = $(row);
+      if ( $row.text().trim() !== '' ) {
+        var row = [];
+        $row.find('td,th').each(function(j, cell) {
+          row.push($(cell).text().trim());
+        });
+        climateTable.push(row);
+      }
+    });
+
+    return climateTable;
   },
 
 };

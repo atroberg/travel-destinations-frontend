@@ -5,14 +5,33 @@ var Youtube = require('./modules/youtube_videos');
 var videoTemplate = require('./templates/videos.hbs');
 var weatherTemplate = require('./templates/weather.hbs');
 var Weather = require('./modules/weather');
+var moment = require('moment');
 
 $(document).ready(function initApp() {
   var currentDestination = {};
   var $destination = $('#destination');
 
+  // Reference to climateTable that is parsed
+  // from the wikivoyage article. It's a bit ugly
+  // to have kind of a "global" variable, but the
+  // current architecture doesn't allow better solutions?
+  var climateTable;
+
   function showDestination(path) {
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
-    loadDestination($destination, path, currentDestination.title);
+    loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
+      // We need to parse climate table from wikivoyage html
+      // already at this stage, because otherwise we might not
+      // be able to access the DOM when weather tab is loaded
+      // (because the DOM is removed and instead just the html
+      // is preserved when changing tabs)
+      try {
+        climateTable = Weather.getClimateTable($destination);
+      }
+      catch(e) {
+        console.log(e);
+      }
+    });
     DestinationTabs.clearCache();
   }
 
@@ -93,8 +112,15 @@ $(document).ready(function initApp() {
     Weather.getForecast({
       q: currentDestination.title,
       callback: function(error, forecastList) {
-        console.log(error);
-        $tab.html(weatherTemplate({forecast: forecastList}));
+        $.each(forecastList, function(i, day) {
+          day.dayLabel = moment.unix(day.dt).format('ddd D.M');
+          day.temp.day = Math.round(day.temp.day);
+          day.temp.night = Math.round(day.temp.night);
+        });
+        $tab.html(weatherTemplate({
+          forecast: forecastList,
+          climateTable: climateTable,
+        }));
       },
     });
   }),
