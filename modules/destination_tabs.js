@@ -1,3 +1,5 @@
+var settings = require('./settings');
+
 var DestinationTabs = {
 
   setElement: function setElement($el) {
@@ -38,7 +40,11 @@ var DestinationTabs = {
 
         var $prevTab = $viewport.find('.tab:eq(' + this.currentTab + ')');
         this.htmlCache[this.currentTab] = $prevTab.html();
-        $prevTab.html('');
+
+        // Delete contents only after animation is complete
+        setTimeout(function() {
+          $prevTab.html('');
+        }, settings.animationDurations.tabs);
 
         if ( this.htmlCache[index] ) {
           var $nextTab = $viewport.find('.tab:eq(' + index + ')');
