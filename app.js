@@ -3,6 +3,8 @@ var DestinationTabs = require('./modules/destination_tabs');
 var flickrPhotoSearch = require('./modules/flickr_photo_search');
 var Youtube = require('./modules/youtube_videos');
 var videoTemplate = require('./templates/videos.hbs');
+var weatherTemplate = require('./templates/weather.hbs');
+var Weather = require('./modules/weather');
 
 $(document).ready(function initApp() {
   var currentDestination = {};
@@ -18,7 +20,7 @@ $(document).ready(function initApp() {
   $destination.on('click', 'a', function(e) {
     e.preventDefault();
   }).hammer().on('tap', 'a', function(e) {
-    
+
     $el = $(this);
     var url = $el.attr('href');
 
@@ -87,7 +89,17 @@ $(document).ready(function initApp() {
     });
   });
 
-  
+  DestinationTabs.bindTabFunction('weather', function($tab) {
+    Weather.getForecast({
+      q: currentDestination.title,
+      callback: function(error, forecastList) {
+        console.log(error);
+        $tab.html(weatherTemplate({forecast: forecastList}));
+      },
+    });
+  }),
+
+
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');
 });
