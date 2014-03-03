@@ -11,6 +11,13 @@ $(document).ready(function initApp() {
   var currentDestination = {};
   var $destination = $('#destination');
 
+  // History management
+  window.onpopstate = function(event) {
+    if ( event.state ) {
+      showDestination(event.state.url);
+    }
+  };
+
   // Reference to climateTable that is parsed
   // from the wikivoyage article. It's a bit ugly
   // to have kind of a "global" variable, but the
@@ -18,7 +25,12 @@ $(document).ready(function initApp() {
   var climateTable;
 
   function showDestination(path) {
+
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
+
+    // Back history management
+    history.pushState({url:path}, currentDestination.title);
+
     loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
       // We need to parse climate table from wikivoyage html
       // already at this stage, because otherwise we might not
