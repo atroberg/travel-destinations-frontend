@@ -1,9 +1,13 @@
-$accordion-title-bgcolor:#39b3d7;
-$nav-bgcolor:#39b3d7;
+$accordion-title-bgcolor:white;
+$accordion-title-color:#474747;
+$accordion-title-border-color:#e7e7e7;
+$nav-bgcolor:#ededed;
+$nav-color:#474747;
+$nav-border-bottom-color:#9c9c9c;
 
 nav {
   background:$nav-bgcolor;
-  color:white;
+  color:$nav-color;
   text-align:center;
   position:fixed;
   top:0;
@@ -15,12 +19,14 @@ nav {
   h1 {
     display:inline-block;
     font-size:2em;
+    line-height:1em;
+    margin-top:.3em;
     font-family:"RobotoRegular";
   }
 
   i {
     font-size:2em;
-    margin:.15em .1em;
+    margin:.3em .2em;
   }
 
   .back {
@@ -29,6 +35,7 @@ nav {
 
   .right {
     float:right;
+    margin-right:.8em;
   }
 
   .menu {
@@ -41,6 +48,7 @@ nav {
     padding:0;
     font-size:1.3em;
     margin-bottom:.3em;
+    clear:both;
   }
 
   #tabs_menu li:first-child {
@@ -55,23 +63,14 @@ nav {
 
   #tabs_menu li.active {
     font-weight:bold;
-    border-bottom:2px solid white;
+    border-bottom:2px solid $nav-border-bottom-color;
   }
 
   .loading_status {
     width:100%;
-    height:4px;
-    background:#B0E1EF;
+    height:2px;
+    background:$nav-border-bottom-color;
     transition:width $transition-duration;
-
-    span {
-      display:none;
-      width:10px;
-      height:10px;
-      float:right;
-      background:red;
-      border-radius:10px;
-    }
   }
 }
 
@@ -106,7 +105,7 @@ h1, h2, h3, h4, h5, h6 {
 #destination_tabs > .tab {
   width:25%;
   float:left;
-  margin-top:86px;
+  margin-top:92px;
 }
 
 #destination_content {
@@ -123,7 +122,31 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   > div {
-    margin:.5em .9em;
+    margin:.5em 1.1em;
+    margin-top:0;
+
+    // prevent infobox from overflowing
+    // over next div
+    overflow:hidden;
+
+    > h1:first-child,
+    > h2:first-child,
+    > h3:first-child,
+    > h4:first-child,
+    > h5:first-child,
+    > h6:first-child {
+      padding-top:0;
+      margin-top:0;
+    }
+
+    // Ensure min-width for floating paragraphs
+    // Credits: http://css-tricks.com/minimum-paragraph-widths/
+    p:before {
+        content: "";
+        width: 10em;
+        display: block;
+        overflow: hidden;
+    }
   }
 
   // Hide these elements
@@ -145,11 +168,15 @@ h1, h2, h3, h4, h5, h6 {
     display:block;
   }
 
+  > h2:first-of-type {
+    border-top:0;
+  }
+
   > h2 {
     background:$accordion-title-bgcolor;
-    color:white;
+    color:$accordion-title-color;
     padding:.7em 1em;
-    margin-top:.5em;
+    border-top:2px solid $accordion-title-border-color;
     font-family:"RobotoRegular";
   }
 
