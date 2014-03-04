@@ -6,6 +6,7 @@ var videoTemplate = require('./templates/videos.hbs');
 var weatherTemplate = require('./templates/weather.hbs');
 var Weather = require('./modules/weather');
 var moment = require('moment');
+var settings = require('./modules/settings');
 
 $(document).ready(function initApp() {
   var currentDestination = {};
@@ -94,11 +95,25 @@ $(document).ready(function initApp() {
     DestinationTabs.focusToTab($(this).index());
   });
 
-  $destination.hammer({swipe_velocity: 0.1}).on('swipeleft', '#destination_tabs', function(e) {
-    DestinationTabs.nextTab();
+  // Need to prevent drag event from firing tab change multiple times
+  var tabSwitchRequested = false;
+  $destination.hammer().on('dragleft dragright', '#destination_tabs', function(e) {
+    e.gesture.preventDefault();
+
+    if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
+
+      if ( e.gesture.direction === 'left' ) {
+        DestinationTabs.nextTab();
+      }
+      else {
+        DestinationTabs.prevTab();
+      }
+
+      tabSwitchRequested = true;
+    }
   })
-  .on('swiperight', function(e) {
-    DestinationTabs.prevTab();
+  .on('dragend', function(e) {
+    tabSwitchRequested = false;
   });
 
   DestinationTabs.bindTabFunction('photos', function($tab) {

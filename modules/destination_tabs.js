@@ -48,7 +48,15 @@ var DestinationTabs = {
 
         if ( this.htmlCache[index] ) {
           var $nextTab = $viewport.find('.tab:eq(' + index + ')');
-          $nextTab.html(this.htmlCache[index]);
+
+          // TODO: need to delay DOM manipulation
+          // until animation is done, because DOM
+          // manipulation is expensive and thus makes
+          // animation unresponsive
+          var parent = this;
+          setTimeout(function() {
+            $nextTab.html(parent.htmlCache[index]);
+          }, settings.animationDurations.tabs);
         }
 
         else {

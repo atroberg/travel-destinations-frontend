@@ -4,6 +4,7 @@ var settings = {
   openWeatherMapKey: 'ea3739d944e0f931dee8b175958316c0',
   animationDurations: {
     tabs: 200,
-  }
+  },
+  tabSwipeVelocity: 0.4,
 };
 module.exports = settings;
