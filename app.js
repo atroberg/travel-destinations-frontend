@@ -14,7 +14,7 @@ $(document).ready(function initApp() {
   // History management
   window.onpopstate = function(event) {
     if ( event.state ) {
-      showDestination(event.state.url);
+      showDestination(event.state.url, {addHistoryEntry:false});
     }
   };
 
@@ -24,12 +24,19 @@ $(document).ready(function initApp() {
   // current architecture doesn't allow better solutions?
   var climateTable;
 
-  function showDestination(path) {
+  function showDestination(path, options) {
+
+    options = options || {};
+    options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
+                                ? options.addHistoryEntry
+                                : true;
 
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
-    history.pushState({url:path}, currentDestination.title);
+    if ( options.addHistoryEntry ) {
+      history.pushState({url:path}, currentDestination.title);
+    }
 
     loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
       // We need to parse climate table from wikivoyage html
