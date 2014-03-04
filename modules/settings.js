@@ -5,6 +5,6 @@ var settings = {
   animationDurations: {
     tabs: 200,
   },
-  tabSwipeVelocity: 0.4,
+  tabSwipeVelocity: 0.2,
 };
 module.exports = settings;
