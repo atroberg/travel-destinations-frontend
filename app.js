@@ -11,6 +11,7 @@ var settings = require('./modules/settings');
 $(document).ready(function initApp() {
   var currentDestination = {};
   var $destination = $('#destination');
+  var $destinationHammer = $('#destination').hammer(settings.hammer);
 
   // History management
   window.onpopstate = function(event) {
@@ -58,7 +59,8 @@ $(document).ready(function initApp() {
   // Prevent default behavior for links
   $destination.on('click', 'a', function(e) {
     e.preventDefault();
-  }).hammer().on('tap', 'a', function(e) {
+  });
+  $destinationHammer.on('tap', 'a', function(e) {
 
     $el = $(this);
     var url = $el.attr('href');
@@ -78,12 +80,11 @@ $(document).ready(function initApp() {
   });
 
   // Open youtube videos with external app
-  $destination.hammer().on('tap', '#videos_tab img', function(e) {
+  $destinationHammer.on('tap', '#videos_tab img', function(e) {
     window.open($(this).attr('data-href'), '_system');
-  });
-
+  })
   // Accordion
-  $destination.hammer().on('tap', '#destination_content > h2', function(e) {
+  .on('tap', '#destination_content > h2', function(e) {
     var $title = $(this);
     $title.toggleClass('expanded');
   });
@@ -91,13 +92,13 @@ $(document).ready(function initApp() {
 
   // Tabs
   DestinationTabs.setElement($destination);
-  $destination.hammer().on('tap', 'nav #tabs_menu li', function(e) {
+  $destinationHammer.on('tap', 'nav #tabs_menu li', function(e) {
     DestinationTabs.focusToTab($(this).index());
   });
 
   // Need to prevent drag event from firing tab change multiple times
   var tabSwitchRequested = false;
-  $destination.hammer().on('dragleft dragright', function(e) {
+  $destinationHammer.on('dragleft dragright', function(e) {
     e.gesture.preventDefault();
 
     if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {

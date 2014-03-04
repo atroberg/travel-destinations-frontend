@@ -6,5 +6,9 @@ var settings = {
     tabs: 200,
   },
   tabSwipeVelocity: 0.2,
+  hammer: {
+    tap_max_distance: 20,
+    tap_max_touchtime: 400
+  },
 };
 module.exports = settings;
