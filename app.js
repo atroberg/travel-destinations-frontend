@@ -97,7 +97,7 @@ $(document).ready(function initApp() {
 
   // Need to prevent drag event from firing tab change multiple times
   var tabSwitchRequested = false;
-  $destination.hammer().on('dragleft dragright', '#destination_tabs', function(e) {
+  $destination.hammer().on('dragleft dragright', function(e) {
     e.gesture.preventDefault();
 
     if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {

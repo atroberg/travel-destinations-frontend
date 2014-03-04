@@ -4,6 +4,7 @@ $accordion-title-border-color:#e7e7e7;
 $nav-bgcolor:#ededed;
 $nav-color:#474747;
 $nav-border-bottom-color:#9c9c9c;
+$number-of-tabs:4;
 
 nav {
   background:$nav-bgcolor;
@@ -78,7 +79,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #destination_tabs {
-  width:400%;
+  width: $number-of-tabs * 100%;
   transition:all $transition-duration;
   -webkit-transform:translate3d(0,0,0);
   min-height:100%;
