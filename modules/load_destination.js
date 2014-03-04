@@ -22,7 +22,7 @@ module.exports = function loadDestination($destination, path, title, onComplete)
         $loadingStatus.css('width', '100%');
 
         if ( error ) {
-
+          // TODO
         }
 
         else {
