@@ -1,15 +1,46 @@
-div {
+$photo-background-color:#141414;
+
+#popup_gallery_fullscreen {
+  z-index:2000;
+  position:absolute;
+  overflow:hidden;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
-  background-size:contain;
-  background-repeat:no-repeat;
-  position:relative;
-  float:left;
+  background:$photo-background-color;
+  transition:-webkit-transform $transition-duration;
 
-  span {
-    position:absolute;
-    bottom:1em;
-    left:1em;
-    color:white;
+  div {
+    height:100%;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position: 50% 50%;
+    float:left;
+    position:relative;
+
+    > span {
+      width:100%;
+      position:absolute;
+      display:block;
+      left:0;
+      bottom:2em;
+      text-align:center;
+
+      span {
+        font-size:1.2em;
+        background:rgba($photo-background-color, .8);
+        color:white;
+        padding:.5em 1.2em;
+
+        // External link has this padding
+        padding-right:0;
+
+        .external_link {
+          margin-left:.3em;
+          padding:.5em 1.2em;
+        }
+      }
+    }
   }
 }

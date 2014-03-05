@@ -7,18 +7,18 @@ var weatherTemplate = require('./templates/weather.hbs');
 var Weather = require('./modules/weather');
 var moment = require('moment');
 var settings = require('./modules/settings');
+var AppHistory = require('./modules/history');
 
 $(document).ready(function initApp() {
   var currentDestination = {};
   var $destination = $('#destination');
   var $destinationHammer = $('#destination').hammer(settings.hammer);
 
-  // History management
-  window.onpopstate = function(event) {
-    if ( event.state ) {
-      showDestination(event.state.url, {addHistoryEntry:false});
-    }
-  };
+  AppHistory.init();
+
+  AppHistory.addPopHandler('loadDestination', function(state) {
+    showDestination(state.url, {addHistoryEntry:false});
+  });
 
   // Reference to climateTable that is parsed
   // from the wikivoyage article. It's a bit ugly
@@ -37,7 +37,7 @@ $(document).ready(function initApp() {
 
     // Back history management
     if ( options.addHistoryEntry ) {
-      history.pushState({url:path}, currentDestination.title);
+      AppHistory.push({url:path, popHandler: 'loadDestination'}, currentDestination.title);
     }
 
     loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
@@ -90,10 +90,12 @@ $(document).ready(function initApp() {
   });
 
   // Fullscreen gallery functionality for photos
+  AppHistory.addPopHandler('galleryFullscreen', function(state) {
+    Photos.fullscreenGallery.close();
+  });
   $destinationHammer.on('tap', '#photos_tab img', function(e) {
-    var html = Photos.fullscreenGallery({$images: $(this).parent().find('img')});
-    var popup = $('<div id="popup_gallery_fullscreen" />').html(html);
-    popup.appendTo('body');
+    AppHistory.pushAction({popHandler:'galleryFullscreen'}, 'Photos');
+    Photos.fullscreenGallery.open({$photos: $(this).parent().find('img'), index: $(this).index()});
   });
 
 
@@ -125,13 +127,10 @@ $(document).ready(function initApp() {
   });
 
   DestinationTabs.bindTabFunction('photos', function($tab) {
-    Photos.flickrPhotoSearch(currentDestination.title, function flickrPhotoCallback(error, html) {
-      if ( error ) {
-        // TODO
-      }
-      else {
-        $tab.html(html);
-      }
+    Photos.showTab({
+      keyword:currentDestination.title,
+      $tab:$tab,
+      $wikiTab: $destination.find('#destination_content'),
     });
   });
 

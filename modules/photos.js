@@ -4,6 +4,84 @@ var photosTabTemplate = require('../templates/photos.hbs');
 
 var Photos = {
 
+  photos: [],
+
+  showTab: function(options) {
+
+    // Automatically parse photos from wikivoyage article
+    if ( options.$wikiTab ) {
+      this.photos = this.photos.concat( options.$wikiTab.find('.thumbinner').map(function(i, el) {
+        $el = $(el);
+
+        var $img = $el.find('img:first');
+        if ( $img.attr('src').match(/\.jpe?g$/i) ) {
+
+          try {
+            var title = $el.find('.thumbcaption').text().trim();
+          }
+          catch(e){
+            var title = '';
+          }
+
+          var src = $img.attr('src');
+          var sizes = $img.attr('srcset')
+                        ? $img.attr('srcset').split(/,\s+/g)
+                        : null;
+
+          var photo = {
+            src: src,
+            title: title,
+            bigSrc: src,
+          };
+
+          if ( sizes && sizes.length > 0 ) {
+            var parsedSizes = {};
+
+            $.each(sizes, function(i, entry) {
+              entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
+
+              if ( entry ) {
+                parsedSizes[entry[2]] = entry[1];
+              }
+
+            });
+
+            if ( parsedSizes['2x'] ) {
+              photo.bigSrc = parsedSizes['2x'];
+            }
+            else if ( parsedSizes['1.5x'] ) {
+              photo.bigSrc = parsedSizes['1.5x'];
+            }
+
+          }
+
+          return photo;
+        }
+      }).get() );
+
+      if ( this.photos.length > 0 ) {
+        console.log(this.photos);
+        var html = photosTabTemplate({photos:this.photos});
+        options.$tab.html(html);
+      }
+    }
+
+    this.flickrPhotoSearch(options.keyword, function flickrPhotoCallback(error, photos) {
+      if ( error ) {
+        // TODO
+      }
+      else if ( photos.length > 0 ) {
+        Photos.photos = Photos.photos.concat(photos);
+        var html = photosTabTemplate({photos:Photos.photos});
+        options.$tab.html(html);
+      }
+      else {
+        // TODO
+        // Alert no photos?
+      }
+    });
+  },
+
   flickrPhotoSearch: function flickrPhotoSearch(keywords, callback) {
 
     function getImgSrc(photo, size) {
@@ -14,7 +92,7 @@ var Photos = {
                 ? keywords
                 : keywords.join(' ');
 
-    // Fetch images from Google image search
+    // Fetch photos from Google image search
     $.ajax({
       url: 'http://api.flickr.com/services/rest/?method=flickr.photos.search',
       type: 'GET',
@@ -44,7 +122,7 @@ var Photos = {
           };
         });
 
-        callback(null, photosTabTemplate({photos:photos}));
+        callback(null, photos);
       },
       error: function() {
         callback('error_fetching_photos');
@@ -52,17 +130,82 @@ var Photos = {
     });
   },
 
-  fullscreenGallery: function(options) {
+  fullscreenGallery: {
 
-    var images = options.$images.map(function(i, img) {
-      return {
-        src: $(this).attr('data-big-src'),
-        title: $(this).attr('title'),
-      };
-    }).get();
+    open: function(options) {
 
-    return fullscreenGalleryTemplate({images: images});
-  }
+      var currentIndex = options.index || 0;
+
+      var photos = options.$photos.map(function(i, img) {
+        return {
+          src: $(this).attr('data-big-src'),
+          title: $(this).attr('title'),
+          xbigSrc: $(this).attr('data-xbig-src'),
+        };
+      }).get();
+
+      var html = fullscreenGalleryTemplate({photos: photos});
+
+      var popup = $('<div id="popup_gallery_fullscreen" />').html(html);
+
+      var popupWidth = photos.length * 100;
+      popup.css({
+        'width': popupWidth + '%',
+        'top': $(window).scrollTop(),
+      })
+      .find('div').css('width', 100 / photos.length + '%');
+
+      popup.appendTo('body');
+
+      // Make sure we focus to correct photo on init
+      focusToPhoto(currentIndex);
+
+      var photoSwitchRequested = false;
+
+      popup.on('touchmove', function(e) {
+        e.preventDefault();
+      });
+
+      popup.hammer(settings.hammer).on('tap', '.external_link', function(e) {
+        window.open($(this).parents('div:first').attr('data-xbig-src'), '_system');
+      })
+      .on('dragleft dragright', function(e) {
+        e.gesture.preventDefault();
+
+        if ( !photoSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
+
+          if ( e.gesture.direction === 'left' ) {
+            focusToPhoto(currentIndex + 1);
+          }
+          else {
+            focusToPhoto(currentIndex - 1);
+          }
+
+          photoSwitchRequested = true;
+        }
+      })
+      .on('dragend', function(e) {
+        photoSwitchRequested = false;
+      });
+
+      function focusToPhoto(index) {
+
+        if ( index < 0 ) index = 0;
+        else if ( index > photos.length - 1 ) index = photos.length - 1;
+
+        currentIndex = index;
+
+        var translateX = -(100 / photos.length) * currentIndex + '%';
+        popup.css('transform', 'translate3d('+translateX+',0,0)');
+      }
+
+    },
+
+    close: function() {
+      $('#popup_gallery_fullscreen').remove();
+    },
+
+  },
 
 };
 

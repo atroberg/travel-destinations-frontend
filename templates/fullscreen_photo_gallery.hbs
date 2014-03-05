@@ -1,5 +1,5 @@
-{{#each images}}
-  <div style="background-image:url({{this.src}})">
-    <span>{{this.title}}</span>
+{{#each photos}}
+  <div style="background-image:url({{this.src}})" data-xbig-src="{{this.xbigSrc}}">
+    <span><span>{{this.title}} <i class="fa fa-external-link external_link"></i></span></span>
   </div>
 {{/each}}

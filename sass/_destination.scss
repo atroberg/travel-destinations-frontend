@@ -189,7 +189,19 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
-// Weather tab
+
+#photos_tab {
+  padding:0 4px;
+  line-height: 1em;
+
+  img {
+    width:7em;
+    height:7em;
+    margin:0 4px 3px 0;
+  }
+}
+
+
 #weather_tab {
 
   text-align: center;
