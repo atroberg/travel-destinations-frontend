@@ -4,13 +4,11 @@ var photosTabTemplate = require('../templates/photos.hbs');
 
 var Photos = {
 
-  photos: [],
-
   showTab: function(options) {
 
     // Automatically parse photos from wikivoyage article
     if ( options.$wikiTab ) {
-      this.photos = this.photos.concat( options.$wikiTab.find('.thumbinner').map(function(i, el) {
+      this.photos = options.$wikiTab.find('.thumbinner').map(function(i, el) {
         $el = $(el);
 
         var $img = $el.find('img:first');
@@ -57,7 +55,7 @@ var Photos = {
 
           return photo;
         }
-      }).get() );
+      }).get();
 
       if ( this.photos.length > 0 ) {
         var html = photosTabTemplate({photos:this.photos});

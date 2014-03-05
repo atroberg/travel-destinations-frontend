@@ -93,9 +93,9 @@ $(document).ready(function initApp() {
   AppHistory.addPopHandler('galleryFullscreen', function(state) {
     Photos.fullscreenGallery.close();
   });
-  $destinationHammer.on('tap', '#photos_tab img', function(e) {
+  $destinationHammer.on('tap', '#photos_tab div.photo', function(e) {
     AppHistory.pushAction({popHandler:'galleryFullscreen'}, 'Photos');
-    Photos.fullscreenGallery.open({$photos: $(this).parent().find('img'), index: $(this).index()});
+    Photos.fullscreenGallery.open({$photos: $(this).parent().find('.photo'), index: $(this).index()});
   });
 
 
@@ -159,5 +159,5 @@ $(document).ready(function initApp() {
 
 
   // TODO: for this test just init with Helsinki
-  showDestination('/wiki/Berne');
+  showDestination('/wiki/Helsinki');
 });
