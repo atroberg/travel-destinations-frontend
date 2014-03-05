@@ -1,6 +1,6 @@
 var loadDestination = require('./modules/load_destination');
 var DestinationTabs = require('./modules/destination_tabs');
-var flickrPhotoSearch = require('./modules/flickr_photo_search');
+var Photos = require('./modules/photos');
 var Youtube = require('./modules/youtube_videos');
 var videoTemplate = require('./templates/videos.hbs');
 var weatherTemplate = require('./templates/weather.hbs');
@@ -89,6 +89,13 @@ $(document).ready(function initApp() {
     $title.toggleClass('expanded');
   });
 
+  // Fullscreen gallery functionality for photos
+  $destinationHammer.on('tap', '#photos_tab img', function(e) {
+    var html = Photos.fullscreenGallery({$images: $(this).parent().find('img')});
+    var popup = $('<div id="popup_gallery_fullscreen" />').html(html);
+    popup.appendTo('body');
+  });
+
 
   // Tabs
   DestinationTabs.setElement($destination);
@@ -118,21 +125,12 @@ $(document).ready(function initApp() {
   });
 
   DestinationTabs.bindTabFunction('photos', function($tab) {
-    flickrPhotoSearch(currentDestination.title, function flickrPhotoCallback(error, photos) {
+    Photos.flickrPhotoSearch(currentDestination.title, function flickrPhotoCallback(error, html) {
       if ( error ) {
         // TODO
       }
       else {
-        try {
-          var imgHtml = '';
-          $.each(photos, function(index, photo) {
-            imgHtml += '<img src="' + photo.url + '">';
-          });
-          $tab.html(imgHtml);
-        }
-        catch (e) {
-          // TODO: no images found msg
-        }
+        $tab.html(html);
       }
     });
   });

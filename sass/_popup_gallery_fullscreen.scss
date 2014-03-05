@@ -1,0 +1,15 @@
+div {
+  width:100%;
+  height:100%;
+  background-size:contain;
+  background-repeat:no-repeat;
+  position:relative;
+  float:left;
+
+  span {
+    position:absolute;
+    bottom:1em;
+    left:1em;
+    color:white;
+  }
+}

@@ -26,3 +26,16 @@ body {
 
   @import 'destination';
 }
+
+#popup_gallery_fullscreen {
+  z-index:1001;
+  position:absolute;
+  overflow:hidden;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#141414;
+
+  @import 'popup_gallery_fullscreen';
+}
