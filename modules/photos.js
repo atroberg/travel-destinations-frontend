@@ -41,7 +41,7 @@ var Photos = {
               entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
 
               if ( entry ) {
-                parsedSizes[entry[2]] = entry[1];
+                parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
               }
 
             });
@@ -60,7 +60,6 @@ var Photos = {
       }).get() );
 
       if ( this.photos.length > 0 ) {
-        console.log(this.photos);
         var html = photosTabTemplate({photos:this.photos});
         options.$tab.html(html);
       }
