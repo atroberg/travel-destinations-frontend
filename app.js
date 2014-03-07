@@ -8,6 +8,7 @@ var Weather = require('./modules/weather');
 var moment = require('moment');
 var settings = require('./modules/settings');
 var AppHistory = require('./modules/history');
+var ActionBar = require('./modules/action_bar');
 
 $(document).ready(function initApp() {
 
@@ -162,4 +163,7 @@ $(document).ready(function initApp() {
 
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');
+
+  ActionBar.init($destination.find('nav'));
+
 });
