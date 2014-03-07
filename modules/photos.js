@@ -4,7 +4,14 @@ var photosTabTemplate = require('../templates/photos.hbs');
 
 var Photos = {
 
+  updateTemplate: function() {
+    var html = photosTabTemplate({photos:this.photos});
+    this.$tab.html(html);
+  },
+
   showTab: function(options) {
+
+    this.$tab = options.$tab;
 
     // Automatically parse photos from wikivoyage article
     if ( options.$wikiTab ) {
@@ -58,8 +65,7 @@ var Photos = {
       }).get();
 
       if ( this.photos.length > 0 ) {
-        var html = photosTabTemplate({photos:this.photos});
-        options.$tab.html(html);
+        this.updateTemplate()
       }
     }
 
@@ -69,8 +75,7 @@ var Photos = {
       }
       else if ( photos.length > 0 ) {
         Photos.photos = Photos.photos.concat(photos);
-        var html = photosTabTemplate({photos:Photos.photos});
-        options.$tab.html(html);
+        Photos.updateTemplate();
       }
       else {
         // TODO

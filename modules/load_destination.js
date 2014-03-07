@@ -1,9 +1,11 @@
 var Wikivoyage = require('./wikivoyage');
 var MediawikiMobileParser = require('./mediawiki_mobile_parser.js');
 var destinationTemplate = require('./../templates/destination.hbs');
-var accordion = require('./accordion');
 var autohideNav = require('./autohide_nav');
 
+// TODO: this must probably be changed to work some other way
+// because we must be able to support other languages as well
+// (and their base url is different)
 var BASE_URL = 'http://en.m.wikivoyage.org';
 
 module.exports = function loadDestination($destination, path, title, onComplete) {
@@ -43,7 +45,8 @@ module.exports = function loadDestination($destination, path, title, onComplete)
 
           $destinationContent.hide().html(destination.html);
 
-          accordion($destinationContent);
+          // Accordion chevron
+          $destinationContent.find('> h2').prepend('<i class="fa fa-chevron-right"></i>');
 
           $destinationContent.show();
 

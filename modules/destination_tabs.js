@@ -12,6 +12,9 @@ var DestinationTabs = {
     this.tabFunctions[tab] = f;
   },
 
+  // Save tab contents in cache, so that
+  // we don't need to rebuild the tab each
+  // time we refocus to it
   htmlCache: {},
 
   clearCache: function clearCache() {

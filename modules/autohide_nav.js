@@ -5,7 +5,7 @@ module.exports = function autohideNav($el) {
   var menuHeight = $el.outerHeight();
 
   // Binding to onscroll is resource intensive,
-  // use interval instead
+  // use interval instead (250ms is suitable update interval)
   window.setInterval(function() {
     var newScrollTop = $(window).scrollTop();
 

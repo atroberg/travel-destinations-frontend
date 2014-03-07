@@ -65,7 +65,7 @@ var Weather = {
   },
 
   // Parse html from wikivoyage and return table as an array
-  getClimateTable: function getClimateTable($el) {
+  setClimateTable: function setClimateTable($el) {
     var $weatherTable = $el.find('#climate_table');
 
     if ( $weatherTable.length <= 0 )
@@ -84,7 +84,7 @@ var Weather = {
       }
     });
 
-    return climateTable;
+    this.climateTable = climateTable;
   },
 
 };

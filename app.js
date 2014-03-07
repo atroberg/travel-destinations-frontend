@@ -10,29 +10,15 @@ var settings = require('./modules/settings');
 var AppHistory = require('./modules/history');
 
 $(document).ready(function initApp() {
+
   var currentDestination = {};
-  var $destination = $('#destination');
-  var $destinationHammer = $('#destination').hammer(settings.hammer);
-
-  AppHistory.init();
-
-  AppHistory.addPopHandler('loadDestination', function(state) {
-    showDestination(state.url, {addHistoryEntry:false});
-  });
-
-  // Reference to climateTable that is parsed
-  // from the wikivoyage article. It's a bit ugly
-  // to have kind of a "global" variable, but the
-  // current architecture doesn't allow better solutions?
-  var climateTable;
+  var $destination = $('#destination').hammer(settings.hammer);
 
   function showDestination(path, options) {
-
     options = options || {};
     options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
                                 ? options.addHistoryEntry
                                 : true;
-
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
@@ -47,20 +33,28 @@ $(document).ready(function initApp() {
       // (because the DOM is removed and instead just the html
       // is preserved when changing tabs)
       try {
-        climateTable = Weather.getClimateTable($destination);
+        Weather.setClimateTable($destination);
       }
       catch(e) {
         console.log(e);
       }
     });
+
     DestinationTabs.clearCache();
   }
+
+  AppHistory.init();
+
+  AppHistory.addPopHandler('loadDestination', function(state) {
+    showDestination(state.url, {addHistoryEntry:false});
+  });
 
   // Prevent default behavior for links
   $destination.on('click', 'a', function(e) {
     e.preventDefault();
   });
-  $destinationHammer.on('tap', 'a', function(e) {
+  // Handle them with the tap-event instead
+  $destination.on('tap', 'a', function(e) {
 
     $el = $(this);
     var url = $el.attr('href');
@@ -80,11 +74,12 @@ $(document).ready(function initApp() {
   });
 
   // Open youtube videos with external app
-  $destinationHammer.on('tap', '#videos_tab img', function(e) {
+  $destination.on('tap', '#videos_tab img', function(e) {
     window.open($(this).attr('data-href'), '_system');
-  })
-  // Accordion
-  .on('tap', '#destination_content > h2', function(e) {
+  });
+
+  // Accordion for wikivoyage articles
+  $destination.on('tap', '#destination_content > h2', function(e) {
     var $title = $(this);
     $title.toggleClass('expanded');
   });
@@ -93,7 +88,8 @@ $(document).ready(function initApp() {
   AppHistory.addPopHandler('galleryFullscreen', function(state) {
     Photos.fullscreenGallery.close();
   });
-  $destinationHammer.on('tap', '#photos_tab div.photo', function(e) {
+
+  $destination.on('tap', '#photos_tab div.photo', function(e) {
     AppHistory.pushAction({popHandler:'galleryFullscreen'}, 'Photos');
     Photos.fullscreenGallery.open({$photos: $(this).parent().find('.photo'), index: $(this).index()});
   });
@@ -101,13 +97,13 @@ $(document).ready(function initApp() {
 
   // Tabs
   DestinationTabs.setElement($destination);
-  $destinationHammer.on('tap', 'nav #tabs_menu li', function(e) {
+  $destination.on('tap', 'nav #tabs_menu li', function(e) {
     DestinationTabs.focusToTab($(this).index());
   });
 
   // Need to prevent drag event from firing tab change multiple times
   var tabSwitchRequested = false;
-  $destinationHammer.on('dragleft dragright', function(e) {
+  $destination.on('dragleft dragright', function(e) {
     e.gesture.preventDefault();
 
     if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
@@ -151,12 +147,11 @@ $(document).ready(function initApp() {
         });
         $tab.html(weatherTemplate({
           forecast: forecastList,
-          climateTable: climateTable,
+          climateTable: Weather.climateTable,
         }));
       },
     });
   }),
-
 
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');

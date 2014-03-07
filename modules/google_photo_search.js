@@ -1,3 +1,5 @@
+// NOT CURRENTLY USED!
+
 module.exports = function googlePhotoSearch(keyword, callback) {
   // Fetch images from Google image search
   $.ajax({
