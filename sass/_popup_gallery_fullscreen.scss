@@ -26,21 +26,24 @@ $photo-background-color:#141414;
       left:0;
       bottom:2em;
       text-align:center;
+      transition:opacity $transition-duration;
 
       span {
         font-size:1.2em;
+        display:inline-block;
         background:rgba($photo-background-color, .8);
         color:white;
         padding:.5em 1.2em;
 
-        // External link has this padding
-        padding-right:0;
-
         .external_link {
           margin-left:.3em;
-          padding:.5em 1.2em;
         }
       }
     }
   }
+
+  &.hide_photo_title div > span {
+    opacity:0;
+  }
+
 }

@@ -1,6 +1,9 @@
 {{#if videos}}
   {{#each videos}}
-    <img src="{{this.snippet.thumbnails.medium.url}}" data-href="http://www.youtube.com/watch?v={{this.id.videoId}}">
+    <div>
+      <img src="{{this.snippet.thumbnails.default.url}}" data-href="http://www.youtube.com/watch?v={{this.id.videoId}}">
+      <span>{{this.snippet.title}}</span>
+    </div>
   {{/each}}
 {{else}}
   <p>No videos found.</p>

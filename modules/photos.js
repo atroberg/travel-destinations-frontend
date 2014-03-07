@@ -169,7 +169,10 @@ var Photos = {
       });
 
       popup.hammer(settings.hammer).on('tap', '.external_link', function(e) {
-        window.open($(this).parents('div:first').attr('data-xbig-src'), '_system');
+        e.stopPropagation();
+        var xbigSrc = $(this).parents('div:first').attr('data-xbig-src');
+        if ( xbigSrc )
+          window.open(xbigSrc, '_system');
       })
       .on('dragleft dragright', function(e) {
         e.gesture.preventDefault();
@@ -188,6 +191,11 @@ var Photos = {
       })
       .on('dragend', function(e) {
         photoSwitchRequested = false;
+      })
+
+      // Show hide image text
+      .on('tap', function(e) {
+        $(this).toggleClass('hide_photo_title');
       });
 
       function focusToPhoto(index) {

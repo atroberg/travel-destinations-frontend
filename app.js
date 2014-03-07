@@ -74,7 +74,9 @@ $(document).ready(function initApp() {
   });
 
   // Open youtube videos with external app
-  $destination.on('tap', '#videos_tab img', function(e) {
+  $destination.on('tap', '#videos_tab > div', function(e) {
+    // Show loading
+    $(this).addClass('opening_external_app');
     window.open($(this).attr('data-href'), '_system');
   });
 
@@ -133,6 +135,7 @@ $(document).ready(function initApp() {
   DestinationTabs.bindTabFunction('videos', function($tab) {
     Youtube.search(currentDestination.title, function(error, videos) {
       $tab.html(videoTemplate({videos: videos}));
+      $tab.removeClass('not_loaded');
     });
   });
 
@@ -151,7 +154,11 @@ $(document).ready(function initApp() {
         }));
       },
     });
-  }),
+  });
+
+  $(window).on('focus', function() {
+    $('.opening_external_app').removeClass('opening_external_app');
+  });
 
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');

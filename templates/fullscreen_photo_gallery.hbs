@@ -1,5 +1,12 @@
 {{#each photos}}
   <div style="background-image:url({{this.src}})" data-xbig-src="{{this.xbigSrc}}">
-    <span><span>{{this.title}} <i class="fa fa-external-link external_link"></i></span></span>
+    <span>
+      <span class="external_link">
+        {{this.title}}
+        {{#if this.xbigSrc}}
+          <i class="fa fa-external-link"></i>
+        {{/if}}
+      </span>
+    </span>
   </div>
 {{/each}}
