@@ -1,43 +1,29 @@
 var loadDestination = require('./modules/load_destination');
 var DestinationTabs = require('./modules/destination_tabs');
-var flickrPhotoSearch = require('./modules/flickr_photo_search');
+var Photos = require('./modules/photos');
 var Youtube = require('./modules/youtube_videos');
 var videoTemplate = require('./templates/videos.hbs');
 var weatherTemplate = require('./templates/weather.hbs');
 var Weather = require('./modules/weather');
 var moment = require('moment');
 var settings = require('./modules/settings');
+var AppHistory = require('./modules/history');
 
 $(document).ready(function initApp() {
+
   var currentDestination = {};
-  var $destination = $('#destination');
-  var $destinationHammer = $('#destination').hammer(settings.hammer);
-
-  // History management
-  window.onpopstate = function(event) {
-    if ( event.state ) {
-      showDestination(event.state.url, {addHistoryEntry:false});
-    }
-  };
-
-  // Reference to climateTable that is parsed
-  // from the wikivoyage article. It's a bit ugly
-  // to have kind of a "global" variable, but the
-  // current architecture doesn't allow better solutions?
-  var climateTable;
+  var $destination = $('#destination').hammer(settings.hammer);
 
   function showDestination(path, options) {
-
     options = options || {};
     options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
                                 ? options.addHistoryEntry
                                 : true;
-
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
     if ( options.addHistoryEntry ) {
-      history.pushState({url:path}, currentDestination.title);
+      AppHistory.push({url:path, popHandler: 'loadDestination'}, currentDestination.title);
     }
 
     loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
@@ -47,20 +33,28 @@ $(document).ready(function initApp() {
       // (because the DOM is removed and instead just the html
       // is preserved when changing tabs)
       try {
-        climateTable = Weather.getClimateTable($destination);
+        Weather.setClimateTable($destination);
       }
       catch(e) {
         console.log(e);
       }
     });
+
     DestinationTabs.clearCache();
   }
+
+  AppHistory.init();
+
+  AppHistory.addPopHandler('loadDestination', function(state) {
+    showDestination(state.url, {addHistoryEntry:false});
+  });
 
   // Prevent default behavior for links
   $destination.on('click', 'a', function(e) {
     e.preventDefault();
   });
-  $destinationHammer.on('tap', 'a', function(e) {
+  // Handle them with the tap-event instead
+  $destination.on('tap', 'a', function(e) {
 
     $el = $(this);
     var url = $el.attr('href');
@@ -80,25 +74,36 @@ $(document).ready(function initApp() {
   });
 
   // Open youtube videos with external app
-  $destinationHammer.on('tap', '#videos_tab img', function(e) {
+  $destination.on('tap', '#videos_tab img', function(e) {
     window.open($(this).attr('data-href'), '_system');
-  })
-  // Accordion
-  .on('tap', '#destination_content > h2', function(e) {
+  });
+
+  // Accordion for wikivoyage articles
+  $destination.on('tap', '#destination_content > h2', function(e) {
     var $title = $(this);
     $title.toggleClass('expanded');
+  });
+
+  // Fullscreen gallery functionality for photos
+  AppHistory.addPopHandler('galleryFullscreen', function(state) {
+    Photos.fullscreenGallery.close();
+  });
+
+  $destination.on('tap', '#photos_tab div.photo', function(e) {
+    AppHistory.pushAction({popHandler:'galleryFullscreen'}, 'Photos');
+    Photos.fullscreenGallery.open({$photos: $(this).parent().find('.photo'), index: $(this).index()});
   });
 
 
   // Tabs
   DestinationTabs.setElement($destination);
-  $destinationHammer.on('tap', 'nav #tabs_menu li', function(e) {
+  $destination.on('tap', 'nav #tabs_menu li', function(e) {
     DestinationTabs.focusToTab($(this).index());
   });
 
   // Need to prevent drag event from firing tab change multiple times
   var tabSwitchRequested = false;
-  $destinationHammer.on('dragleft dragright', function(e) {
+  $destination.on('dragleft dragright', function(e) {
     e.gesture.preventDefault();
 
     if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
@@ -118,22 +123,10 @@ $(document).ready(function initApp() {
   });
 
   DestinationTabs.bindTabFunction('photos', function($tab) {
-    flickrPhotoSearch(currentDestination.title, function flickrPhotoCallback(error, photos) {
-      if ( error ) {
-        // TODO
-      }
-      else {
-        try {
-          var imgHtml = '';
-          $.each(photos, function(index, photo) {
-            imgHtml += '<img src="' + photo.url + '">';
-          });
-          $tab.html(imgHtml);
-        }
-        catch (e) {
-          // TODO: no images found msg
-        }
-      }
+    Photos.showTab({
+      keyword:currentDestination.title,
+      $tab:$tab,
+      $wikiTab: $destination.find('#destination_content'),
     });
   });
 
@@ -154,13 +147,12 @@ $(document).ready(function initApp() {
         });
         $tab.html(weatherTemplate({
           forecast: forecastList,
-          climateTable: climateTable,
+          climateTable: Weather.climateTable,
         }));
       },
     });
   }),
 
-
   // TODO: for this test just init with Helsinki
-  showDestination('/wiki/Berne');
+  showDestination('/wiki/Helsinki');
 });

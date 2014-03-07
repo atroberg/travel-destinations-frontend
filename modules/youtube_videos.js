@@ -25,6 +25,7 @@ var YoutubeVideos = {
 
   search: function(query, callback) {
     $.ajax({
+      // Connect to my AWS instance
       url: 'http://54.200.137.96:8888/search',
       data: {
         q: query,
@@ -32,7 +33,7 @@ var YoutubeVideos = {
       type: 'GET',
       dataType: 'json',
       success: function(data) {
-    
+
         if ( data.items ) {
           var videos = [];
           $.each(data.items, function(i, video) {

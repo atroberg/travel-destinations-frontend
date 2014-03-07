@@ -53,7 +53,7 @@ var MediawikiMobileParser = {
   },
 
   fixPaths: function(html) {
-    return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http://\\$1"');
+    return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http:\$1"');
   },
 
 };
