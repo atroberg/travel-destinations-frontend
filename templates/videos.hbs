@@ -1,7 +1,7 @@
 {{#if videos}}
   {{#each videos}}
-    <div>
-      <img src="{{this.snippet.thumbnails.default.url}}" data-href="http://www.youtube.com/watch?v={{this.id.videoId}}">
+    <div data-href="http://www.youtube.com/watch?v={{this.id.videoId}}">
+      <img src="{{this.snippet.thumbnails.default.url}}">
       <span>{{this.snippet.title}}</span>
     </div>
   {{/each}}

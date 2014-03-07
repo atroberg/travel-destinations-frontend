@@ -156,9 +156,9 @@ $(document).ready(function initApp() {
     });
   });
 
-  $(window).on('focus', function() {
+  document.addEventListener("resume", function onResume() {
     $('.opening_external_app').removeClass('opening_external_app');
-  });
+  }, false);
 
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');
