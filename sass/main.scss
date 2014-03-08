@@ -28,3 +28,20 @@ body {
 }
 
 @import 'popup_gallery_fullscreen';
+
+.toast_msg {
+  position: fixed;
+  bottom:2em;
+  width:90%;
+  left:5%;
+  text-align:center;
+  background:#141414;
+  color:white;
+  padding:1em 1.5em;
+  opacity:0;
+  transition:opacity $transition-duration;
+}
+
+.toast_msg.visible {
+  opacity:1;
+}

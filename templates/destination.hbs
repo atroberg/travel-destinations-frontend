@@ -2,8 +2,8 @@
   <i class="back fa fa-chevron-left"></i>
   <h1>{{destination.title}}</h1>
   <div class="right">
-    <i class="fa fa-star-o"></i>
-    <i class="menu fa fa-ellipsis-v"></i>
+    <i class="fa {{#if destination.isFavorite}}fa-star{{else}}fa-star-o{{/if}} favoriteBtn"></i>
+    <i class="menu fa fa-ellipsis-v menuBtn"></i>
   </div>
   <ul id="tabs_menu">
     <li class="active">Info</li>

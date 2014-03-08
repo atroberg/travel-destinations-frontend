@@ -8,6 +8,7 @@ var Weather = require('./modules/weather');
 var moment = require('moment');
 var settings = require('./modules/settings');
 var AppHistory = require('./modules/history');
+var ActionBar = require('./modules/action_bar');
 
 $(document).ready(function initApp() {
 
@@ -19,6 +20,9 @@ $(document).ready(function initApp() {
     options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
                                 ? options.addHistoryEntry
                                 : true;
+
+    // TODO: fix URI
+    currentDestination.uri = path;
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
@@ -26,7 +30,7 @@ $(document).ready(function initApp() {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, currentDestination.title);
     }
 
-    loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
+    loadDestination(currentDestination, $destination, function wikivoyageLoaded() {
       // We need to parse climate table from wikivoyage html
       // already at this stage, because otherwise we might not
       // be able to access the DOM when weather tab is loaded
@@ -162,4 +166,7 @@ $(document).ready(function initApp() {
 
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');
+
+  ActionBar.init(currentDestination, $destination);
+
 });
