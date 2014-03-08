@@ -11,13 +11,22 @@ $photo-background-color:#141414;
   background:$photo-background-color;
   transition:-webkit-transform $transition-duration;
 
-  div {
-    height:100%;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position: 50% 50%;
+  .photo_container {
     float:left;
     position:relative;
+    height:100%;
+    background:url(../images/ajax-loader-fullscreen-gallery.gif) no-repeat 50% 50%;
+
+    .photo {
+      height:100%;
+      background-size:contain;
+      background-repeat:no-repeat;
+      background-position: 50% 50%;
+    }
+
+    &.opening_external_app .photo {
+      visibility: hidden;
+    }
 
     > span {
       width:100%;
@@ -35,7 +44,7 @@ $photo-background-color:#141414;
         color:white;
         padding:.5em 1.2em;
 
-        .external_link {
+        .fa-external-link {
           margin-left:.3em;
         }
       }
