@@ -2,14 +2,20 @@ var Wikivoyage = require('./wikivoyage');
 var MediawikiMobileParser = require('./mediawiki_mobile_parser.js');
 var destinationTemplate = require('./../templates/destination.hbs');
 var autohideNav = require('./autohide_nav');
+var Favorites = require('./favorites');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
 // (and their base url is different)
 var BASE_URL = 'http://en.m.wikivoyage.org';
 
-module.exports = function loadDestination($destination, path, title, onComplete) {
-    $destination.html(destinationTemplate({destination:{title:title}}));
+module.exports = function loadDestination(destination, $destination, onComplete) {
+    $destination.html(destinationTemplate({
+      destination:{
+        title:destination.title,
+        isFavorite: Favorites.isFavorite(destination),
+      }
+    }));
 
     var $loadingStatus = $destination.find('.loading_status');
     $loadingStatus.css('width', '0%');
@@ -17,7 +23,7 @@ module.exports = function loadDestination($destination, path, title, onComplete)
     autohideNav($destination.find('nav:first'));
 
     Wikivoyage.getPage({
-      url: BASE_URL + path,
+      url: BASE_URL + destination.uri,
       callback: function(error, data) {
 
         // Show 100% loading status
@@ -28,7 +34,6 @@ module.exports = function loadDestination($destination, path, title, onComplete)
         }
 
         else {
-          var destination = {};
 
           try {
             var parser = MediawikiMobileParser.setHtml(data).getActualContent()

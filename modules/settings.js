@@ -4,11 +4,14 @@ var settings = {
   openWeatherMapKey: 'ea3739d944e0f931dee8b175958316c0',
   animationDurations: {
     tabs: 200,
+    toastMsg: 200,
   },
   tabSwipeVelocity: 0.2,
   hammer: {
     tap_max_distance: 20,
     tap_max_touchtime: 400
   },
+  toastMsgDuration: 2000,
 };
+
 module.exports = settings;

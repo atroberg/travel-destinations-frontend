@@ -20,6 +20,9 @@ $(document).ready(function initApp() {
     options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
                                 ? options.addHistoryEntry
                                 : true;
+
+    // TODO: fix URI
+    currentDestination.uri = path;
     currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
@@ -27,7 +30,7 @@ $(document).ready(function initApp() {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, currentDestination.title);
     }
 
-    loadDestination($destination, path, currentDestination.title, function wikivoyageLoaded() {
+    loadDestination(currentDestination, $destination, function wikivoyageLoaded() {
       // We need to parse climate table from wikivoyage html
       // already at this stage, because otherwise we might not
       // be able to access the DOM when weather tab is loaded
@@ -164,6 +167,6 @@ $(document).ready(function initApp() {
   // TODO: for this test just init with Helsinki
   showDestination('/wiki/Helsinki');
 
-  ActionBar.init($destination.find('nav'));
+  ActionBar.init(currentDestination, $destination);
 
 });
