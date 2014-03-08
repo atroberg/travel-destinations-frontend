@@ -1,5 +1,6 @@
 {{#each photos}}
-  <div style="background-image:url({{this.src}})" data-xbig-src="{{this.xbigSrc}}">
+  <div class="photo_container" data-xbig-src="{{this.xbigSrc}}">
+    <div class="photo" style="background-image:url({{this.src}})"></div>
     <span>
       <span class="external_link">
         {{this.title}}

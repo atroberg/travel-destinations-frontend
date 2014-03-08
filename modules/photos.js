@@ -155,7 +155,7 @@ var Photos = {
         'width': popupWidth + '%',
         'top': $(window).scrollTop(),
       })
-      .find('div').css('width', 100 / photos.length + '%');
+      .find('div.photo_container').css('width', 100 / photos.length + '%');
 
       popup.appendTo('body');
 
@@ -170,9 +170,12 @@ var Photos = {
 
       popup.hammer(settings.hammer).on('tap', '.external_link', function(e) {
         e.stopPropagation();
-        var xbigSrc = $(this).parents('div:first').attr('data-xbig-src');
-        if ( xbigSrc )
+        var $photoContainer = $(this).parents('div:first');
+        var xbigSrc = $photoContainer.attr('data-xbig-src');
+        if ( xbigSrc ) {
+          $photoContainer.addClass('opening_external_app');
           window.open(xbigSrc, '_system');
+        }
       })
       .on('dragleft dragright', function(e) {
         e.gesture.preventDefault();
