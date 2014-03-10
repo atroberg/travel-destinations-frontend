@@ -1,6 +1,7 @@
 var Favorites = require('./favorites');
 var Toast = require('./toast');
 var autohideNav = require('./autohide_nav');
+var AppHistory = require('./history');
 
 var ActionBar = {
 
@@ -11,7 +12,7 @@ var ActionBar = {
     autohideNav(this.$el);
 
     this.$el.on('tap', '.back', function(e) {
-      history.back();
+      AppHistory.gotoShortcut('closeDestination');
     });
 
     this.$el.on('tap', '.favoriteBtn', function(e) {

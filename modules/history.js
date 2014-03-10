@@ -7,23 +7,38 @@ var AppHistory = {
 
   popHandlers: {},
 
-  init: function() {
-    var that = this;
+  shortcuts: {},
 
+  init: function() {
     window.onpopstate = function(event) {
-      if ( event.state && that.popHandlers[event.state.popHandler] ) {
-        that.popHandlers[event.state.popHandler](event.state);
+      if ( event.state && AppHistory.popHandlers[event.state.popHandler] ) {
+        AppHistory.popHandlers[event.state.popHandler](event.state);
       }
     };
   },
 
   // Add function handler to
   // be called onPopState
-  addPopHandler: function(name, f) {
+  addPopHandler: function(name, f, options) {
     this.popHandlers[name] = f;
   },
 
-  push: function(state, title) {
+  // Shortcut method for "jumping" over history
+  // directly to specified popHandler
+  gotoShortcut: function(name) {
+    try {
+      var addedPosition = this.shortcuts[name];
+      var currentPosition = history.length;
+      history.go(addedPosition - currentPosition);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  },
+
+  push: function(state, title, options) {
+    options = options || {};
+
     if ( this.noEntriesYet ) {
       var fn = 'replaceState';
       this.noEntriesYet = false;
@@ -33,6 +48,10 @@ var AppHistory = {
     }
 
     history[fn](state, title);
+
+    if ( options.shortcut ) {
+      this.shortcuts[options.shortcut] = history.length;
+    }
   },
 
   // Need this because some history events we need

@@ -14,7 +14,8 @@ var Frontpage = {
       Frontpage.activate();
       Destination.deactivate();
     });
-    AppHistory.push({popHandler: 'closeDestination'}, "Frontpage");
+
+    AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
 
     this.$frontpage.on('tap', '.destination', function(e) {
       Frontpage.deactivate();

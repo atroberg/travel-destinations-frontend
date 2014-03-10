@@ -8,7 +8,7 @@ $(document).ready(function initApp() {
 
   AppHistory.init();
 
-  document.addEventListener("resume", function onResume() {
+  document.addEventListener('resume', function onResume() {
     $('.opening_external_app').removeClass('opening_external_app');
   }, false);
 
@@ -17,6 +17,5 @@ $(document).ready(function initApp() {
   Destination.init({
     $el: $('#destination').hammer(settings.hammer)
   });
-  //Destination.show('/wiki/Helsinki');
 
 });
