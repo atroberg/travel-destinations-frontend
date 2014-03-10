@@ -1,0 +1,70 @@
+$frontpage-tab-count: 3;
+
+#frontpage {
+  overflow:hidden;
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:100%;
+
+  &.inactive {
+    z-index:-1;
+  }
+
+  nav {
+    background: #ededed;
+    color: #474747;
+    border-bottom:2px solid #9c9c9c;
+    overflow: hidden;
+    padding:.2em 0;
+
+    i {
+      display:inline-block;
+      padding:.2em 0 0 .4em;
+      font-size:2em;
+    }
+
+    input {
+      float:right;
+      width:84%;
+      margin-right:.3em;
+      font-size:1.5em;
+    }
+
+  }
+
+  #frontpage_tabs_menu {
+    margin:0;
+    padding:0;
+    border-bottom:1px solid #9c9c9c;
+
+    li {
+      padding:1em 0 .1em 0;
+      font-size:1.5em;
+      display:inline-block;
+      text-align: center;
+      width:98% / $frontpage-tab-count;
+
+      &.active {
+        border-bottom:4px solid #9c9c9c;
+      }
+    }
+  }
+
+  #frontpage_tabs {
+    // This fixes an issue related to the transition
+    // effect, where the viewport isn't refreshed correctly
+    // (parts of non-active tab elements visible)
+    position:relative;
+    height:100%;
+
+    width:$frontpage-tab-count * 100%;
+    transition:-webkit-transform $transition-duration;
+
+    .tab {
+      float:left;
+      width:100%/$frontpage-tab-count;
+    }
+  }
+}

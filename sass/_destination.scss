@@ -6,300 +6,126 @@ $nav-color:#474747;
 $nav-border-bottom-color:#9c9c9c;
 $number-of-tabs:4;
 
-nav {
-  background:$nav-bgcolor;
-  color:$nav-color;
-  text-align:center;
-  position:fixed;
-  top:0;
+#destination {
   width:100%;
-  z-index:1000;
-  transition:-webkit-transform $transition-duration;
-  -webkit-transform: translate3d(0,0,0);
-
-  h1 {
-    display:inline-block;
-    font-size:2em;
-    line-height:1em;
-    margin-top:.3em;
-    font-family:"RobotoRegular";
-  }
-
-  i {
-    font-size:2em;
-    margin:.3em .2em;
-  }
-
-  .back {
-    float:left;
-  }
-
-  .right {
-    float:right;
-    margin-right:.8em;
-  }
-
-  .menu {
-    margin-left:.5em;
-    margin-right:.5em;
-  }
-
-  #tabs_menu {
-    margin:0;
-    padding:0;
-    font-size:1.3em;
-    margin-bottom:.3em;
-    clear:both;
-  }
-
-  #tabs_menu li {
-    display:inline-block;
-    padding:0 .75em;
-    margin-left:.5em;
-  }
-
-  #tabs_menu li.active {
-    font-weight:bold;
-    border-bottom:2px solid $nav-border-bottom-color;
-  }
-
-  .loading_status {
-    width:100%;
-    height:2px;
-    background:$nav-border-bottom-color;
-    transition:width $transition-duration;
-  }
-}
-
-// Content definitions below
-
-// Need to override wikivoyage
-h1, h2, h3, h4, h5, h6 {
-  font-family:inherit;
-}
-
-#destination_tabs {
-  width: $number-of-tabs * 100%;
-  transition:all $transition-duration;
-  -webkit-transform:translate3d(0,0,0);
-  min-height:100%;
   overflow:hidden;
+  background:white;
+  min-height: 100%;
+  height:100%;
+  -webkit-transform:scale(0);
+  transition:-webkit-transform $page-transition-duration, opacity $page-transition-duration;
+  visibility: hidden;
+  opacity:0;
 
-  .ajax_loading {
+  &.active {
+    visibility:visible;
+    height:auto;
+    opacity:1;
+    // Otherwise autohiding nav doesn't work
+    -webkit-transform:none;
+  }
+
+  &.animateIn.active {
+    height:100%;
+    -webkit-transform:scale(1);
+  }
+
+  nav {
+    background:$nav-bgcolor;
+    color:$nav-color;
     text-align:center;
-    margin-top:2em;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+    transition:-webkit-transform $transition-duration;
+    -webkit-transform: translate3d(0,0,0);
 
-    .ajax_spinner {
-      font-size:3em;
-      display:block;
-      margin:auto;
-      -webkit-animation:spin 1s infinite linear;
-    }
-  }
-
-}
-
-#destination_tabs > .tab {
-  width:25%;
-  float:left;
-  margin-top:92px;
-}
-
-#destination_content {
-  margin-left:0;
-  margin-right:0;
-  margin-bottom:0;
-
-  .thumbcaption {
-    overflow:hidden;
-  }
-
-  img {
-    max-width:95%;
-  }
-
-  > div {
-    margin:.5em 1.1em;
-    margin-top:0;
-
-    // prevent infobox from overflowing
-    // over next div
-    overflow:hidden;
-
-    > h1:first-child,
-    > h2:first-child,
-    > h3:first-child,
-    > h4:first-child,
-    > h5:first-child,
-    > h6:first-child {
-      padding-top:0;
-      margin-top:0;
+    h1 {
+      display:inline-block;
+      font-size:2em;
+      line-height:1em;
+      margin-top:.3em;
+      font-family:"RobotoRegular";
     }
 
-    // Ensure min-width for floating paragraphs
-    // Credits: http://css-tricks.com/minimum-paragraph-widths/
-    p:before {
-        content: "";
-        width: 10em;
-        display: block;
-        overflow: hidden;
-    }
-  }
-
-  // Hide these elements
-  .iconbox, .edit-page, .noprint {
-    display:none;
-  }
-
-  #region_list table td,
-  #region_list table th {
-    border:0;
-  }
-
-  // Accordion: hide content by default
-  > h2 + div {
-    display:none;
-  }
-
-  > h2.expanded + div {
-    display:block;
-  }
-
-  > h2:first-of-type {
-    border-top:0;
-  }
-
-  > h2 {
-    background:$accordion-title-bgcolor;
-    color:$accordion-title-color;
-    padding:.7em 1em;
-    border-top:2px solid $accordion-title-border-color;
-    font-family:"RobotoRegular";
-  }
-
-  > h2 i {
-    margin-right:.5em;
-    transition:all $transition-duration;
-    -webkit-transform:rotateZ(0deg);
-  }
-
-  > h2.expanded i {
-    -webkit-transform:rotateZ(90deg);
-  }
-
-}
-
-
-#photos_tab {
-  padding:0 4px;
-  line-height: 1em;
-
-  .photo {
-    display:inline-block;
-    background-repeat:no-repeat;
-    background-size:cover;
-    width:7em;
-    height:7em;
-    margin:0 4px 3px 0;
-  }
-}
-
-#videos_tab {
-  background:#E8E8E8;
-  padding-top:.7em;
-
-  &.not_loaded {
-    background:transparent;
-  }
-
-  > div {
-    overflow:hidden;
-    margin:0 .5em .5em .5em;
-    background:white;
-
-    &.opening_external_app {
-      background: {
-        image: url(../images/ajax-loader.gif);
-        repeat: no-repeat;
-        position:60% 50%;
-      }
-      span {
-        display:none;
-      }
+    i {
+      font-size:2em;
+      margin:.3em .2em;
     }
 
-    span {
-      display:table-cell;
-      height:90px;
-      padding-left:.5em;
-      vertical-align:middle;
-    }
-
-    img {
+    .back {
       float:left;
-      width:120px;
-      height:90px;
+    }
+
+    .right {
+      float:right;
+      margin-right:.8em;
+    }
+
+    .menu {
+      margin-left:.5em;
+      margin-right:.5em;
+    }
+
+    #tabs_menu {
+      margin:0;
+      padding:0;
+      font-size:1.3em;
+      margin-bottom:.3em;
+      clear:both;
+    }
+
+    #tabs_menu li {
+      display:inline-block;
+      padding:0 .75em;
+      margin-left:.5em;
+    }
+
+    #tabs_menu li.active {
+      font-weight:bold;
+      border-bottom:2px solid $nav-border-bottom-color;
+    }
+
+    .loading_status {
+      width:100%;
+      height:2px;
+      background:$nav-border-bottom-color;
+      transition:width $transition-duration;
     }
   }
-}
 
+  // Content definitions below
+  #destination_tabs {
+    width: $number-of-tabs * 100%;
+    transition:all $transition-duration;
+    -webkit-transform:translate3d(0,0,0);
+    min-height:100%;
+    overflow:hidden;
 
-#weather_tab {
-
-  text-align: center;
-
-  h2 {
-    text-align:center;
-    margin-bottom:.3em;
-  }
-
-  .forecast {
-    text-align: left;
-    display:inline-block;
-
-    div {
-      display:inline-block;
-      text-align: center;
-      margin-bottom:1.5em;
-
-      label {
-        font-family:"RobotoRegular";
-        font-size:1.1em;
-      }
-
-      > * {
-        display:block;
-      }
-
-      img {
-        margin:-10px 0;
-      }
-    }
-  }
-
-  .climate_table {
-    display:inline-block;
-    text-align:left;
-
-    ul {
-      display:inline-block;
+    .ajax_loading {
       text-align:center;
-      margin-right:-5px;
+      margin-top:2em;
 
-      li:first-child {
-        font-weight: bold;
-        border-top:0;
-      }
-
-      li {
-        //border-top:1px solid gray;
-        padding:.5em 1em;
-      }
-
-      li:nth-child(2n) {
-        background:#F8F8F8;
+      .ajax_spinner {
+        font-size:3em;
+        display:block;
+        margin:auto;
+        -webkit-animation:spin 1s infinite linear;
       }
     }
+
   }
+
+  #destination_tabs > .tab {
+    width:25%;
+    float:left;
+    margin-top:92px;
+  }
+
+  @import 'wikivoyage';
+  @import 'photos';
+  @import 'videos';
+  @import 'weather';
 
 }

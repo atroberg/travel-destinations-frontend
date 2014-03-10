@@ -1,0 +1,38 @@
+#videos_tab {
+  background:#E8E8E8;
+  padding-top:.7em;
+
+  &.not_loaded {
+    background:transparent;
+  }
+
+  > div {
+    overflow:hidden;
+    margin:0 .5em .5em .5em;
+    background:white;
+
+    &.opening_external_app {
+      background: {
+        image: url(../images/ajax-loader.gif);
+        repeat: no-repeat;
+        position:60% 50%;
+      }
+      span {
+        display:none;
+      }
+    }
+
+    span {
+      display:table-cell;
+      height:90px;
+      padding-left:.5em;
+      vertical-align:middle;
+    }
+
+    img {
+      float:left;
+      width:120px;
+      height:90px;
+    }
+  }
+}

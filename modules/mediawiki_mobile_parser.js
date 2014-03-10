@@ -56,6 +56,57 @@ var MediawikiMobileParser = {
     return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http:\$1"');
   },
 
+  parsePhotos: function($el) {
+    return $el.find('.thumbinner').map(function(i, thumbinner) {
+        $thumbinner = $(thumbinner);
+        var $img = $thumbinner.find('img:first');
+
+        if ( $img.attr('src').match(/\.jpe?g$/i) ) {
+
+          try {
+            var title = $thumbinner.find('.thumbcaption').text().trim();
+          }
+          catch(e){
+            var title = '';
+          }
+
+          var src = $img.attr('src');
+          var sizes = $img.attr('srcset')
+                        ? $img.attr('srcset').split(/,\s+/g)
+                        : null;
+
+          var photo = {
+            src: src,
+            title: title,
+            bigSrc: src,
+          };
+
+          if ( sizes && sizes.length > 0 ) {
+            var parsedSizes = {};
+
+            $.each(sizes, function(i, entry) {
+              entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
+
+              if ( entry ) {
+                parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
+              }
+
+            });
+
+            if ( parsedSizes['2x'] ) {
+              photo.bigSrc = parsedSizes['2x'];
+            }
+            else if ( parsedSizes['1.5x'] ) {
+              photo.bigSrc = parsedSizes['1.5x'];
+            }
+
+          }
+
+          return photo;
+        }
+      }).get();
+  },
+
 };
 
 module.exports = MediawikiMobileParser;
