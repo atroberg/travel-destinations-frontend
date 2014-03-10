@@ -27,7 +27,7 @@ var Videos = {
   },
 
   show: function(keyword) {
-    Youtube.get({
+    Youtube.search({
       keyword: keyword
     }, function(error, videos) {
       if ( error ) {

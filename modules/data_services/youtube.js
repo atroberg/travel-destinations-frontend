@@ -2,7 +2,7 @@ var settings = require('../settings');
 
 var Youtube = {
 
-  get: function(options, callback) {
+  search: function(options, callback) {
     $.ajax({
       // Connect to my AWS instance
       url: settings.youtubeApiURI + '/search',
