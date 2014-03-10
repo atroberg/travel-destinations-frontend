@@ -1,35 +1,37 @@
 var Favorites = require('./favorites');
 var Toast = require('./toast');
+var autohideNav = require('./autohide_nav');
 
 var ActionBar = {
 
-  init: function(destination, $destination) {
-    this.destination = destination;
-    this.$destination = $destination;
-    var that = this;
+  init: function(options) {
+    this.destination = options.destination;
+    this.$el = options.$el;
 
-    this.$destination.on('tap', 'nav .back', function(e) {
+    autohideNav(this.$el);
+
+    this.$el.on('tap', '.back', function(e) {
       history.back();
     });
 
-    this.$destination.on('tap', 'nav .favoriteBtn', function(e) {
+    this.$el.on('tap', '.favoriteBtn', function(e) {
       var $btn = $(this);
 
       var favoriteClass = 'fa-star';
       var notFavoriteClass = 'fa-star-o';
-      var isFavorite = Favorites.isFavorite(that.destination);
+      var isFavorite = Favorites.isFavorite(ActionBar.destination);
 
       if ( isFavorite ) {
         var addClass = notFavoriteClass;
         var removeClass = favoriteClass;
-        var msg = that.destination.title + " removed from favorites";
-        Favorites.remove(that.destination);
+        var msg = ActionBar.destination.title + " removed from favorites";
+        Favorites.remove(ActionBar.destination);
       }
       else {
         var addClass = favoriteClass;
         var removeClass = notFavoriteClass;
-        var msg = that.destination.title + " added to favorites";
-        Favorites.add(that.destination);
+        var msg = ActionBar.destination.title + " added to favorites";
+        Favorites.add(ActionBar.destination);
       }
 
       Toast.show(msg);
@@ -37,7 +39,7 @@ var ActionBar = {
       $btn.removeClass(removeClass).addClass(addClass);
     })
 
-    .on('tap', 'nav .menuBtn', function(e) {
+    .on('tap', '.menuBtn', function(e) {
       alert(currentDestination.title);
     });
   },

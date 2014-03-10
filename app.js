@@ -1,6 +1,7 @@
 var Destination = require('./modules/destination');
 var Frontpage = require('./modules/frontpage');
 var AppHistory = require('./modules/history');
+var trobisHammer = require('./modules/trobis.hammer.js');
 var settings = require('./modules/settings');
 
 $(document).ready(function initApp() {
@@ -13,7 +14,9 @@ $(document).ready(function initApp() {
 
   Frontpage.init($('#frontpage').hammer(settings.hammer));
 
-  Destination.init($('#destination').hammer(settings.hammer));
+  Destination.init({
+    $el: $('#destination').hammer(settings.hammer)
+  });
   //Destination.show('/wiki/Helsinki');
 
 });

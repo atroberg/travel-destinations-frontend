@@ -45,8 +45,10 @@ var Weather = {
   setClimateTable: function setClimateTable($el) {
     var $weatherTable = $el.find('#climate_table');
 
-    if ( $weatherTable.length <= 0 )
+    if ( $weatherTable.length <= 0 ) {
+      this.climateTable = null;
       throw "no_weather_data_found";
+    }
 
     var climateTable = [];
 

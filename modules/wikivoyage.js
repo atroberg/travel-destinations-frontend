@@ -1,76 +1,88 @@
+var WikivoyageService = require('./data_services/wikivoyage');
+var MediawikiMobileParser = require('./mediawiki_mobile_parser.js');
+
+// TODO: this must probably be changed to work some other way
+// because we must be able to support other languages as well
+// (and their base url is different)
+var BASE_URL = 'http://en.m.wikivoyage.org';
+
 var Wikivoyage = {
 
-  getPage: function(params) {
+  activate: function(options) {
+    this.$el = options.$el;
+    this.$loadingStatus = this.$el.find('.loading_status');
+    this.$loadingStatus.css('width', '0%');
 
-    var ajaxObj = {
-      url: params.url,
+    // Accordion
+    this.$el.on('tap', '> h2', function(e) {
+      var $title = $(this);
+      $title.toggleClass('expanded');
+    });
 
-      // Just to be sure that jQuery doesn't do
-      // any HTML magick with the response
-      dataType: 'text',
+    // Prevent default behavior for links
+    this.$el.on('click', 'a', function(e) {
+      e.preventDefault();
+    });
+    // Handle them with the tap-event instead
+    this.$el.on('tap', 'a', function(e) {
+      $el = $(this);
+      var url = $el.attr('href');
 
-      success: function(data) {
-        // TODO: return in structured form (title, stripped body etc)
-        params.callback(null, data);
-      },
+      // Check if relative url => load from wikivoyage
+      if ( url.match(/^\/\//) === null
+            && url.match(/:\/\//) === null ) {
+        e.preventDefault();
 
-      error: function(msg) {
-        // TODO
-
-        // For debugging with mobile chrome
-        $.get('/helsinki_debug.html', function(data) {
-          params.callback(null, data);
-        })
+        options.Destination.show(url);
       }
-    };
+      // open in external browser
+      else {
+        window.open(url, '_system');
+      }
+    });
+  },
 
-    if ( params.progressCallback ) {
-      ajaxObj.xhr = function(){
-        // get the native XmlHttpRequest object
-        var xhr = $.ajaxSettings.xhr();
+  updateView: function() {
+    this.$el.hide().html(this.html);
+    // Accordion chevron
+    this.$el.find('> h2').prepend('<i class="fa fa-chevron-right"></i>');
+    this.$el.show();
+  },
 
-        var totalSize = 0;
+  showDestination: function(options) {
+    WikivoyageService.get({
+      url: BASE_URL + options.destination.uri,
+      callback: function(error, data) {
+        // Show 100% loading status
+        Wikivoyage.$loadingStatus.css('width', '100%');
 
-        // set the onprogress event handler
-        xhr.onprogress = function(e){
-          if ( totalSize === 0 ) {
-            if ( e.lengthComputable ) {
-              totalSize = e.total;
-            }
-            // Try parsing content length manually
-            else {
-              totalSize = parseInt(xhr.getResponseHeader("Content-Length"));
-              // Manual parsing also failed
-              if ( totalSize <= 0 ) {
-                totalSize = -1;
+        if ( error ) {
+          // TODO
+        }
 
-                params.progressCallback("no_totalsize_for_ajax_request");
-              }
+        else {
+          try {
+            var parser = MediawikiMobileParser.setHtml(data).getActualContent()
+                          .removeBanner().removeEmptySections();
+            Wikivoyage.html = parser.getHtml();
+            Wikivoyage.updateView();
 
-              // For some strange reason, the size parsed from header
-              // doesn't match the total size we should get from
-              // progress event. The size we get from header is about 3-4x smaller
-              else {
-                totalSize *= 3.5;
-              }
+            if ( options.pageLoaded ) {
+              options.pageLoaded();
             }
           }
-
-          if ( totalSize > 0 ) {
-            var progress = Math.round(e.loaded / totalSize * 100);
-            if ( progress > 100 )
-              progress = 100;
-            params.progressCallback(null, progress);
+          catch (e) {
+            // TODO
+            console.log(e);
           }
-        };
-
-        // return the customized object
-        return xhr ;
-      };
-    }
-
-    $.ajax(ajaxObj);
-
+        }
+      },
+      progressCallback: function(error, progress) {
+        if ( !error ) {
+          Wikivoyage.$loadingStatus.css('width', progress + '%');
+        }
+      },
+    });
   },
 
 };

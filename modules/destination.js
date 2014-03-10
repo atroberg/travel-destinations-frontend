@@ -1,85 +1,48 @@
-var loadDestination = require('./load_destination');
 var DestinationTabs = require('./destination_tabs');
 var Photos = require('./photos');
 var Videos = require('./videos');
-var trobisHammer = require('./trobis.hammer.js');
-
 var Weather = require('./weather');
-var moment = require('moment');
-var settings = require('./settings');
 var AppHistory = require('./history');
 var ActionBar = require('./action_bar');
+var Favorites = require('./favorites');
+var Wikivoyage = require('./wikivoyage');
+var destinationTemplate = require('./../templates/destination.hbs');
 
 var Destination = {
 
-  init: function($destination) {
+  init: function(options) {
 
-    this.$destination = $destination;
+    this.$el = options.$el;
     this.destination = {};
-
-    ActionBar.init(this.destination, $destination);
 
     AppHistory.addPopHandler('loadDestination', function(state) {
       Destination.show(state.url, {addHistoryEntry:false});
     });
 
-    // Prevent default behavior for links
-    $destination.on('click', 'a', function(e) {
-      e.preventDefault();
-    });
-    // Handle them with the tap-event instead
-    $destination.on('tap', 'a', function(e) {
-
-      $el = $(this);
-      var url = $el.attr('href');
-
-      // Check if relative url => load from wikivoyage
-      if ( url.match(/^\/\//) === null
-            && url.match(/:\/\//) === null ) {
-        e.preventDefault();
-
-        Destination.show(url);
-      }
-
-      // open in external browser
-      else {
-        window.open(url, '_system');
-      }
-    });
-
-    // Accordion for wikivoyage articles
-    $destination.on('tap', '#destination_content > h2', function(e) {
-      var $title = $(this);
-      $title.toggleClass('expanded');
-    });
-
-
     // Tabs
-    DestinationTabs.setElement($destination);
-    $destination.on('tap', 'nav #tabs_menu li', function(e) {
+    DestinationTabs.setElement(this.$el);
+    this.$el.on('tap', 'nav #tabs_menu li', function(e) {
       DestinationTabs.focusToTab($(this).index());
     });
-
-    // Need to prevent drag event from firing tab change multiple times
-    var tabSwitchRequested = false;
-    $destination.trobisHammer();
-    $destination.on('trobisHammer.swiperight', function(e) {
+    this.$el.trobisHammer().on('trobisHammer.swiperight', function(e) {
       DestinationTabs.nextTab();
     })
     .on('trobisHammer.swipeleft', function(e) {
       DestinationTabs.prevTab();
     });
 
+    // Photo tab
     DestinationTabs.bindTabFunction('photos', function($tab) {
       Photos.activate({
         $el: $tab,
         keyword: Destination.getTitle(),
 
         // TODO: must be better way to do this
-        $wikiTab: $destination.find('#destination_content'),
+        $wikiTab: Destination.$el.find('#destination_content'),
       });
     });
 
+    // Video tab
     DestinationTabs.bindTabFunction('videos', function($tab) {
       Videos.activate({
         $el: $tab,
@@ -87,6 +50,7 @@ var Destination = {
       });
     });
 
+    // Weather tab
     DestinationTabs.bindTabFunction('weather', function($tab) {
       Weather.activate({
         $el: $tab,
@@ -96,16 +60,29 @@ var Destination = {
 
   },
 
+  updateView: function() {
+    this.$el.html(destinationTemplate({
+      destination:{
+        title: Destination.getTitle(),
+        isFavorite: Favorites.isFavorite(Destination.destination),
+      }
+    }));
+    ActionBar.init({
+      $el: this.$el.find('nav:first'),
+      destination: Destination.destination
+    });
+  },
+
   getTitle: function() {
     return this.destination.title;
   },
 
   activate: function() {
-    this.$destination.addClass('active');
+    this.$el.addClass('active');
   },
 
   deactivate: function() {
-    this.$destination.removeClass('active');
+    this.$el.removeClass('active');
   },
 
   show: function(path, options) {
@@ -116,31 +93,44 @@ var Destination = {
 
     this.activate();
 
+    DestinationTabs.clearCache();
+
     // TODO: fix URI
     Destination.destination.uri = path;
     Destination.destination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
+
+    this.updateView();
 
     // Back history management
     if ( options.addHistoryEntry ) {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.destination.title);
     }
 
-    loadDestination(Destination.destination, Destination.$destination, function wikivoyageLoaded() {
-      // We need to parse climate table from wikivoyage html
-      // already at this stage, because otherwise we might not
-      // be able to access the DOM when weather tab is loaded
-      // (because the DOM is removed and instead just the html
-      // is preserved when changing tabs)
-      try {
-        Weather.setClimateTable(Destination.$destination);
-        Photos.setWikiPhotos(Destination.$destination);
-      }
-      catch(e) {
-        console.log(e);
-      }
+    // Init default tab (Wikivoyage)
+    Wikivoyage.activate({
+      $el: this.$el.find('#wikivoyage_tab'),
+      Destination: this
     });
 
-    DestinationTabs.clearCache();
+    Wikivoyage.showDestination({
+      destination: this.destination,
+      pageLoaded: function() {
+        // We need to parse climate table from wikivoyage html
+        // already at this stage, because otherwise we might not
+        // be able to access the DOM when weather tab is loaded
+        // (because the DOM is removed and instead just the html
+        // is preserved when changing tabs)
+        try {
+          var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
+          Weather.setClimateTable($wikivoyageTab);
+          Photos.setWikiPhotos($wikivoyageTab);
+        }
+        catch(e) {
+          console.log(e);
+        }
+      },
+    });
+
   }
 
 };
