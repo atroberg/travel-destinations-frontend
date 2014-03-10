@@ -52,16 +52,6 @@ var Destination = {
       $title.toggleClass('expanded');
     });
 
-    // Fullscreen gallery functionality for photos
-    AppHistory.addPopHandler('galleryFullscreen', function(state) {
-      Photos.fullscreenGallery.close();
-    });
-
-    $destination.on('tap', '#photos_tab div.photo', function(e) {
-      AppHistory.pushAction({popHandler:'galleryFullscreen'}, 'Photos');
-      Photos.fullscreenGallery.open({$photos: $(this).parent().find('.photo'), index: $(this).index()});
-    });
-
 
     // Tabs
     DestinationTabs.setElement($destination);
@@ -91,9 +81,11 @@ var Destination = {
     });
 
     DestinationTabs.bindTabFunction('photos', function($tab) {
-      Photos.showTab({
-        keyword:Destination.destination.title,
-        $tab:$tab,
+      Photos.activate({
+        $el: $tab,
+        keyword: Destination.getTitle(),
+
+        // TODO: must be better way to do this
         $wikiTab: $destination.find('#destination_content'),
       });
     });
@@ -101,7 +93,7 @@ var Destination = {
     DestinationTabs.bindTabFunction('videos', function($tab) {
       Videos.activate({
         $el: $tab,
-        keyword: Destination.getTitle,
+        keyword: Destination.getTitle(),
       });
     });
 
@@ -151,6 +143,7 @@ var Destination = {
       // is preserved when changing tabs)
       try {
         Weather.setClimateTable(Destination.$destination);
+        Photos.setWikiPhotos(Destination.$destination);
       }
       catch(e) {
         console.log(e);
