@@ -1,8 +1,7 @@
 var loadDestination = require('./load_destination');
 var DestinationTabs = require('./destination_tabs');
 var Photos = require('./photos');
-var Youtube = require('./youtube_videos');
-var videoTemplate = require('../templates/videos.hbs');
+var Videos = require('./videos');
 
 var Weather = require('./weather');
 var moment = require('moment');
@@ -45,13 +44,6 @@ var Destination = {
       else {
         window.open(url, '_system');
       }
-    });
-
-    // Open youtube videos with external app
-    $destination.on('tap', '#videos_tab > div', function(e) {
-      // Show loading
-      $(this).addClass('opening_external_app');
-      window.open($(this).attr('data-href'), '_system');
     });
 
     // Accordion for wikivoyage articles
@@ -107,16 +99,16 @@ var Destination = {
     });
 
     DestinationTabs.bindTabFunction('videos', function($tab) {
-      Youtube.search(Destination.destination.title, function(error, videos) {
-        $tab.html(videoTemplate({videos: videos}));
-        $tab.removeClass('not_loaded');
+      Videos.activate({
+        $el: $tab,
+        keyword: Destination.getTitle,
       });
     });
 
     DestinationTabs.bindTabFunction('weather', function($tab) {
       Weather.activate({
         $el: $tab,
-        keyword: Destination.getTitle()
+        keyword: Destination.getTitle(),
       });
     });
 

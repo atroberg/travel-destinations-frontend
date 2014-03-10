@@ -1,6 +1,7 @@
 var settings = {
   flickrApiKey: 'cb604a39c91c3feca7769fa5fa012b5a',
   youtubeApiKey: 'AIzaSyDaS1ZttUF_kl-geMgtEy9X5_eqV3UWEXs',
+  youtubeApiURI: 'http://54.200.137.96:8888',
   openWeatherMapKey: 'ea3739d944e0f931dee8b175958316c0',
   animationDurations: {
     tabs: 200,
