@@ -46,24 +46,11 @@ var Frontpage = {
       Frontpage.focusToTab($(this).index());
     });
 
-    var tabSwitchRequested = false;
-    this.$frontpage.on('dragleft dragright', '#frontpage_tabs', function(e) {
-      e.gesture.preventDefault();
-
-      if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
-
-        if ( e.gesture.direction === 'left' ) {
-          Frontpage.focusToTab(Frontpage.currentTab + 1);
-        }
-        else {
-          Frontpage.focusToTab(Frontpage.currentTab - 1);
-        }
-
-        tabSwitchRequested = true;
-      }
+    this.$frontpage.trobisHammer().on('trobisHammer.swiperight', '#frontpage_tabs', function(e) {
+      Frontpage.focusToTab(Frontpage.currentTab + 1);
     })
-    .on('dragend', function(e) {
-      tabSwitchRequested = false;
+    .on('trobisHammer.swipeleft', '#frontpage_tabs', function(e) {
+      Frontpage.focusToTab(Frontpage.currentTab - 1);
     });
   },
 

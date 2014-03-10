@@ -31,8 +31,6 @@ var FullscreenPhotoGallery = {
     // Make sure we focus to correct photo on init
     focusToPhoto(currentIndex);
 
-    var photoSwitchRequested = false;
-
     popup.on('touchmove', function(e) {
       e.preventDefault();
     });
@@ -46,28 +44,17 @@ var FullscreenPhotoGallery = {
         window.open(xbigSrc, '_system');
       }
     })
-    .on('dragleft dragright', function(e) {
-      e.gesture.preventDefault();
-
-      if ( !photoSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
-
-        if ( e.gesture.direction === 'left' ) {
-          focusToPhoto(currentIndex + 1);
-        }
-        else {
-          focusToPhoto(currentIndex - 1);
-        }
-
-        photoSwitchRequested = true;
-      }
-    })
-    .on('dragend', function(e) {
-      photoSwitchRequested = false;
-    })
 
     // Show hide image text
-    .on('tap', function(e) {
+    popup.on('tap', function(e) {
       $(this).toggleClass('hide_photo_title');
+    });
+
+    popup.trobisHammer().on('trobisHammer.swiperight', function(e) {
+      focusToPhoto(currentIndex + 1);
+    })
+    .on('trobisHammer.swipeleft', function(e) {
+      focusToPhoto(currentIndex - 1);
     });
 
     function focusToPhoto(index) {

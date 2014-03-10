@@ -2,6 +2,7 @@ var loadDestination = require('./load_destination');
 var DestinationTabs = require('./destination_tabs');
 var Photos = require('./photos');
 var Videos = require('./videos');
+var trobisHammer = require('./trobis.hammer.js');
 
 var Weather = require('./weather');
 var moment = require('moment');
@@ -61,23 +62,12 @@ var Destination = {
 
     // Need to prevent drag event from firing tab change multiple times
     var tabSwitchRequested = false;
-    $destination.on('dragleft dragright', function(e) {
-      e.gesture.preventDefault();
-
-      if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
-
-        if ( e.gesture.direction === 'left' ) {
-          DestinationTabs.nextTab();
-        }
-        else {
-          DestinationTabs.prevTab();
-        }
-
-        tabSwitchRequested = true;
-      }
+    $destination.trobisHammer();
+    $destination.on('trobisHammer.swiperight', function(e) {
+      DestinationTabs.nextTab();
     })
-    .on('dragend', function(e) {
-      tabSwitchRequested = false;
+    .on('trobisHammer.swipeleft', function(e) {
+      DestinationTabs.prevTab();
     });
 
     DestinationTabs.bindTabFunction('photos', function($tab) {
