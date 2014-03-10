@@ -22,7 +22,18 @@ body {
 #destination {
   width:100%;
   overflow:hidden;
+  background:white;
   min-height: 100%;
+  height:100%;
+  -webkit-transform:scale(.1);
+  transition:-webkit-transform $transition-duration;
+  visibility: hidden;
+
+  &.active {
+    visibility:visible;
+    height:auto;
+    -webkit-transform:scale(1);
+  }
 
   @import 'destination';
 }

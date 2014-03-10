@@ -132,11 +132,21 @@ var Destination = {
 
   },
 
+  activate: function() {
+    this.$destination.addClass('active');
+  },
+
+  deactivate: function() {
+    this.$destination.removeClass('active');
+  },
+
   show: function(path, options) {
     options = options || {};
     options.addHistoryEntry = typeof options.addHistoryEntry !== 'undefined'
                                 ? options.addHistoryEntry
                                 : true;
+
+    this.activate();
 
     // TODO: fix URI
     Destination.currentDestination.uri = path;

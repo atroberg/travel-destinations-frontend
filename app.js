@@ -13,7 +13,7 @@ $(document).ready(function initApp() {
 
   Frontpage.init($('#frontpage').hammer(settings.hammer));
 
-  //Destination.init($('#destination').hammer(settings.hammer));
+  Destination.init($('#destination').hammer(settings.hammer));
   //Destination.show('/wiki/Helsinki');
 
 });

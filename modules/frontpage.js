@@ -1,20 +1,53 @@
 var frontpageTemplate = require('../templates/frontpage.hbs');
 var settings = require('./settings');
+var AppHistory = require('./history');
+var Destination = require('./destination');
 
 var Frontpage = {
 
   init: function($frontpage) {
-    this.currentTab = 0;
     this.$frontpage = $frontpage;
     this.updateView();
-    this.tabCount = $frontpage.find('#frontpage_tabs .tab').length;
+    this.initSwipeTabs();
 
-    $frontpage.on('tap', '#frontpage_tabs_menu li', function(e) {
+    AppHistory.addPopHandler('closeDestination', function() {
+      Frontpage.activate();
+      Destination.deactivate();
+    });
+    AppHistory.push({popHandler: 'closeDestination'}, "Frontpage");
+
+    this.$frontpage.on('tap', '.destination', function(e) {
+      Frontpage.deactivate();
+      var url = $(this).attr('data-url');
+      Destination.show(url);
+    });
+  },
+
+  activate: function() {
+    this.$frontpage.removeClass('inactive');
+  },
+
+  deactivate: function() {
+    this.$frontpage.addClass('inactive');
+  },
+
+  updateView: function() {
+    var html = frontpageTemplate({
+
+    });
+    this.$frontpage.html(html);
+  },
+
+  initSwipeTabs: function() {
+    this.currentTab = 0;
+    this.tabCount = this.$frontpage.find('#frontpage_tabs .tab').length;
+
+    this.$frontpage.on('tap', '#frontpage_tabs_menu li', function(e) {
       Frontpage.focusToTab($(this).index());
     });
 
     var tabSwitchRequested = false;
-    $frontpage.on('dragleft dragright', '#frontpage_tabs', function(e) {
+    this.$frontpage.on('dragleft dragright', '#frontpage_tabs', function(e) {
       e.gesture.preventDefault();
 
       if ( !tabSwitchRequested && e.gesture.velocityX > settings.tabSwipeVelocity ) {
@@ -32,13 +65,6 @@ var Frontpage = {
     .on('dragend', function(e) {
       tabSwitchRequested = false;
     });
-  },
-
-  updateView: function() {
-    var html = frontpageTemplate({
-
-    });
-    this.$frontpage.html(html);
   },
 
   focusToTab: function(index) {

@@ -8,6 +8,10 @@ var ActionBar = {
     this.$destination = $destination;
     var that = this;
 
+    this.$destination.on('tap', 'nav .back', function(e) {
+      history.back();
+    });
+
     this.$destination.on('tap', 'nav .favoriteBtn', function(e) {
       var $btn = $(this);
 
