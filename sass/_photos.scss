@@ -1,0 +1,13 @@
+#photos_tab {
+  padding:0 4px;
+  line-height: 1em;
+
+  .photo {
+    display:inline-block;
+    background-repeat:no-repeat;
+    background-size:cover;
+    width:7em;
+    height:7em;
+    margin:0 4px 3px 0;
+  }
+}

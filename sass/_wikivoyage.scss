@@ -1,0 +1,87 @@
+#wikivoyage_tab {
+  margin-left:0;
+  margin-right:0;
+  margin-bottom:0;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family:inherit;
+  }
+
+  .thumbcaption {
+    overflow:hidden;
+  }
+
+  img {
+    max-width:95%;
+  }
+
+  > div {
+    margin:.5em 1.1em;
+    margin-top:0;
+
+    // prevent infobox from overflowing
+    // over next div
+    overflow:hidden;
+
+    > h1:first-child,
+    > h2:first-child,
+    > h3:first-child,
+    > h4:first-child,
+    > h5:first-child,
+    > h6:first-child {
+      padding-top:0;
+      margin-top:0;
+    }
+
+    // Ensure min-width for floating paragraphs
+    // Credits: http://css-tricks.com/minimum-paragraph-widths/
+    p:before {
+        content: "";
+        width: 10em;
+        display: block;
+        overflow: hidden;
+    }
+  }
+
+  // Hide these elements
+  .iconbox, .edit-page, .noprint {
+    display:none;
+  }
+
+  #region_list table td,
+  #region_list table th {
+    border:0;
+  }
+
+  // Accordion: hide content by default
+  > h2 + div {
+    display:none;
+  }
+
+  > h2.expanded + div {
+    display:block;
+  }
+
+  > h2:first-of-type {
+    border-top:0;
+  }
+
+  > h2 {
+    background:$accordion-title-bgcolor;
+    color:$accordion-title-color;
+    padding:.7em 1em;
+    border-top:2px solid $accordion-title-border-color;
+    font-family:"RobotoRegular";
+  }
+
+  > h2 i {
+    margin-right:.5em;
+    transition:all $transition-duration;
+    -webkit-transform:rotateZ(0deg);
+  }
+
+  > h2.expanded i {
+    -webkit-transform:rotateZ(90deg);
+  }
+
+}
