@@ -6,6 +6,7 @@ var AppHistory = require('./history');
 var ActionBar = require('./action_bar');
 var Favorites = require('./favorites');
 var Wikivoyage = require('./wikivoyage');
+var settings = require('./settings');
 var destinationTemplate = require('./../templates/destination.hbs');
 
 var Destination = {
@@ -78,7 +79,10 @@ var Destination = {
   },
 
   activate: function() {
-    this.$el.addClass('active');
+    this.$el.addClass('animateIn');
+    setTimeout(function(){
+      Destination.$el.removeClass('animateIn').addClass('active');
+    }, settings.animationDurations.page)
   },
 
   deactivate: function() {
