@@ -17,7 +17,7 @@ var Wikivoyage = {
         // For debugging with mobile chrome
         $.get('/helsinki_debug.html', function(data) {
           params.callback(null, data);
-        })
+        });
       }
     };
 

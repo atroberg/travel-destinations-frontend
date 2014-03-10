@@ -12,22 +12,22 @@ $number-of-tabs:4;
   background:white;
   min-height: 100%;
   height:100%;
-  -webkit-transform:scale(.1);
-  transition:-webkit-transform $transition-duration;
+  -webkit-transform:scale(0);
+  transition:-webkit-transform $page-transition-duration, opacity $page-transition-duration;
   visibility: hidden;
-
-  &.animateIn {
-    -webkit-transform:scale(1);
-  }
+  opacity:0;
 
   &.active {
+    visibility:visible;
+    height:auto;
+    opacity:1;
     // Otherwise autohiding nav doesn't work
     -webkit-transform:none;
   }
 
-  &.active, &.animateIn {
-    visibility:visible;
-    height:auto;
+  &.animateIn.active {
+    height:100%;
+    -webkit-transform:scale(1);
   }
 
   nav {

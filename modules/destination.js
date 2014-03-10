@@ -79,9 +79,9 @@ var Destination = {
   },
 
   activate: function() {
-    this.$el.addClass('animateIn');
+    this.$el.addClass('animateIn active');
     setTimeout(function(){
-      Destination.$el.removeClass('animateIn').addClass('active');
+      Destination.$el.removeClass('animateIn');
     }, settings.animationDurations.page)
   },
 
