@@ -1,66 +1,43 @@
-var settings = require('./settings');
-
-// Make icons provided by openweathermap
-// match the icon set we use
-var iconConversions = {
-  '01d': '01d',
-  '01n': '01n',
-  '02d': '03d',
-  '02n': '03n',
-  '03d': '04',
-  '03n': '04',
-  '04d': '04',
-  '04n': '04',
-  '09d': '05d',
-  '09n': '05n',
-  '10d': '10',
-  '10n': '10',
-  '11d': '11',
-  '11n': '11',
-  '13d': '13',
-  '13n': '13',
-  '50d': '15',
-  '50n': '15',
-};
+var OpenWeatherMap = require('./data_services/openweathermap');
+var weatherTemplate = require('../templates/weather.hbs');
+var moment = require('moment');
 
 var Weather = {
 
-  getForecast: function(options) {
-    $.ajax({
-      url: 'http://api.openweathermap.org/data/2.5/forecast/daily',
-      data: {
-        q: options.q,
-        mode: 'json',
-        units: 'metric',
-        cnt: options.days || 4,
-        APPID: settings.openWeatherMapKey,
+  activate: function(options) {
+    this.$el = options.$el;
+    this.showForecast(options.keyword);
+  },
+
+  updateView: function() {
+    Weather.$el.html(weatherTemplate({
+      forecast: Weather.forecastList,
+      climateTable: Weather.climateTable,
+    }));
+  },
+
+  showForecast: function(keyword) {
+
+    OpenWeatherMap.getForecast({
+        q: keyword,
       },
-      type: 'GET',
-      dataType: 'json',
-      success: function(data) {
-        var forecastList = [];
+      function(error, forecastList) {
 
-        try {
-          $.each(data.list, function(i, day) {
-            if ( typeof iconConversions[day.weather[0].icon] !== 'undefined' ) {
-              day.icon = iconConversions[day.weather[0].icon];
-            }
-            else {
-              day.icon = null;
-            }
+        if ( error ) {
+          // TODO
+        }
 
-            forecastList.push(day);
+        else {
+          $.each(forecastList, function(i, day) {
+            day.dayLabel = moment.unix(day.dt).format('ddd D.M');
+            day.temp.day = Math.round(day.temp.day);
+            day.temp.night = Math.round(day.temp.night);
           });
 
-          options.callback(null, forecastList);
+          Weather.forecastList = forecastList;
+          Weather.updateView();
         }
-        catch(e) {
-          options.callback(e);
-        }
-      },
-      error: function(msg) {
-        options.callback(msg);
-      },
+
     });
   },
 

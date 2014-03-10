@@ -3,7 +3,7 @@ var DestinationTabs = require('./destination_tabs');
 var Photos = require('./photos');
 var Youtube = require('./youtube_videos');
 var videoTemplate = require('../templates/videos.hbs');
-var weatherTemplate = require('../templates/weather.hbs');
+
 var Weather = require('./weather');
 var moment = require('moment');
 var settings = require('./settings');
@@ -15,9 +15,9 @@ var Destination = {
   init: function($destination) {
 
     this.$destination = $destination;
-    this.currentDestination = {};
+    this.destination = {};
 
-    ActionBar.init(this.currentDestination, $destination);
+    ActionBar.init(this.destination, $destination);
 
     AppHistory.addPopHandler('loadDestination', function(state) {
       Destination.show(state.url, {addHistoryEntry:false});
@@ -100,36 +100,30 @@ var Destination = {
 
     DestinationTabs.bindTabFunction('photos', function($tab) {
       Photos.showTab({
-        keyword:Destination.currentDestination.title,
+        keyword:Destination.destination.title,
         $tab:$tab,
         $wikiTab: $destination.find('#destination_content'),
       });
     });
 
     DestinationTabs.bindTabFunction('videos', function($tab) {
-      Youtube.search(Destination.currentDestination.title, function(error, videos) {
+      Youtube.search(Destination.destination.title, function(error, videos) {
         $tab.html(videoTemplate({videos: videos}));
         $tab.removeClass('not_loaded');
       });
     });
 
     DestinationTabs.bindTabFunction('weather', function($tab) {
-      Weather.getForecast({
-        q: Destination.currentDestination.title,
-        callback: function(error, forecastList) {
-          $.each(forecastList, function(i, day) {
-            day.dayLabel = moment.unix(day.dt).format('ddd D.M');
-            day.temp.day = Math.round(day.temp.day);
-            day.temp.night = Math.round(day.temp.night);
-          });
-          $tab.html(weatherTemplate({
-            forecast: forecastList,
-            climateTable: Weather.climateTable,
-          }));
-        },
+      Weather.activate({
+        $el: $tab,
+        keyword: Destination.getTitle()
       });
     });
 
+  },
+
+  getTitle: function() {
+    return this.destination.title;
   },
 
   activate: function() {
@@ -149,15 +143,15 @@ var Destination = {
     this.activate();
 
     // TODO: fix URI
-    Destination.currentDestination.uri = path;
-    Destination.currentDestination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
+    Destination.destination.uri = path;
+    Destination.destination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
 
     // Back history management
     if ( options.addHistoryEntry ) {
-      AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.currentDestination.title);
+      AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.destination.title);
     }
 
-    loadDestination(Destination.currentDestination, Destination.$destination, function wikivoyageLoaded() {
+    loadDestination(Destination.destination, Destination.$destination, function wikivoyageLoaded() {
       // We need to parse climate table from wikivoyage html
       // already at this stage, because otherwise we might not
       // be able to access the DOM when weather tab is loaded
