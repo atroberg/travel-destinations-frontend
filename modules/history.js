@@ -46,21 +46,20 @@ var AppHistory = {
   push: function(state, title, options) {
     options = options || {};
 
-    if ( this.noEntriesYet ) {
+    if ( this.noEntriesYet || options.replaceState ) {
       var fn = 'replaceState';
       this.noEntriesYet = false;
     }
     else {
       var fn = 'pushState';
+      AppHistory.currentIndex += 1;
     }
 
     history[fn](state, title);
 
     if ( options.shortcut ) {
-      this.shortcuts[options.shortcut] = AppHistory.currentIndex;
+      this.shortcuts[options.shortcut] = AppHistory.currentIndex - 1;
     }
-
-    AppHistory.currentIndex += 1;
   },
 
   // Need this because some history events we need
@@ -71,7 +70,7 @@ var AppHistory = {
   // it will never fire when going back. Therefore we need
   // to add one more "dummy" event to history.
   pushAction: function(state, title) {
-    this.push(state, title);
+    this.push(state, title, {replaceState: true});
     // Push the "dummy" action
     this.push({}, 'dummy_event');
   },
