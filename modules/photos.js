@@ -6,9 +6,10 @@ var FullscreenPhotoGallery = require('./fullscreen_photo_gallery');
 
 var Photos = {
 
-  photos: [],
+  init: function(options) {
+    this.$el = options.$el;
+    this.photos = [];
 
-  init: function() {
     if ( typeof this.$el.attr('data-inited') === 'undefined' ) {
       AppHistory.addPopHandler('galleryFullscreen', function(state) {
         FullscreenPhotoGallery.deactivate();
@@ -22,10 +23,9 @@ var Photos = {
   },
 
   activate: function(options) {
-    this.$el = options.$el;
-    this.init();
-    this.updateView();
-    this.searchFlickr(options.keyword);
+    this.init(options);
+    this.showWikiPhotos();
+    this.showFlickrPhotos(options.keyword);
   },
 
   updateView: function() {
@@ -34,10 +34,15 @@ var Photos = {
   },
 
   setWikiPhotos: function($wiki) {
-    this.photos = this.photos.concat(MediawikiMobileParser.parsePhotos($wiki));
+    this.wikiPhotos = MediawikiMobileParser.parsePhotos($wiki);
   },
 
-  searchFlickr: function(keyword) {
+  showWikiPhotos: function() {
+    this.photos = this.photos.concat(this.wikiPhotos);
+    this.updateView();
+  },
+
+  showFlickrPhotos: function(keyword) {
 
     Flickr.search({keyword: keyword}, function(error, photos) {
       if ( error ) {

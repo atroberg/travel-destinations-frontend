@@ -37,9 +37,6 @@ var Destination = {
       Photos.activate({
         $el: $tab,
         keyword: Destination.getTitle(),
-
-        // TODO: must be better way to do this
-        $wikiTab: Destination.$el.find('#destination_content'),
       });
     });
 
@@ -124,14 +121,9 @@ var Destination = {
         // be able to access the DOM when weather tab is loaded
         // (because the DOM is removed and instead just the html
         // is preserved when changing tabs)
-        try {
-          var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
-          Weather.setClimateTable($wikivoyageTab);
-          Photos.setWikiPhotos($wikivoyageTab);
-        }
-        catch(e) {
-          console.log(e);
-        }
+        var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
+        Weather.setClimateTable($wikivoyageTab);
+        Photos.setWikiPhotos($wikivoyageTab);
       },
     });
 
