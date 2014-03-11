@@ -21,6 +21,7 @@ var Videos = {
   },
 
   updateView: function() {
+    this.$el.removeClass('not_loaded');
     this.$el.html(videoTemplate({
       videos: this.videos,
     }));
