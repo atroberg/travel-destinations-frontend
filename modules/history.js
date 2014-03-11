@@ -36,7 +36,8 @@ var AppHistory = {
   gotoShortcut: function(name) {
     try {
       var addedPosition = this.shortcuts[name];
-      history.go(addedPosition - AppHistory.currentIndex);
+      var gotoIndex = addedPosition - AppHistory.currentIndex;
+      AppHistory.currentIndex = addedPosition + 1;
     }
     catch (e) {
       console.log(e);
