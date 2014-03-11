@@ -7,10 +7,18 @@ var AppHistory = {
 
   popHandlers: {},
 
+  // Need to keep track of this separately,
+  // because history.length doesn't give the
+  // current position in history but only the
+  // total amount of pages in the history
+  currentIndex: 0,
+
   shortcuts: {},
 
   init: function() {
     window.onpopstate = function(event) {
+      AppHistory.currentIndex -= 1;
+
       if ( event.state && AppHistory.popHandlers[event.state.popHandler] ) {
         AppHistory.popHandlers[event.state.popHandler](event.state);
       }
@@ -28,8 +36,7 @@ var AppHistory = {
   gotoShortcut: function(name) {
     try {
       var addedPosition = this.shortcuts[name];
-      var currentPosition = history.length;
-      history.go(addedPosition - currentPosition);
+      history.go(addedPosition - AppHistory.currentIndex);
     }
     catch (e) {
       console.log(e);
@@ -50,8 +57,10 @@ var AppHistory = {
     history[fn](state, title);
 
     if ( options.shortcut ) {
-      this.shortcuts[options.shortcut] = history.length;
+      this.shortcuts[options.shortcut] = AppHistory.currentIndex;
     }
+
+    AppHistory.currentIndex += 1;
   },
 
   // Need this because some history events we need
