@@ -37,6 +37,7 @@ var AppHistory = {
     try {
       var addedPosition = this.shortcuts[name];
       var gotoIndex = addedPosition - AppHistory.currentIndex;
+      history.go(gotoIndex);
       AppHistory.currentIndex = addedPosition + 1;
     }
     catch (e) {
