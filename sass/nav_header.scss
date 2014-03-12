@@ -1,0 +1,38 @@
+nav {
+  background:$nav-bgcolor;
+  color:$nav-color;
+  text-align:center;
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+  transition:-webkit-transform $transition-duration;
+  -webkit-transform: translate3d(0,0,0);
+  border-bottom: 2px solid #9c9c9c;
+
+  h1 {
+    display:inline-block;
+    font-size:2em;
+    line-height:1em;
+    margin-top:.3em;
+    font-family:"RobotoRegular";
+  }
+
+  i {
+    font-size:2em;
+    padding:.3em .4em;
+  }
+
+  .back {
+    float:left;
+  }
+
+  .right {
+    float:right;
+  }
+
+  .menu {
+    padding-left:.5em;
+    padding-right:.8em;
+  }
+}

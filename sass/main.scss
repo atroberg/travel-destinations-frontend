@@ -2,6 +2,10 @@
 $transition-duration:.2s;
 $page-transition-duration:.5s;
 
+$nav-bgcolor:#ededed;
+$nav-color:#474747;
+$nav-border-bottom-color:#9c9c9c;
+
 @import 'fonts';
 
 * {
@@ -20,9 +24,30 @@ body {
   //font-size:18px;
 }
 
+@import 'nav_header';
 @import 'destination';
 @import 'popup_gallery_fullscreen';
 @import 'frontpage';
+
+// Container for all page types, that
+// don't have an own container element
+#actionPage {
+  z-index:4000;
+  visibility:hidden;
+  opacity:0;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  min-height:100%;
+  background:white;
+  transition:opacity $page-transition-duration;
+
+  &.active {
+    visibility:visible;
+    opacity:1;
+  }
+}
 
 .toast_msg {
   z-index:2000;

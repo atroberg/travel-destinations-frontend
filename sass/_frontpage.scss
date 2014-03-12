@@ -55,6 +55,7 @@ $frontpage-tab-count: 3;
     width:100%;
     min-height:100%;
     position:absolute;
+    padding-top:38px;
     top:0;
     left:0;
     z-index:2;
@@ -71,26 +72,16 @@ $frontpage-tab-count: 3;
       background:black;
       opacity:0;
       transition:opacity $transition-duration;
-      z-index:1;
+      z-index:1001;
     }
   }
 
   nav {
-    background: #ededed;
-    color: #474747;
-    border-bottom:2px solid #9c9c9c;
-    overflow: hidden;
-    padding:.2em 0;
-
-    i {
-      display:inline-block;
-      padding:.2em 0 0 .4em;
-      font-size:2em;
-    }
 
     input {
       float:right;
       width:84%;
+      margin-top:.2em;
       margin-right:.3em;
       font-size:1.5em;
     }
