@@ -46,7 +46,7 @@ var Frontpage = {
     isVisible: false,
 
     init: function() {
-      Frontpage.$frontpage.on('tap', 'nav .menuBtn', this.toggleVisiblity);
+      Frontpage.$frontpage.on('tap', 'nav .menuBtn', this.show);
       Frontpage.$frontpage.on('touchstart click', '.overlay', function(e) {
         if ( Frontpage.menu.isVisible ) {
           Frontpage.menu.hide();
@@ -57,7 +57,7 @@ var Frontpage = {
 
     actions: {
       savedPages: function() {
-        console.log("lreom");
+        alert("TODO");
       },
       destinationFinder: function() {
         // TODO: will be implemented later
@@ -72,15 +72,6 @@ var Frontpage = {
           Frontpage.menu.actions[action]();
         }
       });
-    },
-
-    toggleVisiblity: function(e) {
-      if ( Frontpage.menu.isVisible ) {
-        Frontpage.menu.hide();
-      }
-      else {
-        Frontpage.menu.show();
-      }
     },
 
     show: function() {
