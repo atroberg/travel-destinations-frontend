@@ -107,10 +107,10 @@ var Frontpage = {
       Frontpage.focusToTab($(this).index());
     });
 
-    this.$frontpage.trobisHammer().on('trobisHammer.swiperight', '#frontpage_tabs', function(e) {
+    this.$frontpage.trobisHammer().on('trobisHammer.swiperight', function(e) {
       Frontpage.focusToTab(Frontpage.currentTab + 1);
     })
-    .on('trobisHammer.swipeleft', '#frontpage_tabs', function(e) {
+    .on('trobisHammer.swipeleft', function(e) {
       Frontpage.focusToTab(Frontpage.currentTab - 1);
     });
   },

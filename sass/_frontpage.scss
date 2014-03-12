@@ -116,10 +116,6 @@ $frontpage-tab-count: 3;
   }
 
   #frontpage_tabs {
-    // This fixes an issue related to the transition
-    // effect, where the viewport isn't refreshed correctly
-    // (parts of non-active tab elements visible)
-    position:relative;
     height:100%;
 
     width:$frontpage-tab-count * 100%;
