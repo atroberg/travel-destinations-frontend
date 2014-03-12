@@ -1,5 +1,6 @@
 var WikivoyageService = require('../../data_services/wikivoyage');
 var MediawikiMobileParser = require('../../mediawiki_mobile_parser.js');
+var SavedPagesDataProvider = require('../../data_services/saved_pages');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
@@ -57,10 +58,21 @@ var Wikivoyage = {
         Wikivoyage.$loadingStatus.css('width', '100%');
 
         if ( error ) {
-          // TODO
+          // Check if we page is saved
+          try {
+            var savedPage = SavedPagesDataProvider.get({
+              destination: {
+                uri: options.destination.uri,
+              }
+            });
+            data = savedPage.html;
+          }
+          catch(e) {
+            // TODO: some error msg
+          }
         }
 
-        else {
+        if ( data ) {
           try {
             var parser = MediawikiMobileParser.setHtml(data).getActualContent()
                           .removeBanner().removeEmptySections();

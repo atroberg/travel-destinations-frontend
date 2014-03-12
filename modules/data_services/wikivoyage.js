@@ -12,8 +12,9 @@ var Wikivoyage = {
         params.callback(null, data);
       },
       error: function(msg) {
-        // TODO
+        params.callback(msg);
 
+        // TODO
         // For debugging with mobile chrome
         $.get('/helsinki_debug.html', function(data) {
           params.callback(null, data);

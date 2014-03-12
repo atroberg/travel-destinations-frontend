@@ -61,7 +61,11 @@ var MediawikiMobileParser = {
         $thumbinner = $(thumbinner);
         var $img = $thumbinner.find('img:first');
 
-        if ( $img.attr('src').match(/\.jpe?g$/i) ) {
+        var matches = $img.attr('src').match(/(\.jpe?g$)|(^data:image\/jpeg)/i)
+
+        if ( matches ) {
+
+          var isDataURLPhoto = typeof(matches[2]) !== 'undefined';
 
           try {
             var title = $thumbinner.find('.thumbcaption').text().trim();
@@ -71,15 +75,20 @@ var MediawikiMobileParser = {
           }
 
           var src = $img.attr('src');
-          var sizes = $img.attr('srcset')
-                        ? $img.attr('srcset').split(/,\s+/g)
-                        : null;
 
           var photo = {
             src: src,
             title: title,
             bigSrc: src,
           };
+
+          if ( isDataURLPhoto ) {
+            return photo;
+          }
+
+          var sizes = $img.attr('srcset')
+                        ? $img.attr('srcset').split(/,\s+/g)
+                        : null;
 
           if ( sizes && sizes.length > 0 ) {
             var parsedSizes = {};

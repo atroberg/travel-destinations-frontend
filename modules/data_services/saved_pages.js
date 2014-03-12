@@ -85,8 +85,6 @@ var SavedPages = {
         }));
       });
 
-      console.log(savedDestinations);
-
       return savedDestinations;
     },
 
@@ -130,12 +128,20 @@ var SavedPages = {
       var img = new Image();
       img.src = src;
       img.onload = function() {
+        // Make sure canvas is clean (adjusting dimensions will clean it)
+        SavedPages.canvas.width = img.width;
+        SavedPages.canvas.height = img.height;
+
         context.drawImage(img, 0, 0);
 
-        // Make sure canvas is clean
-        SavedPages.canvas.width = SavedPages.canvas.width;
+        if ( img.src.match(/\.jpe?g/i) ) {
+          var mime = 'image/jpeg';
+        }
+        else {
+          var mime = 'image/png';
+        }
 
-        callback(null, SavedPages.canvas.toDataURL());
+        callback(null, SavedPages.canvas.toDataURL(mime));
       };
       img.onerror = function(e) {
         callback(e);
