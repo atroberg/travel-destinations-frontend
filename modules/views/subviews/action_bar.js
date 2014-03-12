@@ -1,9 +1,10 @@
-var Favorites = require('./favorites');
-var Toast = require('./toast');
-var autohideNav = require('./autohide_nav');
-var AppHistory = require('./history');
-var SavedPages = require('./saved_pages');
-var Map = require('./map');
+var Favorites = require('../../favorites');
+var Toast = require('../../toast');
+var SavedPages = require('../../data_services/saved_pages');
+var autohideNav = require('../../autohide_nav');
+var AppHistory = require('../../history');
+var Map = require('../../map');
+
 
 var ActionBar = {
 
@@ -112,6 +113,10 @@ var ActionBar = {
 
       showOnMap: function() {
         Map.openExternalApp();
+      },
+
+      share: function() {
+        alert("TODO");
       },
     }
   }

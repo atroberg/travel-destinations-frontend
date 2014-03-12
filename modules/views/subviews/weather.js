@@ -1,5 +1,5 @@
-var OpenWeatherMap = require('./data_services/openweathermap');
-var weatherTemplate = require('../templates/weather.hbs');
+var OpenWeatherMap = require('../../data_services/openweathermap');
+var weatherTemplate = require('../../../templates/weather.hbs');
 var moment = require('moment');
 
 var Weather = {

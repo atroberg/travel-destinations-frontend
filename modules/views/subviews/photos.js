@@ -1,8 +1,10 @@
-var photosTabTemplate = require('../templates/photos.hbs');
-var Flickr = require('./data_services/flickr');
-var MediawikiMobileParser = require('./mediawiki_mobile_parser');
-var AppHistory = require('./history');
+var photosTabTemplate = require('../../../templates/photos.hbs');
+var Flickr = require('../../data_services/flickr');
+var MediawikiMobileParser = require('../../mediawiki_mobile_parser');
+var AppHistory = require('../../history');
+
 var FullscreenPhotoGallery = require('./fullscreen_photo_gallery');
+
 
 var Photos = {
 

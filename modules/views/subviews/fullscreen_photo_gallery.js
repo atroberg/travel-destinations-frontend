@@ -1,5 +1,5 @@
-var fullscreenGalleryTemplate = require('../templates/fullscreen_photo_gallery.hbs');
-var settings = require('./settings');
+var fullscreenGalleryTemplate = require('../../../templates/fullscreen_photo_gallery.hbs');
+var settings = require('../../settings');
 
 var FullscreenPhotoGallery = {
 

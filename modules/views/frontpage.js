@@ -1,7 +1,9 @@
-var frontpageTemplate = require('../templates/frontpage.hbs');
-var settings = require('./settings');
-var AppHistory = require('./history');
+var frontpageTemplate = require('../../templates/frontpage.hbs');
+
+var settings = require('../settings');
+var AppHistory = require('../history');
 var Destination = require('./destination');
+
 
 var Frontpage = {
 

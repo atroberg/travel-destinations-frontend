@@ -1,14 +1,17 @@
-var DestinationTabs = require('./destination_tabs');
-var Photos = require('./photos');
-var Videos = require('./videos');
-var Weather = require('./weather');
-var AppHistory = require('./history');
-var ActionBar = require('./action_bar');
-var Favorites = require('./favorites');
-var Wikivoyage = require('./wikivoyage');
-var settings = require('./settings');
-var Map = require('./map');
-var destinationTemplate = require('./../templates/destination.hbs');
+var Photos = require('./subviews/photos');
+var Videos = require('./subviews/videos');
+var Weather = require('./subviews/weather');
+var Wikivoyage = require('./subviews/wikivoyage');
+
+var DestinationTabs = require('../destination_tabs');
+var AppHistory = require('../history');
+var ActionBar = require('./subviews/action_bar');
+var Favorites = require('../favorites');
+var settings = require('../settings');
+var Map = require('../map');
+
+var destinationTemplate = require('../../templates/destination.hbs');
+
 
 var Destination = {
 

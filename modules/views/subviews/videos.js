@@ -1,5 +1,5 @@
-var Youtube = require('./data_services/youtube');
-var videoTemplate = require('../templates/videos.hbs');
+var Youtube = require('../../data_services/youtube');
+var videoTemplate = require('../../../templates/videos.hbs');
 
 var Videos = {
 

@@ -1,5 +1,5 @@
-var WikivoyageService = require('./data_services/wikivoyage');
-var MediawikiMobileParser = require('./mediawiki_mobile_parser.js');
+var WikivoyageService = require('../../data_services/wikivoyage');
+var MediawikiMobileParser = require('../../mediawiki_mobile_parser.js');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
