@@ -25,6 +25,7 @@ body {
 @import 'frontpage';
 
 .toast_msg {
+  z-index:2000;
   position: fixed;
   bottom:2em;
   width:90%;

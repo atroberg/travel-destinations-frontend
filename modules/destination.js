@@ -76,14 +76,18 @@ var Destination = {
   },
 
   activate: function() {
-    this.$el.addClass('animateIn active');
+    this.$el.addClass('animate active');
     setTimeout(function(){
-      Destination.$el.removeClass('animateIn');
-    }, settings.animationDurations.page)
+      Destination.$el.removeClass('animate');
+    }, settings.animationDurations.page);
   },
 
   deactivate: function() {
     this.$el.removeClass('active');
+    this.$el.addClass('animate');
+    setTimeout(function(){
+      Destination.$el.removeClass('animate');
+    }, settings.animationDurations.page);
   },
 
   show: function(path, options) {

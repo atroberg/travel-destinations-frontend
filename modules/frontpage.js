@@ -30,7 +30,9 @@ var Frontpage = {
   },
 
   deactivate: function() {
-    this.$frontpage.addClass('inactive');
+    setTimeout(function() {
+      Frontpage.$frontpage.addClass('inactive');
+    }, settings.animationDurations.page);
   },
 
   updateView: function() {
