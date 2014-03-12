@@ -12,7 +12,7 @@ var SavedPages = {
       // Save only wikivoyage
       this.getWikivoyagePage(options.destination.uri, function(error, html) {
         if ( error ) {
-          // Todo
+          options.callback(error);
         }
         else {
           // Replace all photos with dataURL
@@ -21,6 +21,7 @@ var SavedPages = {
 
           $.each(images, function(i, img)  {
             var src = img.substring('src="'.length, img.length - 1);
+
             SavedPages.imageToDataURL(src, function(error, dataURL) {
               handledImages += 1;
 
@@ -40,6 +41,8 @@ var SavedPages = {
                   destination: options.destination,
                   keyName: keyName
                 });
+
+                options.callback(null, true);
               }
             });
           });

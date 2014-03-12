@@ -96,7 +96,19 @@ var ActionBar = {
   initMenuActions: function() {
     this.menuActions = {
       'save': function() {
-        SavedPages.save({destination: ActionBar.destination});
+        SavedPages.save({
+          destination: ActionBar.destination,
+          callback: function (error, success) {
+            if ( error ) {
+              // TODO
+              console.log(error);
+            }
+            else {
+              Toast.show(ActionBar.destination.title + ' saved');
+            }
+          },
+        });
+        Toast.show('Saving page');
       }
     };
   },
