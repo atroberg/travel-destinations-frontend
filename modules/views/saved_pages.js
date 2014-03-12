@@ -1,6 +1,7 @@
 var template = require('../../templates/saved_pages.hbs');
 var SavedPagesDataProvider = require('../data_services/saved_pages');
 var settings = require('../settings');
+var AppHistory = require('../history');
 var Destination = require('./destination');
 
 var SavedPages = {
@@ -20,6 +21,13 @@ var SavedPages = {
       }
 
       else {
+        AppHistory.addPopHandler('closeDestination', function() {
+          SavedPages.activate();
+          Destination.deactivate();
+        });
+
+        AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
+
         Destination.show($(this).attr('data-uri'));
         SavedPages.deactivate();
       }

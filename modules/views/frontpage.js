@@ -14,14 +14,15 @@ var Frontpage = {
     this.menu.init();
     this.initSwipeTabs();
 
-    AppHistory.addPopHandler('closeDestination', function() {
-      Frontpage.activate();
-      Destination.deactivate();
-    });
-
-    AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
-
     this.$frontpage.on('tap', '.destination', function(e) {
+
+      AppHistory.addPopHandler('closeDestination', function() {
+        Frontpage.activate();
+        Destination.deactivate();
+      });
+
+      AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
+
       Frontpage.deactivate();
       var url = $(this).attr('data-url');
       Destination.show(url);
