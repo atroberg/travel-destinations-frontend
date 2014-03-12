@@ -30,6 +30,35 @@ $number-of-tabs:4;
     -webkit-transform:scale(1);
   }
 
+  #destinationMenu {
+    background:#efefef;
+    display:none;
+    position:absolute;
+    right:8px;
+    text-align:left;
+    box-shadow:0px 10px 22px 0px #717171;
+
+    &.active {
+      display:block;
+    }
+
+    i:before {
+      margin-right:.8em;
+    }
+
+    i:first-child {
+      border-top:0;
+    }
+
+    i {
+      margin:0;
+      padding:.7em 1.5em .7em 1.1em;
+      font-size:1.3em;
+      display:block;
+      border-top:1px solid #d7d7d7;
+    }
+  }
+
   nav {
     background:$nav-bgcolor;
     color:$nav-color;
