@@ -51,14 +51,43 @@ var SavedPages = {
     },
 
     get: function(options) {
-      var savedDestinations = this.index.getDestinations();
 
-      if ( savedDestinations[options.destination.uri] ) {
-        return localStorage.getItem(savedDestinations[options.destination.uri]);
+      // Destination provided => add additional fields etc
+      if ( options.savedDestination ) {
+        var savedDestination = options.savedDestination;
       }
+      // Destination not provided => need to fetch all and
+      // search for matching destination
       else {
-        throw "not_found";
+        var savedDestinations = this.index.getDestinations();
+
+        if ( savedDestinations[options.destination.uri] ) {
+          var savedDestination = savedDestinations[options.destination.uri];
+        }
+        else {
+          throw 'not_found';
+        }
       }
+
+      savedDestination = $.extend(savedDestination, {});
+      savedDestination.html = localStorage.getItem(savedDestination.html);
+      return savedDestination;
+    },
+
+    getAll: function() {
+      var savedDestinationsIndex = this.index.getDestinations();
+
+      var savedDestinations = [];
+
+      $.each(savedDestinationsIndex, function(key, destination) {
+        savedDestinations.push(SavedPages.get({
+          savedDestination: destination
+        }));
+      });
+
+      console.log(savedDestinations);
+
+      return savedDestinations;
     },
 
     storeOnDisk: function(options) {
@@ -119,7 +148,10 @@ var SavedPages = {
 
       addDestination: function(options) {
         this.getDestinations();
-        this.savedDestinations[options.destination.uri] = options.keyName;
+        this.savedDestinations[options.destination.uri] = {
+          html: options.keyName,
+          destination: options.destination
+        };
         this.save();
       },
 

@@ -1,0 +1,22 @@
+<nav>
+  <i class="back fa fa-chevron-left"></i>
+  <h1>Saved Pages</h1>
+  <div class="right">
+    <i class="menu fa fa-ellipsis-v menuBtn"></i>
+  </div>
+</nav>
+{{#if pages}}
+  <ul class="savedPagesList">
+    {{#each pages}}
+      <li data-uri="{{this.destination.uri}}">
+        {{this.destination.title}}
+        <i class="fa fa-times remove"></i>
+      </li>
+    {{/each}}
+  <ul>
+{{else}}
+  <div class="alert alert-info">
+    <h3>No saved pages</h3>
+    You can save pages from the menu when you are viewing a destination. Saved pages are available also when you don't have internet connectivity.
+  </div>
+{{/if}}

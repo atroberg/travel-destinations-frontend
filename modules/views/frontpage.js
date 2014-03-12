@@ -3,6 +3,7 @@ var frontpageTemplate = require('../../templates/frontpage.hbs');
 var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');
+var SavedPages = require('./saved_pages');
 
 
 var Frontpage = {
@@ -59,7 +60,8 @@ var Frontpage = {
 
     actions: {
       savedPages: function() {
-        alert("TODO");
+        Frontpage.menu.hide();
+        SavedPages.activate();
       },
       destinationFinder: function() {
         // TODO: will be implemented later
