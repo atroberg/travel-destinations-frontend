@@ -14,6 +14,9 @@ var settings = {
     tap_max_touchtime: 400
   },
   toastMsgDuration: 2000,
+  map: {
+    defaultZoomLevel: 10,
+  },
 };
 
 module.exports = settings;

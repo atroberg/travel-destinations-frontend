@@ -7,6 +7,7 @@ var ActionBar = require('./action_bar');
 var Favorites = require('./favorites');
 var Wikivoyage = require('./wikivoyage');
 var settings = require('./settings');
+var Map = require('./map');
 var destinationTemplate = require('./../templates/destination.hbs');
 
 var Destination = {
@@ -128,6 +129,10 @@ var Destination = {
         var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
         Weather.setClimateTable($wikivoyageTab);
         Photos.setWikiPhotos($wikivoyageTab);
+        Map.setCoordinates({
+          destination: Destination.destination,
+          $el: $wikivoyageTab
+        });
       },
     });
 

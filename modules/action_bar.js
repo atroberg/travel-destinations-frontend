@@ -3,6 +3,7 @@ var Toast = require('./toast');
 var autohideNav = require('./autohide_nav');
 var AppHistory = require('./history');
 var SavedPages = require('./saved_pages');
+var Map = require('./map');
 
 var ActionBar = {
 
@@ -93,7 +94,7 @@ var ActionBar = {
     },
 
     actions: {
-      'save': function() {
+      save: function() {
         SavedPages.save({
           destination: ActionBar.destination,
           callback: function (error, success) {
@@ -107,6 +108,10 @@ var ActionBar = {
           },
         });
         Toast.show('Saving page');
+      },
+
+      showOnMap: function() {
+        Map.openExternalApp();
       },
     }
   }
