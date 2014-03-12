@@ -2,6 +2,7 @@ var Favorites = require('./favorites');
 var Toast = require('./toast');
 var autohideNav = require('./autohide_nav');
 var AppHistory = require('./history');
+var SavedPages = require('./saved_pages');
 
 var ActionBar = {
 
@@ -71,6 +72,17 @@ var ActionBar = {
         ActionBar.hideMenu();
       }
     });
+
+    // Bind the event handlers
+    this.$el.on('tap', '#destinationMenu i', function(i) {
+      var action = $(this).attr('data-action');
+
+      if ( action && ActionBar.menuActions[action] ) {
+        ActionBar.menuActions[action]();
+      }
+    });
+
+    this.initMenuActions();
   },
 
   showMenu: function() {
@@ -79,6 +91,14 @@ var ActionBar = {
 
   hideMenu: function() {
     ActionBar.$menu.removeClass('active');
+  },
+
+  initMenuActions: function() {
+    this.menuActions = {
+      'save': function() {
+        SavedPages.save({destination: ActionBar.destination});
+      }
+    };
   },
 
 };
