@@ -98,7 +98,7 @@ var Destination = {
 
     this.activate();
 
-    DestinationTabs.clearCache();
+    DestinationTabs.init();
 
     // TODO: fix URI
     Destination.destination.uri = path;

@@ -2,6 +2,11 @@ var settings = require('./settings');
 
 var DestinationTabs = {
 
+  init: function() {
+    this.clearCache();
+    this.currentTab = 0;
+  },
+
   setElement: function setElement($el) {
     this.$container = $el;
   },
@@ -20,8 +25,6 @@ var DestinationTabs = {
   clearCache: function clearCache() {
     this.htmlCache = {};
   },
-
-  currentTab: 0,
 
   focusToTab: function focusToTab(index) {
 
