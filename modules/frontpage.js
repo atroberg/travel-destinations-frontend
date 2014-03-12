@@ -8,6 +8,7 @@ var Frontpage = {
   init: function($frontpage) {
     this.$frontpage = $frontpage;
     this.updateView();
+    this.menu.init();
     this.initSwipeTabs();
 
     AppHistory.addPopHandler('closeDestination', function() {
@@ -37,6 +38,63 @@ var Frontpage = {
 
     });
     this.$frontpage.html(html);
+  },
+
+  menu: {
+    isVisible: false,
+
+    init: function() {
+      Frontpage.$frontpage.on('tap', 'nav .menuBtn', this.toggleVisiblity);
+      Frontpage.$frontpage.on('touchstart click', '.overlay', function(e) {
+        if ( Frontpage.menu.isVisible ) {
+          Frontpage.menu.hide();
+        }
+      });
+      this.initActions();
+    },
+
+    actions: {
+      savedPages: function() {
+        console.log("lreom");
+      },
+      destinationFinder: function() {
+        // TODO: will be implemented later
+      },
+    },
+
+    initActions: function() {
+      Frontpage.$frontpage.on('tap', '#drawerMenu i', function(e) {
+        var action = $(this).attr('data-action');
+
+        if ( action && Frontpage.menu.actions[action] ) {
+          Frontpage.menu.actions[action]();
+        }
+      });
+    },
+
+    toggleVisiblity: function(e) {
+      if ( Frontpage.menu.isVisible ) {
+        Frontpage.menu.hide();
+      }
+      else {
+        Frontpage.menu.show();
+      }
+    },
+
+    show: function() {
+      Frontpage.$frontpage.addClass('menuActive');
+
+      // Need timeout, because otherwise menu will immediately
+      // hide again (see event binded to .overlay)
+      setTimeout(function() {
+        Frontpage.menu.isVisible = true;
+      }, 10);
+    },
+
+    hide: function() {
+      Frontpage.$frontpage.removeClass('menuActive');
+      Frontpage.menu.isVisible = false;
+    },
   },
 
   initSwipeTabs: function() {
