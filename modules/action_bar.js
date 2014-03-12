@@ -84,7 +84,7 @@ var ActionBar = {
       ActionBar.$menu.addClass('active');
       setTimeout(function() {
         ActionBar.menu.isVisible = true;
-      }, 10);
+      }, 200);
     },
 
     hide: function() {
