@@ -8,6 +8,7 @@ var ActionBar = {
   init: function(options) {
     this.destination = options.destination;
     this.$el = options.$el;
+    this.$menu = this.$el.find('#destinationMenu');
 
     autohideNav(this.$el);
 
@@ -38,11 +39,46 @@ var ActionBar = {
       Toast.show(msg);
 
       $btn.removeClass(removeClass).addClass(addClass);
+    });
+
+    this.initMenu();
+  },
+
+  initMenu: function() {
+
+    // Show/Hide menu
+
+    this.$el.on('touchstart click', '.menuBtn', function(e) {
+      // Need to prevent event from bubbling, because
+      // otherwise the menu will be immediately closed
+      // by the body event listener
+      e.stopPropagation();
     })
 
     .on('tap', '.menuBtn', function(e) {
-      alert(currentDestination.title);
+      if ( ActionBar.$menu.hasClass('active') ) {
+        ActionBar.hideMenu();
+      }
+      else {
+        ActionBar.showMenu();
+      }
     });
+
+    // Add listener that closes menu when user touches
+    // outside of menu
+    $('body').on('touchdown click', function(e) {
+      if ( ActionBar.$menu.hasClass('active') ) {
+        ActionBar.hideMenu();
+      }
+    });
+  },
+
+  showMenu: function() {
+    ActionBar.$menu.addClass('active');
+  },
+
+  hideMenu: function() {
+    ActionBar.$menu.removeClass('active');
   },
 
 };
