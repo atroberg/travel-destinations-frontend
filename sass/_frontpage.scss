@@ -65,6 +65,46 @@ $frontpage-tab-count: 3;
     .tab {
       float:left;
       width:100%/$frontpage-tab-count;
+
+      .destination {
+        background:white;
+        overflow:hidden;
+        padding:.5em;
+
+        label {
+          font-family: "RobotoRegular";
+          font-size:1.2em;
+          margin-top:.2em;
+        }
+
+        p {
+          height:5.5em;
+          overflow:hidden;
+          position:relative;
+        }
+
+        p:after {
+          content: "";
+          text-align: right;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 30%;
+          height: 1.2em;
+          background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+        }
+
+        .photo {
+          width:12em;
+          max-width:40%;
+          height:7.5em;
+          background-repeat:no-repeat;
+          background-size:cover;
+          background-position:50% 50%;
+          float:left;
+          margin-right:1em;
+        }
+      }
     }
   }
 }
