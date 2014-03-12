@@ -15,7 +15,7 @@ var settings = {
   },
   toastMsgDuration: 2000,
   map: {
-    defaultZoomLevel: 10,
+    defaultZoomLevel: 8,
   },
 };
 
