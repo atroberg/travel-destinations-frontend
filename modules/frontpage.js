@@ -81,7 +81,7 @@ var Frontpage = {
       // hide again (see event binded to .overlay)
       setTimeout(function() {
         Frontpage.menu.isVisible = true;
-      }, 10);
+      }, 200);
     },
 
     hide: function() {
