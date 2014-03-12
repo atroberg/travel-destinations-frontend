@@ -1,13 +1,14 @@
+<div id="destinationMenu">
+  <i class="fa fa-share" data-action="share">Share page</i>
+  <i class="fa fa-download" data-action="save">Save page</i>
+  <i class="fa fa-map-marker" data-action="showOnMap">Show on Map</i>
+</div>
 <nav>
   <i class="back fa fa-chevron-left"></i>
   <h1>{{destination.title}}</h1>
   <div class="right">
     <i class="fa {{#if destination.isFavorite}}fa-star{{else}}fa-star-o{{/if}} favoriteBtn"></i>
     <i class="menu fa fa-ellipsis-v menuBtn"></i>
-    <div id="destinationMenu">
-      <i class="fa fa-share" data-action="share">Share page</i>
-      <i class="fa fa-download" data-action="save">Save page</i>
-    </div>
   </div>
   <ul id="tabs_menu">
     <li class="active">Info</li>

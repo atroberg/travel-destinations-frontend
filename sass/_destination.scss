@@ -41,8 +41,9 @@ $number-of-tabs:4;
   #destinationMenu {
     background:#efefef;
     display:none;
-    position:absolute;
-    top:43px;
+    z-index:3000;
+    position:fixed;
+    top:44px;
     right:8px;
     overflow:hidden;
     text-align:left;
@@ -53,6 +54,9 @@ $number-of-tabs:4;
     }
 
     i:before {
+      width:1em;
+      display:inline-block;
+      text-align: center;
       margin-right:.8em;
     }
 
@@ -90,7 +94,7 @@ $number-of-tabs:4;
 
     i {
       font-size:2em;
-      margin:.3em .2em;
+      padding:.3em .4em;
     }
 
     .back {
@@ -99,12 +103,11 @@ $number-of-tabs:4;
 
     .right {
       float:right;
-      margin-right:.8em;
     }
 
     .menu {
-      margin-left:.5em;
-      margin-right:.5em;
+      padding-left:.5em;
+      padding-right:.8em;
     }
 
     #tabs_menu {

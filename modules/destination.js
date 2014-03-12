@@ -66,7 +66,7 @@ var Destination = {
       }
     }));
     ActionBar.init({
-      $el: this.$el.find('nav:first'),
+      $el: this.$el,
       destination: Destination.destination
     });
   },

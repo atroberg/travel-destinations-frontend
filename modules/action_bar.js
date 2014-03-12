@@ -8,8 +8,8 @@ var ActionBar = {
 
   init: function(options) {
     this.destination = options.destination;
-    this.$el = options.$el;
-    this.$menu = this.$el.find('#destinationMenu');
+    this.$el = options.$el.find('nav:first');
+    this.$menu = options.$el.find('#destinationMenu');
 
     autohideNav(this.$el);
 
@@ -42,59 +42,57 @@ var ActionBar = {
       $btn.removeClass(removeClass).addClass(addClass);
     });
 
-    this.initMenu();
+    this.menu.init();
   },
 
-  initMenu: function() {
+  menu: {
 
-    // Show/Hide menu
+    isVisible: false,
 
-    this.$el.on('touchstart click', '.menuBtn', function(e) {
-      // Need to prevent event from bubbling, because
-      // otherwise the menu will be immediately closed
-      // by the body event listener
-      e.stopPropagation();
-    })
+    init: function() {
 
-    .on('tap', '.menuBtn', function(e) {
-      if ( ActionBar.$menu.hasClass('active') ) {
-        ActionBar.hideMenu();
-      }
-      else {
-        ActionBar.showMenu();
-      }
-    });
+      // Show/Hide menu
+      ActionBar.$el.on('tap', '.menuBtn', function(e) {
+        if ( ActionBar.menu.isVisible ) {
+          ActionBar.menu.hide();
+        }
+        else {
+          ActionBar.menu.show();
+        }
+      });
 
-    // Add listener that closes menu when user touches
-    // outside of menu
-    $('body').on('touchdown click', function(e) {
-      if ( ActionBar.$menu.hasClass('active') ) {
-        ActionBar.hideMenu();
-      }
-    });
+      // Add listener that closes menu when user touches
+      // outside of menu
+      $('body').on('touchstart click', function(e) {
+        if ( ActionBar.menu.isVisible ) {
+          if ( $(e.target).hasClass('menuBtn') === false ) {
+            ActionBar.menu.hide();
+          }
+        }
+      });
 
-    // Bind the event handlers
-    this.$el.on('tap', '#destinationMenu i', function(i) {
-      var action = $(this).attr('data-action');
+      ActionBar.$menu.on('tap', 'i', function(i) {
+        var action = $(this).attr('data-action');
 
-      if ( action && ActionBar.menuActions[action] ) {
-        ActionBar.menuActions[action]();
-      }
-    });
+        if ( action && ActionBar.menu.actions[action] ) {
+          ActionBar.menu.actions[action]();
+        }
+      });
+    },
 
-    this.initMenuActions();
-  },
+    show: function() {
+      ActionBar.$menu.addClass('active');
+      setTimeout(function() {
+        ActionBar.menu.isVisible = true;
+      }, 10);
+    },
 
-  showMenu: function() {
-    ActionBar.$menu.addClass('active');
-  },
+    hide: function() {
+      ActionBar.$menu.removeClass('active');
+      ActionBar.menu.isVisible = false;
+    },
 
-  hideMenu: function() {
-    ActionBar.$menu.removeClass('active');
-  },
-
-  initMenuActions: function() {
-    this.menuActions = {
+    actions: {
       'save': function() {
         SavedPages.save({
           destination: ActionBar.destination,
@@ -109,9 +107,9 @@ var ActionBar = {
           },
         });
         Toast.show('Saving page');
-      }
-    };
-  },
+      },
+    }
+  }
 
 };
 
