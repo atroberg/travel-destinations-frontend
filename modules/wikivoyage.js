@@ -10,7 +10,7 @@ var Wikivoyage = {
 
   activate: function(options) {
     this.$el = options.$el;
-    this.$loadingStatus = this.$el.find('.loading_status');
+    this.$loadingStatus = $('#destination nav .loading_status');
     this.$loadingStatus.css('width', '0%');
 
     // Accordion
