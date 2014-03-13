@@ -26,15 +26,6 @@ var Destination = {
 
     // Tabs
     DestinationTabs.setElement(this.$el);
-    this.$el.on('tap', 'nav #tabs_menu li', function(e) {
-      DestinationTabs.focusToTab($(this).index());
-    });
-    this.$el.trobisHammer().on('trobisHammer.swiperight', function(e) {
-      DestinationTabs.nextTab();
-    })
-    .on('trobisHammer.swipeleft', function(e) {
-      DestinationTabs.prevTab();
-    });
 
     // Photo tab
     DestinationTabs.bindTabFunction('photos', function($tab) {
@@ -62,6 +53,18 @@ var Destination = {
 
   },
 
+  initEventHandlers: function() {
+    this.$el.on('tap', 'nav #tabs_menu li', function(e) {
+      DestinationTabs.focusToTab($(this).index());
+    });
+    this.$el.trobisHammer().on('trobisHammer.swiperight', function(e) {
+      DestinationTabs.nextTab();
+    })
+    .on('trobisHammer.swipeleft', function(e) {
+      DestinationTabs.prevTab();
+    });
+  },
+
   updateView: function() {
     this.$el.html(destinationTemplate({
       destination:{
@@ -80,6 +83,7 @@ var Destination = {
   },
 
   activate: function() {
+    this.initEventHandlers();
     this.$el.addClass('animate active');
     setTimeout(function(){
       Destination.$el.removeClass('animate');
@@ -90,6 +94,7 @@ var Destination = {
     this.$el.removeClass('active');
     this.$el.addClass('animate');
     setTimeout(function(){
+      Destination.$el.off().html('');
       Destination.$el.removeClass('animate');
     }, settings.animationDurations.page);
   },

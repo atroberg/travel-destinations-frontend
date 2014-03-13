@@ -9,25 +9,35 @@ var SavedPages = {
   init: function() {
   },
 
-  activate: function() {
+  activate: function(options) {
+    options = options || {addHistoryEntry: true};
+
     this.$el = $('#actionPage').hammer(settings.hammer);
     this.$el.removeClass();
-    this.$el.addClass('savedPages');
+    this.$el.addClass('savedPages animate');
+
+    if ( options.addHistoryEntry ) {
+      AppHistory.push({}, 'Saved Pages');
+    }
+
+    this.$el.on('tap', 'nav .back', function(e) {
+      AppHistory.gotoShortcut('closeSavedPages');
+    });
 
     this.$el.on('tap', '.savedPagesList li', function(e) {
+
+      AppHistory.addPopHandler('closeDestination', function() {
+        SavedPages.activate({addHistoryEntry: false});
+        Destination.deactivate();
+      });
+
+      AppHistory.push({popHandler: 'closeDestination'}, 'Saved Pages', {shortcut: 'closeDestination', replaceState: true});
 
       if ( $(e.target).hasClass('remove') ) {
         alert('TODO');
       }
 
       else {
-        AppHistory.addPopHandler('closeDestination', function() {
-          SavedPages.activate();
-          Destination.deactivate();
-        });
-
-        AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
-
         Destination.show($(this).attr('data-uri'));
         SavedPages.deactivate();
       }
@@ -44,8 +54,14 @@ var SavedPages = {
 
   deactivate: function() {
     this.$el.addClass('animate');
+    this.$el.removeClass('active');
+
     setTimeout(function(){
-      SavedPages.$el.removeClass('active animate');
+      SavedPages.$el.removeClass('animate');
+
+      // Clear the element and listeners
+      SavedPages.$el.off().html('');
+
     }, settings.animationDurations.page);
   },
 

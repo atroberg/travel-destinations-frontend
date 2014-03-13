@@ -49,6 +49,10 @@ body {
     visibility:visible;
     opacity:1;
   }
+
+  &.animate {
+    visibility:visible;
+  }
 }
 
 .toast_msg {

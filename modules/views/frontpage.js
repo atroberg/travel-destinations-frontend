@@ -10,7 +10,9 @@ var Search = require('../search');
 var Frontpage = {
 
   init: function($frontpage) {
-    this.$frontpage = $frontpage;
+    if ( $frontpage ) {
+      this.$frontpage = $frontpage;
+    }
     this.updateView();
     this.menu.init();
     this.initSwipeTabs();
@@ -41,12 +43,14 @@ var Frontpage = {
   },
 
   activate: function() {
+    this.init();
     this.$frontpage.removeClass('inactive');
   },
 
   deactivate: function() {
     setTimeout(function() {
       Frontpage.$frontpage.addClass('inactive');
+      Frontpage.$frontpage.off().html('');
     }, settings.animationDurations.page);
   },
 
@@ -72,7 +76,14 @@ var Frontpage = {
 
     actions: {
       savedPages: function() {
+        AppHistory.addPopHandler('closeSavedPages', function() {
+          Frontpage.activate();
+          SavedPages.deactivate();
+        });
+        AppHistory.push({popHandler: 'closeSavedPages'}, 'Frontpage', {shortcut: 'closeSavedPages'});
+
         Frontpage.menu.hide();
+        Frontpage.deactivate();
         SavedPages.activate();
       },
       destinationFinder: function() {

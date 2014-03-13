@@ -38,7 +38,7 @@ var AppHistory = {
       var addedPosition = this.shortcuts[name];
       var gotoIndex = addedPosition - AppHistory.currentIndex;
       history.go(gotoIndex);
-      AppHistory.currentIndex = addedPosition + 1;
+      AppHistory.currentIndex = addedPosition;
     }
     catch (e) {
       console.log(e);
@@ -48,19 +48,20 @@ var AppHistory = {
   push: function(state, title, options) {
     options = options || {};
 
-    if ( this.noEntriesYet || options.replaceState ) {
+    if ( this.noEntriesYet || options.replaceState || this.currentIndex < 0 ) {
       var fn = 'replaceState';
       this.noEntriesYet = false;
     }
     else {
       var fn = 'pushState';
-      AppHistory.currentIndex += 1;
     }
+
+    AppHistory.currentIndex += 1;
 
     history[fn](state, title);
 
     if ( options.shortcut ) {
-      this.shortcuts[options.shortcut] = AppHistory.currentIndex - 1;
+      this.shortcuts[options.shortcut] = AppHistory.currentIndex;
     }
   },
 
