@@ -77,13 +77,37 @@ $frontpage-tab-count: 3;
   }
 
   nav {
+    text-align:left;
 
-    input {
-      float:right;
-      width:84%;
-      margin-top:.2em;
-      margin-right:.3em;
+    .searchInput {
+      position:absolute;
+      top:.2em;
+      left:13%;
+      width:86%;
       font-size:1.5em;
+      transition:all $transition-duration;
+
+      &.active {
+        width:96%;
+        left:2%;
+      }
+
+      .searchIcon {
+        position:absolute;
+        top:2px;
+        left:1px;
+        font-size:.95em;
+        z-index:2;
+      }
+
+      input {
+        padding-left:1.8em;
+        z-index:1;
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+      }
     }
 
   }

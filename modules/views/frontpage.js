@@ -4,6 +4,7 @@ var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');
 var SavedPages = require('./saved_pages');
+var Search = require('../search');
 
 
 var Frontpage = {
@@ -13,6 +14,7 @@ var Frontpage = {
     this.updateView();
     this.menu.init();
     this.initSwipeTabs();
+    this.initSearch();
 
     this.$frontpage.on('tap', '.destination', function(e) {
 
@@ -26,6 +28,12 @@ var Frontpage = {
       Frontpage.deactivate();
       var url = $(this).attr('data-url');
       Destination.show(url);
+    });
+  },
+
+  initSearch: function() {
+    Search.init({
+      $el: this.$frontpage.find('.searchInput')
     });
   },
 
