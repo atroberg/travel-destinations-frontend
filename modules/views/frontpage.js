@@ -17,7 +17,7 @@ var Frontpage = {
     this.initSearch();
 
     this.$frontpage.on('tap', '.destination', function(e) {
-      Destination.openDestination($(this).attr('data-url'));
+      Frontpage.openDestination($(this).attr('data-url'));
     });
   },
 
