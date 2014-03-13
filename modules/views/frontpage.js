@@ -17,23 +17,26 @@ var Frontpage = {
     this.initSearch();
 
     this.$frontpage.on('tap', '.destination', function(e) {
-
-      AppHistory.addPopHandler('closeDestination', function() {
-        Frontpage.activate();
-        Destination.deactivate();
-      });
-
-      AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
-
-      Frontpage.deactivate();
-      var url = $(this).attr('data-url');
-      Destination.show(url);
+      Destination.openDestination($(this).attr('data-url'));
     });
+  },
+
+  openDestination: function(url) {
+    AppHistory.addPopHandler('closeDestination', function() {
+      Frontpage.activate();
+      Destination.deactivate();
+    });
+
+    AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
+
+    Frontpage.deactivate();
+    Destination.show(url);
   },
 
   initSearch: function() {
     Search.init({
-      $el: this.$frontpage.find('.searchInput')
+      $el: this.$frontpage.find('.searchInput'),
+      Frontpage: Frontpage,
     });
   },
 

@@ -1,0 +1,9 @@
+<ul class="searchSuggestResults">
+    {{#if results}}
+      {{#each results}}
+        <li>{{this}}</li>
+      {{/each}}
+    {{else}}
+      <li class="noResults">No results</li>
+    {{/if}}
+</ul>

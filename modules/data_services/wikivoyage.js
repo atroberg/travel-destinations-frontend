@@ -1,5 +1,9 @@
 var Wikivoyage = {
 
+  titleToURL: function(title) {
+    return encodeURIComponent(title.replace(/ /g, '_'));
+  },
+
   get: function(params) {
 
     var ajaxObj = {
@@ -69,6 +73,24 @@ var Wikivoyage = {
 
     $.ajax(ajaxObj);
 
+  },
+
+  search: function(options) {
+    return $.ajax({
+      url: 'http://en.m.wikivoyage.org/w/api.php?format=json&action=opensearch&namespace=0',
+      data: {
+        search: options.keyword,
+        limit: options.limit || 15,
+      },
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        options.callback(null, data[1]);
+      },
+      error: function(msg) {
+        options.callback(msg);
+      },
+    });
   },
 
 };

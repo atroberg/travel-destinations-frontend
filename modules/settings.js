@@ -17,6 +17,7 @@ var settings = {
   map: {
     defaultZoomLevel: 8,
   },
+  autoSuggestMinLength: 3,
 };
 
 module.exports = settings;

@@ -108,6 +108,24 @@ $frontpage-tab-count: 3;
         top:0;
         width:100%;
       }
+
+      .searchSuggestResults {
+        margin:38px 0 0 0;
+        padding:0;
+        background:#efefef;
+        box-shadow:0px 10px 22px 0px #717171;
+        position:relative;
+        overflow:auto;
+
+        li:first-child {
+          border-top:0;
+        }
+
+        li {
+          padding:.7em 1em;
+          border-top:1px solid #d7d7d7;
+        }
+      }
     }
 
   }
