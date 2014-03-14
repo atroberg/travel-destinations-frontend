@@ -83,6 +83,11 @@ var Destination = {
   },
 
   activate: function() {
+    // If already activated
+    if ( this.$el.hasClass('active') ) {
+      return;
+    }
+
     this.initEventHandlers();
     this.$el.addClass('animate active');
     setTimeout(function(){
