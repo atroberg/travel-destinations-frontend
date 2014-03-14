@@ -18,6 +18,7 @@ var settings = {
     defaultZoomLevel: 8,
   },
   autoSuggestMinLength: 3,
+  playStoreLink: 'TODO_INSERT_PLAYSTORE_LINK',
 };
 
 module.exports = settings;

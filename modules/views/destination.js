@@ -141,7 +141,10 @@ var Destination = {
         // is preserved when changing tabs)
         var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
         Weather.setClimateTable($wikivoyageTab);
+
         Photos.setWikiPhotos($wikivoyageTab);
+        Destination.destination.photos = Photos.wikiPhotos;
+
         Map.setCoordinates({
           destination: Destination.destination,
           $el: $wikivoyageTab

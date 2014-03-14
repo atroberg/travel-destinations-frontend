@@ -4,6 +4,7 @@ var SavedPages = require('../../data_services/saved_pages');
 var autohideNav = require('../../autohide_nav');
 var AppHistory = require('../../history');
 var Map = require('../../map');
+var settings = require('../../settings');
 
 
 var ActionBar = {
@@ -116,7 +117,46 @@ var ActionBar = {
       },
 
       share: function() {
-        alert("TODO");
+        // TODO: fix this
+        var link = 'http://en.m.wikivoyage.org' + ActionBar.destination.uri;
+        var msg = ActionBar.destination.title + ': ' + link;
+        var subject = 'Travel Destination: ' + ActionBar.destination.title;
+
+        msg += '\n\nAndroid App: ' + settings.playStoreLink;
+
+        var shareIntentSent = false;
+
+        function shareWithoutImg() {
+          if ( !shareIntentSent ) {
+            window.plugins.socialsharing.share(msg, subject, null, null);
+            shareIntentSent = true;
+          }
+        }
+
+        if ( ActionBar.destination.photos && ActionBar.destination.photos.length > 0) {
+          img = ActionBar.destination.photos[0].src;
+
+          // Allow maximum 1 second for converting image to dataURL
+          setTimeout(function() {
+            shareWithoutImg();
+          }, 1000);
+
+          SavedPages.imageToDataURL(img, function(error, dataURL) {
+            if ( error ) {
+              shareWithoutImg();
+            }
+            else {
+              if ( !shareIntentSent ) {
+                img = dataURL;
+                shareIntentSent = true;
+                window.plugins.socialsharing.share(msg, subject, img, null);
+              }
+            }
+          });
+        }
+        else {
+          shareWithoutImg();
+        }
       },
     }
   }
