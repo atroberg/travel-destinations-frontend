@@ -25,6 +25,11 @@ var Search = {
 
     this.$el.on('tap', '.searchSuggestResults li', function(e) {
       var $li = $(this);
+
+      if ( $li.hasClass('noResults') ) {
+        return;
+      }
+
       var destinationTitle = $li.text();
       var destinationURL = '/wiki/' + Wikivoyage.titleToURL(destinationTitle);
       Search.Frontpage.openDestination(destinationURL);
