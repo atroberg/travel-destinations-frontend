@@ -1,16 +1,16 @@
 <nav>
-  <i class="back fa fa-chevron-left"></i>
+  <i class="back fa fa-chevron-left touchFeedback"></i>
   <h1>Saved Pages</h1>
   <div class="right">
-    <i class="menu fa fa-ellipsis-v menuBtn"></i>
+    <i class="menu fa fa-ellipsis-v menuBtn touchFeedback"></i>
   </div>
 </nav>
 {{#if pages}}
   <ul class="savedPagesList">
     {{#each pages}}
-      <li data-uri="{{this.destination.uri}}">
+      <li data-uri="{{this.destination.uri}}" class="touchFeedback">
         <span>{{this.destination.title}}</span>
-        <i class="fa fa-times remove"></i>
+        <i class="fa fa-times remove touchFeedback"></i>
       </li>
     {{/each}}
   <ul>

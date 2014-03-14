@@ -163,6 +163,10 @@ $frontpage-tab-count: 3;
         overflow:hidden;
         padding:.5em;
 
+        &.touchdown {
+          opacity:.5;
+        }
+
         label {
           font-family: "RobotoRegular";
           font-size:1.2em;

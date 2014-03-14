@@ -4,9 +4,12 @@ var Frontpage = require('./modules/views/frontpage');
 var AppHistory = require('./modules/history');
 var trobisHammer = require('./modules/trobis.hammer.js');
 var settings = require('./modules/settings');
+var PageUtils = require('./modules/page_utils');
 
 
 $(document).ready(function initApp() {
+
+  PageUtils.buttonTouchFeedback();
 
   AppHistory.init();
 

@@ -24,6 +24,10 @@ body {
   //font-size:18px;
 }
 
+.touchFeedback.touchdown {
+  background:#d3d3d3;
+}
+
 @import 'nav_header';
 @import 'destination';
 @import 'popup_gallery_fullscreen';

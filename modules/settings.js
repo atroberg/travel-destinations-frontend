@@ -19,6 +19,7 @@ var settings = {
   },
   autoSuggestMinLength: 3,
   playStoreLink: 'TODO_INSERT_PLAYSTORE_LINK',
+  buttonTouchFeedbackTimeout: 500,
 };
 
 module.exports = settings;

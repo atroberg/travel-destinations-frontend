@@ -68,13 +68,19 @@ var ActionBar = {
       // outside of menu
       $('body').on('touchstart click', function(e) {
         if ( ActionBar.menu.isVisible ) {
-          if ( $(e.target).hasClass('menuBtn') === false ) {
+
+          var $target = $(e.target);
+
+          if ( $target.hasClass('menuBtn') === false
+                && $target.parent().is('#destinationMenu') === false ) {
             ActionBar.menu.hide();
           }
         }
       });
 
       ActionBar.$menu.on('tap', 'i', function(i) {
+        ActionBar.menu.hide();
+
         var action = $(this).attr('data-action');
 
         if ( action && ActionBar.menu.actions[action] ) {
