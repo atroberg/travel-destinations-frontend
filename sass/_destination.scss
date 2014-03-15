@@ -72,29 +72,40 @@ $number-of-tabs:4;
 
   nav {
     border-bottom:0;
+    text-align:left;
+
+    h1 {
+      width:67%;
+      height:1em;
+      overflow:hidden;
+      text-align:center;
+    }
 
     #tabs_menu {
       margin:0;
       padding:0;
       font-size:1.3em;
-      margin-bottom:.3em;
       clear:both;
+      text-align:center;
     }
 
     #tabs_menu li {
       display:inline-block;
-      padding:0 .75em;
+      padding:.2em .75em 0 .75em;
       margin-left:.5em;
+      border-bottom:3px solid $nav-bgcolor;
+      box-sizing:border-box;
+      -webkit-box-sizing:border-box;
     }
 
     #tabs_menu li.active {
       font-weight:bold;
-      border-bottom:2px solid $nav-border-bottom-color;
+      border-bottom:4px solid $nav-border-bottom-color;
     }
 
     .loading_status {
       width:100%;
-      height:2px;
+      height:1px;
       background:$nav-border-bottom-color;
       transition:width $transition-duration;
     }
