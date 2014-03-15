@@ -69,7 +69,7 @@ var Wikivoyage = {
                   Wikivoyage.parseHtml(data, options);
                 }
                 else {
-                  throw "not_found";
+                  // TODO: error
                 }
               }
             });
@@ -94,6 +94,7 @@ var Wikivoyage = {
   },
 
   parseHtml: function(html, options) {
+
     if ( !html ) {
       return;
     }
@@ -103,8 +104,8 @@ var Wikivoyage = {
                     .removeBanner().removeEmptySections();
       Wikivoyage.html = parser.getHtml();
       Wikivoyage.updateView();
-      if ( options.callback ) {
-        options.callback();
+      if ( options.pageLoaded ) {
+        options.pageLoaded();
       }
     }
 

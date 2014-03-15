@@ -1,5 +1,6 @@
 var WikivoyageService= require('./wikivoyage');
 var MediawikiMobileParser = require('../mediawiki_mobile_parser');
+var settings = require('../settings');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
@@ -9,38 +10,14 @@ var BASE_URL = 'http://en.m.wikivoyage.org';
 var SavedPages = {
 
     init: function() {
-      this.db = window.sqlitePlugin.openDatabase({name: 'savedDestinations'});
+      this.db = window.openDatabase('savedDestinations', '1.0', 'savedDestinations', settings.databaseInitSize);
       this.createDatabaseIfNeeded();
-    },
-
-    closeDB: function() {
-      //this.db.close();
-    },
-
-    executeSql: function(sql, data, callback) {
-      this.init();
-
-      this.db.transaction(function(tx) {
-
-        this.executeSql(sql, data, callback);
-
-      }, function(e) {
-        console.error(e);
-      });
-
-      this.closeDB();
     },
 
     createDatabaseIfNeeded: function() {
       this.db.transaction(function(tx) {
-        tx.executeSql(
-          'CREATE TABLE IF NOT EXISTS savedDestinations (uri text primary key, title text, html text)',
-          null,
-          function dbCreated(rx, res) {
-            console.log("DB created", res);
-          }
-        );
-      }, function(e) {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS savedDestinations (uri unique, title, html)');
+      }, function transactionError(e) {
         SavedPages.dbError(e);
       });
     },
@@ -48,7 +25,7 @@ var SavedPages = {
     dbError: function(msg) {
       // TODO
       // something went wrong. Just say that offline storage not available on this device?
-      console.error("DBERROR");
+      console.error("DBERROR", msg);
     },
 
     save: function(options) {
@@ -92,11 +69,7 @@ var SavedPages = {
 
         var resultsCallback = function resultsCallback(tx, results) {
 
-          console.log('Results callback', results);
-          console.log(results.rows.item(0));
-
           if ( results.rows ) {
-
             var destinations = [];
 
             for ( var i = 0; i < results.rows.length; i ++ ) {
@@ -104,15 +77,12 @@ var SavedPages = {
               destinations.push(destination);
             }
 
-            console.log(destinations);
-
             options.callback(null, destinations);
           }
         };
 
         // Return only matching row
         if ( options.uri ) {
-          console.log('URI=' + options.uri);
           tx.executeSql('SELECT uri, title, html FROM savedDestinations WHERE uri=?', [options.uri], resultsCallback);
         }
 
@@ -121,21 +91,18 @@ var SavedPages = {
           tx.executeSql('SELECT uri, title FROM savedDestinations ORDER BY title ASC', null, resultsCallback);
         }
 
-      },function(e) {
-        console.error(e);
+      }, function transactionError(e) {
+        SavedPages.dbError(e);
       });
-
-      this.closeDB();
     },
 
     deleteDestination: function(options) {
 
       if ( options.tx ) {
         options.tx.executeSql(
-          'DELETE FROM savedDestinations WHERE uri = ?',
+          'DELETE FROM savedDestinations WHERE uri=?',
           [options.uri],
           function rowDeleted(tx, res) {
-            console.log("Row deleted", res);
             if ( options.callback ) {
               options.callback({success: res.rowsAffected === 1});
             }
@@ -144,54 +111,41 @@ var SavedPages = {
       }
 
       else {
-
         this.init();
 
         this.db.transaction(function(tx) {
-
           options.tx = tx;
           SavedPages.deleteDestination(options);
-
-        }, function(e) {
-          console.error(e);
+        }, function transactionError(e) {
+          SavedPages.dbError(e);
         });
-
-        this.closeDB();
-
       }
     },
 
     saveDestination: function(destination) {
       this.init();
 
-      console.log("Save: ", destination);
-
       try {
         this.db.transaction(function(tx) {
 
+          // Delete previous record (if it exists)
           SavedPages.deleteDestination({
             uri: destination.uri,
             tx: tx
           });
 
-          //destination.html = destination.html.substring(0, Math.round(destination.html.length / 2));
-
           tx.executeSql(
             'INSERT INTO savedDestinations (uri,title,html) VALUES (?,?,?)',
-            [destination.uri, destination.title, destination.html],
-            function rowInserted(tx, res) {
-              console.log("Row inserted ", res);
-            }
+            [destination.uri, destination.title, destination.html]
           );
-        }, function(e) {
-          console.error(e);
+        }, function transactionError(e) {
+          SavedPages.dbError(e);
         });
       }
-      catch(e) {
-        console.error(e);
-      }
 
-      this.closeDB();
+      catch(e) {
+        SavedPages.dbError(e);
+      }
     },
 
     getWikivoyagePage: function(uri, callback) {

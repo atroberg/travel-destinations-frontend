@@ -20,6 +20,7 @@ var settings = {
   autoSuggestMinLength: 3,
   playStoreLink: 'TODO_INSERT_PLAYSTORE_LINK',
   buttonTouchFeedbackTimeout: 500,
+  databaseInitSize: 52428800, // 50MB
 };
 
 module.exports = settings;
