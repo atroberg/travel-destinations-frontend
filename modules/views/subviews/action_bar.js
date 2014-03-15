@@ -103,8 +103,15 @@ var ActionBar = {
 
     actions: {
       save: function() {
+        var destination = $.extend(ActionBar.destination, {});
+
+        // Don't save photos
+        if ( typeof destination.photos !== 'undefined' ) {
+          delete destination.photos;
+        }
+
         SavedPages.save({
-          destination: ActionBar.destination,
+          destination: destination,
           callback: function (error, success) {
             if ( error ) {
               // TODO

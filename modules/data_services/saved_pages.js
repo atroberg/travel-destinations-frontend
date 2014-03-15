@@ -8,7 +8,31 @@ var BASE_URL = 'http://en.m.wikivoyage.org';
 
 var SavedPages = {
 
+    init: function() {
+
+      if ( typeof this.storageEngine === 'undefined' ) {
+
+        // Enable testing on computer (which doesn't have webkit-sqlite adapter)
+        var adapter = typeof window.sqlitePlugin === 'undefined'
+                        ? 'dom'
+                        : 'webkit-sqlite';
+
+        this.storageEngine = new Lawnchair({
+          name: 'offlinePages',
+          adapter: adapter,
+        }, function(ref) {
+          // don't need to do anything with this
+        });
+
+        window.storageEngine = this.storageEngine;
+
+      }
+    },
+
     save: function(options) {
+
+      this.init();
+
       // Save only wikivoyage
       this.getWikivoyagePage(options.destination.uri, function(error, html) {
         if ( error ) {
@@ -37,6 +61,8 @@ var SavedPages = {
                   data: html,
                 });
 
+                console.log("Keyname: " + keyName);
+
                 SavedPages.index.addDestination({
                   destination: options.destination,
                   keyName: keyName
@@ -51,46 +77,87 @@ var SavedPages = {
     },
 
     get: function(options) {
+      this.index.getDestinations({
+        callback: function(error, savedDestinations) {
+          if ( savedDestinations[options.destination.uri] ) {
+            var savedDestination = savedDestinations[options.destination.uri];
+          }
+          else {
+            throw 'not_found';
+          }
 
-      // Destination provided => add additional fields etc
-      if ( options.savedDestination ) {
-        var savedDestination = options.savedDestination;
-      }
-      // Destination not provided => need to fetch all and
-      // search for matching destination
-      else {
-        var savedDestinations = this.index.getDestinations();
-
-        if ( savedDestinations[options.destination.uri] ) {
-          var savedDestination = savedDestinations[options.destination.uri];
-        }
-        else {
-          throw 'not_found';
-        }
-      }
-
-      savedDestination = $.extend(savedDestination, {});
-      savedDestination.html = localStorage.getItem(savedDestination.html);
-      return savedDestination;
+          SavedPages.getHtml({
+            destination: savedDestination,
+            callback: function(error, html) {
+              savedDestination.html = html;
+              options.callback(savedDestination);
+            },
+          });
+        },
+      });
     },
 
-    getAll: function() {
-      var savedDestinationsIndex = this.index.getDestinations();
+    getHtml: function(options) {
+      console.log("Get html: " + options.destination.html);
 
-      var savedDestinations = [];
+      try {
+        this.storageEngine.get(options.destination.html, function(rows) {
+          var html = rows.data;
+          console.log("Return: " + options.destination.html);
+          options.callback(null, html);
+        });
+      }
+      catch(e) {
+        console.log(e);
+      }
+    },
 
-      $.each(savedDestinationsIndex, function(key, destination) {
-        savedDestinations.push(SavedPages.get({
-          savedDestination: destination
-        }));
+    getAll: function(options) {
+      this.init();
+
+      this.index.getDestinations({
+        callback: function(error, savedDestinationsIndex) {
+
+          if ( $.isEmptyObject(savedDestinationsIndex) ) {
+            options.callback(null, []);
+          }
+
+          var savedDestinations = [];
+          var savedDestinationsCount = 0;
+
+          $.each(savedDestinationsIndex, function(key, destination) {
+            savedDestinationsCount += 1;
+
+            SavedPages.getHtml({
+              destination: destination,
+              callback: function(error, html) {
+                destination.html = html;
+                savedDestinations.push(destination);
+
+                console.log("target: " + savedDestinationsCount + ", now: " + savedDestinations.length);
+
+                // All destinations fetched => return the results
+                if ( savedDestinationsCount <= savedDestinations.length ) {
+                  console.log(savedDestinations);
+                  options.callback(null, savedDestinations);
+                }
+              },
+            });
+          });
+        }
       });
-
-      return savedDestinations;
     },
 
     storeOnDisk: function(options) {
       var keyName = 'savedPage_' + options.type + '_' + options.uri;
-      localStorage.setItem(keyName, options.data);
+
+      try {
+        this.storageEngine.save({key: keyName, data: options.data});
+      }
+      catch(e) {
+        console.error(e);
+      }
+
       return keyName;
     },
 
@@ -150,31 +217,39 @@ var SavedPages = {
     },
 
     index: {
-      localStorageKey: 'savedDestinations',
 
       addDestination: function(options) {
-        this.getDestinations();
-        this.savedDestinations[options.destination.uri] = {
-          html: options.keyName,
-          destination: options.destination
-        };
-        this.save();
+        this.getDestinations({
+          callback: function(error, savedDestinations) {
+
+            console.log(savedDestinations);
+
+            savedDestinations[options.destination.uri] = {
+              html: options.keyName,
+              destination: options.destination,
+            };
+
+            console.log(savedDestinations);
+
+            SavedPages.storageEngine.save({key: 'savedDestinations', data: savedDestinations});
+          },
+        });
       },
 
-      save: function() {
-        localStorage.setItem(this.localStorageKey, JSON.stringify(this.savedDestinations));
-      },
+      getDestinations: function(options) {
+        SavedPages.storageEngine.get('savedDestinations', function(rows) {
 
-      getDestinations: function() {
-        var savedDestinations = JSON.parse(localStorage.getItem(this.localStorageKey));
+          if ( rows === null || rows.data === null ) {
+            var savedDestinations = {};
+          }
+          else {
+            var savedDestinations = rows.data;
+          }
 
-        if ( savedDestinations === null ) {
-          savedDestinations = {};
-        }
+          console.log(savedDestinations);
 
-        this.savedDestinations = savedDestinations;
-
-        return savedDestinations;
+          options.callback(null, savedDestinations);
+        });
       },
     },
 

@@ -44,12 +44,14 @@ var SavedPages = {
 
     });
 
-    var html = template({
-      pages: SavedPagesDataProvider.getAll()
-    });
-    this.$el.html(html);
+    SavedPagesDataProvider.getAll({callback: function(error, destinations) {
+      var html = template({
+        pages: destinations,
+      });
 
-    this.$el.addClass('active');
+      SavedPages.$el.html(html);
+      SavedPages.$el.addClass('active');
+    }});
   },
 
   deactivate: function() {
