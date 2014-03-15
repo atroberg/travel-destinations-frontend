@@ -26,6 +26,8 @@ var SavedPages = {
 
     this.$el.on('tap', '.savedPagesList li', function(e) {
 
+      var $li = $(this);
+
       AppHistory.addPopHandler('closeDestination', function() {
         SavedPages.activate({addHistoryEntry: false});
         Destination.deactivate();
@@ -33,25 +35,54 @@ var SavedPages = {
 
       AppHistory.push({popHandler: 'closeDestination'}, 'Saved Pages', {shortcut: 'closeDestination', replaceState: true});
 
+      var uri = $li.attr('data-uri');
+
       if ( $(e.target).hasClass('remove') ) {
-        alert('TODO');
+
+        var index = $li.index();
+
+        if ( confirm('Delete ' + $(this).text().trim() + '?') ) {
+          SavedPages.deleteDestination(uri, index);
+        }
       }
 
       else {
-        Destination.show($(this).attr('data-uri'));
+        Destination.show(uri);
         SavedPages.deactivate();
       }
 
     });
 
-    SavedPagesDataProvider.getAll({callback: function(error, destinations) {
-      var html = template({
-        pages: destinations,
-      });
-
-      SavedPages.$el.html(html);
-      SavedPages.$el.addClass('active');
+    SavedPagesDataProvider.get({callback: function(error, destinations) {
+      SavedPages.destinations = destinations;
+      SavedPages.updateView();
     }});
+  },
+
+  updateView: function() {
+    var html = template({
+      destinations: SavedPages.destinations,
+    });
+    SavedPages.$el.html(html);
+    SavedPages.$el.addClass('active');
+  },
+
+  deleteDestination: function(uri, indexInArray) {
+    SavedPagesDataProvider.deleteDestination({
+      uri: uri,
+      callback: function(result) {
+        console.log(result);
+
+        if ( result.success ) {
+          SavedPages.destinations.splice(indexInArray, 1);
+          SavedPages.updateView();
+        }
+        else {
+          // TODO
+          console.error("error");
+        }
+      }
+    });
   },
 
   deactivate: function() {

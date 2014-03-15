@@ -5,11 +5,11 @@
     <i class="menu fa fa-ellipsis-v menuBtn touchFeedback"></i>
   </div>
 </nav>
-{{#if pages}}
+{{#if destinations}}
   <ul class="savedPagesList">
-    {{#each pages}}
-      <li data-uri="{{this.destination.uri}}" class="touchFeedback">
-        <span>{{this.destination.title}}</span>
+    {{#each destinations}}
+      <li data-uri="{{this.uri}}" class="touchFeedback">
+        <span>{{this.title}}</span>
         <i class="fa fa-times remove touchFeedback"></i>
       </li>
     {{/each}}

@@ -60,34 +60,30 @@ var Wikivoyage = {
         if ( error ) {
           // Check if we page is saved
           try {
-            var savedPage = SavedPagesDataProvider.get({
-              destination: {
-                uri: options.destination.uri,
+            SavedPagesDataProvider.get({
+              uri: options.destination.uri,
+              callback: function(error, destinations) {
+                if ( destinations && destinations.length > 0 ) {
+                  var savedPage = destinations[0];
+                  data = savedPage.html;
+                  Wikivoyage.parseHtml(data, options);
+                }
+                else {
+                  throw "not_found";
+                }
               }
             });
-            data = savedPage.html;
           }
           catch(e) {
             // TODO: some error msg
+            console.error(e);
           }
         }
 
-        if ( data ) {
-          try {
-            var parser = MediawikiMobileParser.setHtml(data).getActualContent()
-                          .removeBanner().removeEmptySections();
-            Wikivoyage.html = parser.getHtml();
-            Wikivoyage.updateView();
-
-            if ( options.pageLoaded ) {
-              options.pageLoaded();
-            }
-          }
-          catch (e) {
-            // TODO
-            console.log(e);
-          }
+        else {
+          Wikivoyage.parseHtml(data, options);
         }
+
       },
       progressCallback: function(error, progress) {
         if ( !error ) {
@@ -95,6 +91,28 @@ var Wikivoyage = {
         }
       },
     });
+  },
+
+  parseHtml: function(html, options) {
+    if ( !html ) {
+      return;
+    }
+
+    try {
+      var parser = MediawikiMobileParser.setHtml(html).getActualContent()
+                    .removeBanner().removeEmptySections();
+      Wikivoyage.html = parser.getHtml();
+      Wikivoyage.updateView();
+      if ( options.callback ) {
+        options.callback();
+      }
+    }
+
+    catch (e) {
+      // TODO
+      console.log(e);
+    }
+
   },
 
 };
