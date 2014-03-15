@@ -61,7 +61,12 @@ var MediawikiMobileParser = {
         $thumbinner = $(thumbinner);
         var $img = $thumbinner.find('img:first');
 
-        var matches = $img.attr('src').match(/(\.jpe?g$)|(^data:image\/jpeg)/i)
+        try {
+          var matches = $img.attr('src').match(/(\.jpe?g$)|(^data:image\/jpeg)/i);
+        }
+        catch(e) {
+          var matches = null;
+        }
 
         if ( matches ) {
 
@@ -114,6 +119,11 @@ var MediawikiMobileParser = {
           return photo;
         }
       }).get();
+  },
+
+  getCleanPage: function(rawHtml) {
+    var parser = this.setHtml(rawHtml).getActualContent().removeBanner().removeEmptySections();
+    return parser.getHtml();
   },
 
 };

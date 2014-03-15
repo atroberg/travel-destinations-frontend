@@ -35,6 +35,19 @@ $number-of-tabs:4;
     -webkit-transform:scale(1);
   }
 
+  .ajaxError {
+    margin:.5em 1.1em;
+    margin-top:0;
+    text-align:center;
+
+    button {
+      margin-top:1em;
+      margin-left:auto;
+      margin-right:auto;
+      display:block;
+    }
+  }
+
   #destinationMenu {
     background:#efefef;
     display:none;
@@ -130,7 +143,6 @@ $number-of-tabs:4;
         -webkit-animation:spin 1s infinite linear;
       }
     }
-
   }
 
   #destination_tabs > .tab {

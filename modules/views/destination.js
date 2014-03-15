@@ -10,6 +10,7 @@ var Favorites = require('../favorites');
 var settings = require('../settings');
 var Map = require('../map');
 
+var ajaxErrorTemplate = require('../../templates/ajax_failed.hbs');
 var destinationTemplate = require('../../templates/destination.hbs');
 
 
@@ -27,11 +28,48 @@ var Destination = {
     // Tabs
     DestinationTabs.setElement(this.$el);
 
+    var onError = function onError(e) {
+      Destination.showAjaxFailed();
+    };
+
+    DestinationTabs.bindTabFunction('wikivoyage', function($tab) {
+      Wikivoyage.activate({
+        $el: $tab,
+        Destination: Destination
+      });
+
+      // Ensure we never show photos for prev destinations
+      Photos.clear();
+
+      Wikivoyage.showDestination({
+        destination: Destination.destination,
+        onError: onError,
+        pageLoaded: function() {
+          // We need to parse climate table from wikivoyage html
+          // already at this stage, because otherwise we might not
+          // be able to access the DOM when weather tab is loaded
+          // (because the DOM is removed and instead just the html
+          // is preserved when changing tabs)
+          var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
+          Weather.setClimateTable($wikivoyageTab);
+
+          Photos.setWikiPhotos($wikivoyageTab);
+          Destination.destination.photos = Photos.wikiPhotos;
+
+          Map.setCoordinates({
+            destination: Destination.destination,
+            $el: $wikivoyageTab
+          });
+        },
+      });
+    });
+
     // Photo tab
     DestinationTabs.bindTabFunction('photos', function($tab) {
       Photos.activate({
         $el: $tab,
         keyword: Destination.getTitle(),
+        onError: onError,
       });
     });
 
@@ -40,6 +78,7 @@ var Destination = {
       Videos.activate({
         $el: $tab,
         keyword: Destination.getTitle(),
+        onError: onError,
       });
     });
 
@@ -48,6 +87,7 @@ var Destination = {
       Weather.activate({
         $el: $tab,
         keyword: Destination.getTitle(),
+        onError: onError,
       });
     });
 
@@ -125,34 +165,23 @@ var Destination = {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.destination.title);
     }
 
-    // Init default tab (Wikivoyage)
-    Wikivoyage.activate({
-      $el: this.$el.find('#wikivoyage_tab'),
-      Destination: this
+    // Init default tab
+    DestinationTabs.focusToTab(0, {forceRefresh: true});
+
+  },
+
+  showAjaxFailed: function() {
+    var html = ajaxErrorTemplate();
+    var $activeTab = this.$el.find('#destination_tabs > .tab:eq('
+                        + DestinationTabs.currentTab + ')');
+    $activeTab.addClass('loadingFailed');
+    $activeTab.html(html);
+
+    $activeTab.on('tap', '.retryBtn', function(e) {
+      console.log('retry');
+      DestinationTabs.focusToTab(DestinationTabs.currentTab, {forceRefresh: true});
     });
-
-    Wikivoyage.showDestination({
-      destination: this.destination,
-      pageLoaded: function() {
-        // We need to parse climate table from wikivoyage html
-        // already at this stage, because otherwise we might not
-        // be able to access the DOM when weather tab is loaded
-        // (because the DOM is removed and instead just the html
-        // is preserved when changing tabs)
-        var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
-        Weather.setClimateTable($wikivoyageTab);
-
-        Photos.setWikiPhotos($wikivoyageTab);
-        Destination.destination.photos = Photos.wikiPhotos;
-
-        Map.setCoordinates({
-          destination: Destination.destination,
-          $el: $wikivoyageTab
-        });
-      },
-    });
-
-  }
+  },
 
 };
 

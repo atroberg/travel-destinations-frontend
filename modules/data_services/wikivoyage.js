@@ -15,14 +15,8 @@ var Wikivoyage = {
         // TODO: return in structured form (title, stripped body etc)
         params.callback(null, data);
       },
-      error: function(msg) {
-        params.callback(msg);
-
-        // TODO
-        // For debugging with mobile chrome
-        $.get('/helsinki_debug.html', function(data) {
-          params.callback(null, data);
-        });
+      error: function(jqXHR, textStatus, errorThrown) {
+        params.callback(textStatus);
       }
     };
 

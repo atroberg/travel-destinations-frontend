@@ -24,10 +24,17 @@ var Photos = {
     }
   },
 
+  clear: function() {
+    this.photos = [];
+    this.wikiPhotos = [];
+  },
+
   activate: function(options) {
     this.init(options);
     this.showWikiPhotos();
     this.showFlickrPhotos(options.keyword);
+
+    this.onError = options.onError;
   },
 
   updateView: function() {
@@ -40,24 +47,28 @@ var Photos = {
   },
 
   showWikiPhotos: function() {
-    this.photos = this.photos.concat(this.wikiPhotos);
-    this.updateView();
+    if ( typeof this.wikiPhotos !== 'undefined' ) {
+      this.photos = this.photos.concat(this.wikiPhotos);
+      this.updateView();
+    }
   },
 
   showFlickrPhotos: function(keyword) {
 
     Flickr.search({keyword: keyword}, function(error, photos) {
-      if ( error ) {
-        // TODO
+
+      // Only show error, if Flickr failer AND no other photos to show
+      if ( error && Photos.photos.length === 0 ) {
+        if ( Photos.onError ) {
+          Photos.onError();
+        }
       }
+
       else if ( photos.length > 0 ) {
         Photos.photos = Photos.photos.concat(photos);
         Photos.updateView();
       }
-      else {
-        // TODO
-        // Alert no photos?
-      }
+
     });
   },
 

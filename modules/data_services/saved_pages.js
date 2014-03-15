@@ -157,10 +157,7 @@ var SavedPages = {
           }
           else {
             try {
-              var parser = MediawikiMobileParser.setHtml(data).getActualContent()
-                            .removeBanner().removeEmptySections();
-              var html = parser.getHtml();
-
+              var html = MediawikiMobileParser.getCleanPage(data);
               callback(null, html);
             }
             catch(e) {

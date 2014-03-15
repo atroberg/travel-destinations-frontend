@@ -58,7 +58,7 @@ var Wikivoyage = {
         Wikivoyage.$loadingStatus.css('width', '100%');
 
         if ( error ) {
-          // Check if we page is saved
+          // Check if page is saved
           try {
             SavedPagesDataProvider.get({
               uri: options.destination.uri,
@@ -69,14 +69,17 @@ var Wikivoyage = {
                   Wikivoyage.parseHtml(data, options);
                 }
                 else {
-                  // TODO: error
+                  if ( options.onError ) {
+                    options.onError();
+                  }
                 }
               }
             });
           }
           catch(e) {
-            // TODO: some error msg
-            console.error(e);
+            if ( options.onError ) {
+              options.onError();
+            }
           }
         }
 
@@ -100,18 +103,20 @@ var Wikivoyage = {
     }
 
     try {
-      var parser = MediawikiMobileParser.setHtml(html).getActualContent()
-                    .removeBanner().removeEmptySections();
-      Wikivoyage.html = parser.getHtml();
+      Wikivoyage.html = MediawikiMobileParser.getCleanPage(html);
       Wikivoyage.updateView();
+
       if ( options.pageLoaded ) {
         options.pageLoaded();
       }
     }
 
     catch (e) {
-      // TODO
-      console.log(e);
+      // Parsing failed, but still better to show the page as it is...
+      Wikivoyage.html = html;
+      if ( options.pageLoaded ) {
+        options.pageLoaded();
+      }
     }
 
   },

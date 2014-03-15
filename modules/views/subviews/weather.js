@@ -7,13 +7,22 @@ var Weather = {
   activate: function(options) {
     this.$el = options.$el;
     this.showForecast(options.keyword);
+    this.onError = options.onError;
   },
 
   updateView: function() {
-    Weather.$el.html(weatherTemplate({
-      forecast: Weather.forecastList,
-      climateTable: Weather.climateTable,
-    }));
+
+    if ( Weather.forecastList === null && Weather.climateTable === null ) {
+      Weather.onError();
+    }
+
+    else {
+      Weather.$el.html(weatherTemplate({
+        forecast: Weather.forecastList,
+        climateTable: Weather.climateTable,
+      }));
+    }
+
   },
 
   showForecast: function(keyword) {
@@ -24,7 +33,8 @@ var Weather = {
       function(error, forecastList) {
 
         if ( error ) {
-          // TODO
+          Weather.forecastList = null;
+          Weather.updateView();
         }
 
         else {

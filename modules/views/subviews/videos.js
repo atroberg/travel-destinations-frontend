@@ -3,7 +3,7 @@ var videoTemplate = require('../../../templates/videos.hbs');
 
 var Videos = {
 
-  init: function() {
+  initEventHandlers: function() {
     if ( typeof this.$el.attr('data-inited') === 'undefined' ) {
       this.$el.on('tap', '.video', function(e) {
         // Show loading
@@ -16,8 +16,8 @@ var Videos = {
 
   activate: function(options) {
     this.$el = options.$el;
-    this.init();
     this.show(options.keyword);
+    this.onError = options.onError;
   },
 
   updateView: function() {
@@ -32,9 +32,12 @@ var Videos = {
       keyword: keyword
     }, function(error, videos) {
       if ( error ) {
-        // Todo
+        if ( Videos.onError ) {
+          Videos.onError();
+        }
       }
       else {
+        Videos.initEventHandlers();
         Videos.videos = videos;
         Videos.updateView();
       }
