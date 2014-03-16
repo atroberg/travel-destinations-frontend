@@ -58,7 +58,8 @@ var OpenWeatherMap = {
           callback(e);
         }
       },
-      error: function(msg) {
+      error: function(msg, textStatus) {
+        if ( textStatus === 'abort' ) return;
         callback(msg);
       },
     });

@@ -21,6 +21,10 @@ var settings = {
   playStoreLink: 'TODO_INSERT_PLAYSTORE_LINK',
   buttonTouchFeedbackTimeout: 500,
   databaseInitSize: 52428800, // 50MB
+  ajaxCache: {
+    pageCount: 10,
+    lifetime: 1800, // 30 min (argument given in seconds)
+  },
 };
 
 module.exports = settings;

@@ -16,6 +16,7 @@ var Wikivoyage = {
         params.callback(null, data);
       },
       error: function(jqXHR, textStatus, errorThrown) {
+        if ( textStatus === 'abort' ) return;
         params.callback(textStatus);
       }
     };

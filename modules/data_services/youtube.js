@@ -27,6 +27,7 @@ var Youtube = {
 
       },
       error: function(msg) {
+        if ( textStatus === 'abort' ) return;
         callback(msg);
       },
     });
