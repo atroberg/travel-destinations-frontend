@@ -1,6 +1,7 @@
 var WikivoyageService = require('../../data_services/wikivoyage');
 var MediawikiMobileParser = require('../../mediawiki_mobile_parser.js');
 var SavedPagesDataProvider = require('../../data_services/saved_pages');
+var UserSettings = require('../../user_settings');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
@@ -20,13 +21,17 @@ var Wikivoyage = {
       $title.toggleClass('expanded');
     });
 
+    this.initTextZooming();
+
     // Prevent default behavior for links
     this.$el.on('click', 'a', function(e) {
       e.preventDefault();
     });
+
     // Handle them with the tap-event instead
     this.$el.on('tap', 'a', function(e) {
       $el = $(this);
+
       var url = $el.attr('href');
 
       // Check if relative url => load from wikivoyage
@@ -40,6 +45,63 @@ var Wikivoyage = {
       else {
         window.open(url, '_system');
       }
+    });
+
+    // Touch feedback
+    this.$el.on('touchstart', 'a', function(e) {
+      var $link = $(this).addClass('touchdown');
+      setTimeout(function() {
+        $link.removeClass('touchdown');
+      }, 500);
+    });
+  },
+
+  initTextZooming: function() {
+
+    var savedTextSize = UserSettings.get('textSize') || 'textNormal';
+    var textSizeClasses = ['textXSmall', 'textSmall', 'textNormal', 'textBig', 'textXBig'];
+    var prevTextSizeClassIndex = textSizeClasses.indexOf(savedTextSize);
+
+    Wikivoyage.$el.addClass(textSizeClasses[prevTextSizeClassIndex]);
+
+    function textSize(jump) {
+
+      var newIndex = prevTextSizeClassIndex + jump;
+
+      if ( newIndex < 0 ) newIndex = 0;
+      else if ( newIndex > textSizeClasses.length - 1) newIndex = textSizeClasses.length - 1;
+
+      if ( newIndex === prevTextSizeClassIndex ) return;
+
+      Wikivoyage.$el.removeClass(textSizeClasses[prevTextSizeClassIndex]).addClass(textSizeClasses[newIndex]);
+
+      prevTextSizeClassIndex = newIndex;
+
+      UserSettings.set('textSize', textSizeClasses[newIndex]);
+    }
+
+    var prevScale = 1.0;
+
+    // Text zooming (change font size)
+    this.$el.on('touchstart touchmove', function(e) {
+      if ( e.originalEvent.touches.length === 2 ) {
+        e.preventDefault();
+      }
+      else {
+        prevScale = 1.0;
+      }
+    })
+    .on('pinch', function(e) {
+
+      if ( e.gesture.scale > 1.4 * prevScale ) {
+        textSize(1);
+        prevScale = e.gesture.scale;
+      }
+      else if ( e.gesture.scale < 0.71 * prevScale ) {
+        textSize(-1);
+        prevScale = e.gesture.scale;
+      }
+
     });
   },
 
