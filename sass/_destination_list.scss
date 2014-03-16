@@ -1,0 +1,29 @@
+.destinationsListingPage {
+  padding-left:0;
+  padding-right:0;
+}
+
+.destinationsList {
+  margin:0;
+  padding:0;
+
+  li:first-child {
+    border-top:0;
+  }
+
+  li {
+    font-size:1.3em;
+    border-top:1px solid #dcdcdc;
+    overflow:hidden;
+
+    span {
+      padding:.7em 0 .7em 1em;
+      display:inline-block;
+    }
+
+    i {
+      float:right;
+      padding:.7em 1em .7em .7em;
+    }
+  }
+}

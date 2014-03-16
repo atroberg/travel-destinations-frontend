@@ -37,7 +37,7 @@ body {
 @import 'destination';
 @import 'popup_gallery_fullscreen';
 @import 'frontpage';
-@import 'saved_pages';
+@import 'destination_list';
 
 // Container for all page types, that
 // don't have an own container element
@@ -52,7 +52,7 @@ body {
   min-height:100%;
   background:white;
   padding:59px .5em .5em .5em;
-  transition:opacity $page-transition-duration;
+  transition:opacity $transition-duration;
 
   &.active {
     visibility:visible;

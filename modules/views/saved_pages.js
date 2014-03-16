@@ -14,7 +14,7 @@ var SavedPages = {
 
     this.$el = $('#actionPage').hammer(settings.hammer);
     this.$el.removeClass();
-    this.$el.addClass('savedPages animate');
+    this.$el.addClass('savedPages destinationsListingPage animate');
 
     if ( options.addHistoryEntry ) {
       AppHistory.push({}, 'Saved Pages');
@@ -24,7 +24,7 @@ var SavedPages = {
       AppHistory.gotoShortcut('closeSavedPages');
     });
 
-    this.$el.on('tap', '.savedPagesList li', function(e) {
+    this.$el.on('tap', '.destinationsList li', function(e) {
 
       var $li = $(this);
 
@@ -48,7 +48,7 @@ var SavedPages = {
 
       else {
         Destination.show(uri);
-        SavedPages.deactivate();
+        SavedPages.deactivate('active');
       }
 
     });
@@ -85,12 +85,18 @@ var SavedPages = {
     });
   },
 
-  deactivate: function() {
-    this.$el.addClass('animate');
-    this.$el.removeClass('active');
+  deactivate: function(classes) {
+    if ( typeof classes !== 'undefined' ) {
+      classes = ' ' + classes;
+    }
+    else {
+      classes = '';
+    }
+
+    this.$el.attr('class', 'animate' + classes);
 
     setTimeout(function(){
-      SavedPages.$el.removeClass('animate');
+      SavedPages.$el.removeClass();
 
       // Clear the element and listeners
       SavedPages.$el.off().html('');

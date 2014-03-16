@@ -28,8 +28,11 @@ var Favorites = {
   },
 
   remove: function(destination) {
+
+    var uri = typeof destination === 'string' ? destination : destination.uri;
+
     this.init();
-    delete this.favorites[destination.uri];
+    delete this.favorites[uri];
     this.save();
   },
 

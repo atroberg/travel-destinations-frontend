@@ -7,6 +7,7 @@ var Destination = require('./destination');
 var SavedPages = require('./saved_pages');
 var Search = require('../search');
 var Favorites = require('../favorites');
+var FavoritesPage = require('./favorites');
 
 
 var Frontpage = {
@@ -112,8 +113,21 @@ var Frontpage = {
         Frontpage.deactivate();
         SavedPages.activate();
       },
+
       destinationFinder: function() {
         // TODO: will be implemented later
+      },
+
+      favorites: function() {
+        AppHistory.addPopHandler('closeFavorites', function() {
+          Frontpage.activate();
+          FavoritesPage.deactivate();
+        });
+        AppHistory.push({popHandler: 'closeFavorites'}, 'Frontpage', {shortcut: 'closeFavorites'});
+
+        Frontpage.menu.hide();
+        Frontpage.deactivate();
+        FavoritesPage.activate();
       },
     },
 
@@ -156,6 +170,14 @@ var Frontpage = {
     })
     .on('trobisHammer.swipeleft', function(e) {
       Frontpage.focusToTab(Frontpage.currentTab - 1);
+    });
+
+    this.$frontpage.on('tap', '.seeAllBtn', function(e) {
+      var action = $(this).attr('data-action');
+
+      if ( action && Frontpage.menu.actions[action] ) {
+        Frontpage.menu.actions[action]();
+      }
     });
   },
 
