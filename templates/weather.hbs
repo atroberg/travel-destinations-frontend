@@ -1,27 +1,31 @@
-{{#if forecast}}
-  <div class="forecast">
-    <h2>Forecast</h2>
-    {{#each forecast}}
-      <div>
-        <label>{{this.dayLabel}}</label>
-        <img src="images/weather_icons/{{this.icon}}.png">
-        <span>Day: <span>{{this.temp.day}}℃</span></span>
-        <span>Night: <span>{{this.temp.night}}℃</span></span>
-      </div>
-    {{/each}}
-  </div>
-  <br>
-{{/if}}
+{{#if noResults}}
+  <div class="alert alert-info">No weather details are available for this destination.</div>
+{{else}}
+  {{#if forecast}}
+    <div class="forecast">
+      <h2>Forecast</h2>
+      {{#each forecast}}
+        <div>
+          <label>{{this.dayLabel}}</label>
+          <img src="images/weather_icons/{{this.icon}}.png">
+          <span>Day: <span>{{this.temp.day}}℃</span></span>
+          <span>Night: <span>{{this.temp.night}}℃</span></span>
+        </div>
+      {{/each}}
+    </div>
+    <br>
+  {{/if}}
 
-{{#if climateTable}}
-  <div class="climate_table">
-    <h2>Climate</h2>
-    {{#each climateTable}}
-      <ul>
-        {{#each this}}
-          <li>{{this}}</li>
-        {{/each}}
-      </ul>
-    {{/each}}
-  </div>
+  {{#if climateTable}}
+    <div class="climate_table">
+      <h2>Climate</h2>
+      {{#each climateTable}}
+        <ul>
+          {{#each this}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      {{/each}}
+    </div>
+  {{/if}}
 {{/if}}

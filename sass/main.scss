@@ -28,6 +28,11 @@ body {
   background:#d3d3d3;
 }
 
+.alert.alert-info {
+  margin-left:.8em;
+  margin-right:.8em;
+}
+
 @import 'nav_header';
 @import 'destination';
 @import 'popup_gallery_fullscreen';

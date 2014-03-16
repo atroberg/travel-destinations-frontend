@@ -10,9 +10,14 @@ var Weather = {
     this.onError = options.onError;
   },
 
-  updateView: function() {
+  updateView: function(options) {
 
-    if ( Weather.forecastList === null && Weather.climateTable === null ) {
+    options = options || {};
+
+    // Only show error message if ALSO climateTable is null.
+    // If climateTable still avaible, we don't need to worry
+    // the user by giving an error message...
+    if ( options.error && Weather.climateTable === null ) {
       Weather.onError();
     }
 
@@ -20,6 +25,7 @@ var Weather = {
       Weather.$el.html(weatherTemplate({
         forecast: Weather.forecastList,
         climateTable: Weather.climateTable,
+        noResults: Weather.forecastList === null && Weather.climateTable === null,
       }));
     }
 
@@ -34,7 +40,7 @@ var Weather = {
 
         if ( error ) {
           Weather.forecastList = null;
-          Weather.updateView();
+          Weather.updateView({error: true});
         }
 
         else {
