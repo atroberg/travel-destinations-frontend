@@ -2,6 +2,7 @@ var WikivoyageService = require('../../data_services/wikivoyage');
 var MediawikiMobileParser = require('../../mediawiki_mobile_parser.js');
 var SavedPagesDataProvider = require('../../data_services/saved_pages');
 var UserSettings = require('../../user_settings');
+var AppHistory = require('../../history');
 
 // TODO: this must probably be changed to work some other way
 // because we must be able to support other languages as well
@@ -38,6 +39,24 @@ var Wikivoyage = {
       if ( url.match(/^\/\//) === null
             && url.match(/:\/\//) === null ) {
         e.preventDefault();
+
+
+        // Remember state (= scrollTop and open divs)
+        // for this article
+        var openSections = [];
+        Wikivoyage.$el.find('> h2').each(function(i) {
+          if ( $(this).hasClass('expanded') ) {
+            openSections.push(i);
+          }
+        });
+
+        AppHistory.extendState({
+          wikivoyageState: {
+            scrollTop: $(window).scrollTop(),
+            openSections: openSections,
+          },
+        }, options.Destination.destination.title);
+
 
         options.Destination.show(url);
       }
@@ -105,11 +124,28 @@ var Wikivoyage = {
     });
   },
 
+  setState: function(state) {
+    this.state = state;
+  },
+
   updateView: function() {
     this.$el.hide().html(this.html);
     // Accordion chevron
     this.$el.find('> h2').prepend('<i class="fa fa-chevron-right"></i>');
+
+    if ( this.state ) {
+      if ( this.state.openSections ) {
+        $.each(this.state.openSections, function(key, val) {
+          Wikivoyage.$el.find('> h2:eq(' + val + ')').addClass('expanded');
+        });
+      }
+    }
+
     this.$el.show();
+
+    if ( this.state && this.state.scrollTop ) {
+      $(window).scrollTop(this.state.scrollTop);
+    }
   },
 
   showDestination: function(options) {

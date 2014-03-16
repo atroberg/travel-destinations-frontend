@@ -45,6 +45,10 @@ var AppHistory = {
     }
   },
 
+  extendState: function(state, title) {
+    this.push($.extend(history.state, state), title, {replaceState: true});
+  },
+
   push: function(state, title, options) {
     options = options || {};
 

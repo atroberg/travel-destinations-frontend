@@ -22,7 +22,7 @@ var Destination = {
     this.destination = {};
 
     AppHistory.addPopHandler('loadDestination', function(state) {
-      Destination.show(state.url, {addHistoryEntry:false});
+      Destination.show(state.url, {addHistoryEntry:false, state: state.wikivoyageState});
     });
 
     // Tabs
@@ -150,6 +150,8 @@ var Destination = {
                                 ? options.addHistoryEntry
                                 : true;
 
+    Wikivoyage.setState(options.state);
+
     this.activate();
 
     DestinationTabs.init();
@@ -178,7 +180,6 @@ var Destination = {
     $activeTab.html(html);
 
     $activeTab.on('tap', '.retryBtn', function(e) {
-      console.log('retry');
       DestinationTabs.focusToTab(DestinationTabs.currentTab, {forceRefresh: true});
     });
   },
