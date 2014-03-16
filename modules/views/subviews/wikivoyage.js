@@ -141,10 +141,20 @@ var Wikivoyage = {
       }
     }
 
-    this.$el.show();
-
     if ( this.state && this.state.scrollTop ) {
-      $(window).scrollTop(this.state.scrollTop);
+      this.$el.css('visibility', 'hidden').show();
+
+      // Need a small timeout, because otherwise it seems
+      // like DOM isn't always ready and therefore the document
+      // isn't high enought to go to wanted scrollTop
+      setTimeout(function() {
+        Wikivoyage.$el.css('visibility', 'visible');
+        $(window).scrollTop(Wikivoyage.state.scrollTop);
+      }, 10);
+    }
+
+    else {
+      this.$el.show();
     }
   },
 

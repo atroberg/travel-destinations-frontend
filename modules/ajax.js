@@ -19,7 +19,14 @@ var Ajax = {
         cacheEntry.response = JSON.parse(cacheEntry.response);
       }
 
-      ajaxOptions.success(cacheEntry.response);
+      // Returning the answer directly might include
+      // (afterwards) heavy DOM manipulations making the
+      // UI unresponsive. Instead, show briefly loading
+      // indicator, before starting the heavy work
+      // (not optimat solution though...)
+      setTimeout(function() {
+        ajaxOptions.success(cacheEntry.response);
+      }, 50);
 
       jqXHR.abort();
 
