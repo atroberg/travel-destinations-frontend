@@ -12,8 +12,18 @@ var Favorites = {
   },
 
   add: function(destination) {
+    var entry = {
+      title: destination.title,
+      firstP: destination.firstP,
+    };
+
+    // Only store 1st photo
+    if ( destination.photos ) {
+      entry.photo = destination.photos[0].src;
+    }
+
     this.init();
-    this.favorites[destination.uri] = destination;
+    this.favorites[destination.uri] = entry;
     this.save();
   },
 
@@ -25,6 +35,33 @@ var Favorites = {
 
   save: function() {
     localStorage.setItem('favorites', JSON.stringify(this.favorites));
+  },
+
+  // Return all favorites
+  get: function() {
+    this.init();
+
+    // We need to return a sorted array
+    var sortedFavorites = [];
+
+    $.each(this.favorites, function(uri, item) {
+      item.uri = uri;
+      sortedFavorites.push(item);
+    });
+
+    sortedFavorites.sort(function(a, b) {
+      if ( a.title < b.title ) {
+        return -1;
+      }
+      if ( a.title > b.title ) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    });
+
+    return sortedFavorites;
   },
 
 };

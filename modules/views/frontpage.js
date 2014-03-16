@@ -1,10 +1,12 @@
 var frontpageTemplate = require('../../templates/frontpage.hbs');
+var destinationsTemplate = require('../../templates/frontpage_destination_list.hbs');
 
 var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');
 var SavedPages = require('./saved_pages');
 var Search = require('../search');
+var Favorites = require('../favorites');
 
 
 var Frontpage = {
@@ -55,7 +57,31 @@ var Frontpage = {
   },
 
   updateView: function() {
+
+    var favorites = Favorites.get();
+    if ( favorites.length > settings.frontpage.destinationListLimit ) {
+      var favoritesCount = favorites.length;
+      favorites = favorites.slice(0, settings.frontpage.destinationListLimit);
+    }
+    else {
+      var favoritesCount = null;
+    }
+
     var html = frontpageTemplate({
+
+      recent: destinationsTemplate({
+        destinations: null,
+        noDestinationsMsg: "Your recently viewed destinations will appear here.",
+      }),
+
+      favorites: destinationsTemplate({
+        destinations: favorites,
+        destinationCount: favoritesCount,
+        dataAction: 'favorites',
+        noDestinationsMsg: "You don't currently have any favorited destinations."
+                            + " You can add destinations to your favorites by clicking"
+                            + " the star icon on a destination's page.",
+      }),
 
     });
     this.$frontpage.html(html);
@@ -149,6 +175,14 @@ var Frontpage = {
     var tabCount = this.$frontpage.find('#frontpage_tabs .tab').length;
     var xpos = -(100 / tabCount * index) + '%';
     this.$frontpage.find('#frontpage_tabs').css('transform', 'translate3d(' + xpos + ',0,0)');
+
+    var $prevTab = this.$frontpage.find('#frontpage_tabs .tab:eq(' + this.currentTab + ')');
+
+    setTimeout(function() {
+      $prevTab.removeClass('active');
+    }, settings.animationDurations.tabs);
+
+    this.$frontpage.find('#frontpage_tabs .tab:eq(' + index + ')').addClass('active');
 
     this.currentTab = index;
   },

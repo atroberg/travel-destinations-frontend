@@ -171,6 +171,10 @@ var ActionBar = {
           shareWithoutImg();
         }
       },
+
+      openInBrowser: function() {
+        window.open(ActionBar.destination.uri, '_system');
+      },
     }
   }
 

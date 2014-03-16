@@ -1,13 +1,8 @@
 $frontpage-tab-count: 3;
+$drawer-width:17em;
 
 #frontpage {
-  overflow:hidden;
-  position:absolute;
-  top:0;
-  left:0;
   height:100%;
-  width:100%;
-  z-index:0;
 
   &.inactive {
     display:none;
@@ -15,14 +10,18 @@ $frontpage-tab-count: 3;
 
   &.menuActive {
 
+    #frontpage {
+      z-index:-3;
+    }
+
     #frontpageContent {
       overflow:hidden;
-      -webkit-transform:translate3d(17em, 0, 0);
+      -webkit-transform:translate3d($drawer-width, 0, 0);
+    }
 
-      .overlay {
-        visibility:visible;
-        opacity:.6;
-      }
+    .overlay {
+      visibility:visible;
+      opacity:.6;
     }
   }
 
@@ -30,9 +29,8 @@ $frontpage-tab-count: 3;
     position:absolute;
     top:0;
     left:0;
-    z-index:1;
     height:100%;
-    width:17em;
+    width:$drawer-width;
     background:#eeeeee;
 
     i:first-child {
@@ -51,29 +49,40 @@ $frontpage-tab-count: 3;
     }
   }
 
+  .overlay {
+    visibility:hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:black;
+    opacity:0;
+    transition:opacity $transition-duration;
+    z-index:1001;
+  }
+
   #frontpageContent {
     background:white;
     width:100%;
+    overflow:hidden;
     min-height:100%;
-    position:absolute;
-    padding-top:38px;
-    top:0;
-    left:0;
     z-index:2;
     transition:-webkit-transform $transition-duration;
     -webkit-transform:translate3d(0,0,0);
+  }
 
-    .overlay {
-      visibility:hidden;
-      position:absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:black;
-      opacity:0;
-      transition:opacity $transition-duration;
-      z-index:1001;
+  .pageContent {
+    position:absolute;
+    top:38px;
+    left:0;
+    width:100%;
+    height:95%;// minus padding top
+    overflow:auto;
+
+    .seeAllBtn {
+      display:block;
+      margin:1em auto;
     }
   }
 
@@ -159,14 +168,25 @@ $frontpage-tab-count: 3;
   }
 
   #frontpage_tabs {
-    height:100%;
-
     width:$frontpage-tab-count * 100%;
     transition:-webkit-transform $transition-duration;
+
+    .noDestinationsMsg {
+      margin-top:1em;
+      font-size:1.2em;
+    }
 
     .tab {
       float:left;
       width:100%/$frontpage-tab-count;
+      visibility:hidden;
+      height:1px;
+      overflow:hidden;
+
+      &.active {
+        height:auto;
+        visibility:visible;
+      }
 
       .destination {
         background:white;
@@ -181,6 +201,9 @@ $frontpage-tab-count: 3;
           font-family: "RobotoRegular";
           font-size:1.2em;
           margin-top:.2em;
+          height:1.2em;
+          overflow:hidden;
+          max-width:55%;
         }
 
         p {

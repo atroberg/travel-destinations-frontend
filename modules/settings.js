@@ -25,6 +25,9 @@ var settings = {
     pageCount: 10,
     lifetime: 1800, // 30 min (argument given in seconds)
   },
+  frontpage: {
+    destinationListLimit: 5,
+  },
 };
 
 module.exports = settings;

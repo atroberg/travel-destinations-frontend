@@ -55,6 +55,7 @@ var Destination = {
 
           Photos.setWikiPhotos($wikivoyageTab);
           Destination.destination.photos = Photos.wikiPhotos;
+          Destination.destination.firstP = $wikivoyageTab.find('p:first').text();
 
           Map.setCoordinates({
             destination: Destination.destination,
