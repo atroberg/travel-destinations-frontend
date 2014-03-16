@@ -36,25 +36,33 @@ var Search = {
     });
 
     var searchXHR = null;
-    var prevKeyword = null;
+    Search.prevKeyword = null;
     this.$el.on('keyup', 'input', function(e) {
+
       var keyword = $(this).val().trim();
 
-      // Don't search for the same thing again...
-      if ( keyword === prevKeyword ) return;
-      else prevKeyword = keyword;
+      var enterPress = e.keyCode === 13;
+      var forceSearch = enterPress && keyword.length > 0;
 
-      if ( keyword.length >= settings.autoSuggestMinLength ) {
+      // Don't search for the same thing again...
+      if ( keyword === Search.prevKeyword ) return;
+
+      if ( forceSearch || keyword.length >= settings.autoSuggestMinLength ) {
+
+        Search.prevKeyword = keyword;
 
         // Prevent multiple requests from overriding each other
         if ( searchXHR && searchXHR.readyState !== 4 ) {
           searchXHR.abort();
         }
 
+        Search.input.showLoading();
+
         searchXHR = Wikivoyage.search({
           keyword: keyword,
           callback: function(error, results) {
             Search.updateView(results);
+            Search.input.hideLoading();
           }
         });
 
@@ -73,6 +81,7 @@ var Search = {
   },
 
   deactivate: function() {
+    Search.prevKeyword = null;
     Search.input.deactivate();
     Search.removeSuggestResults();
   },
@@ -98,8 +107,16 @@ var Search = {
 
     deactivate: function() {
       Search.$el.removeClass('active');
-      Search.$el.find('input').val('');
+      Search.$el.find('input').val('').blur();
       this.isActive = false;
+    },
+
+    showLoading: function() {
+      Search.$el.find('input').addClass('loading');
+    },
+
+    hideLoading: function() {
+      Search.$el.find('input').removeClass('loading');
     },
   }
 

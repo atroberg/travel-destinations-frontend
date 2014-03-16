@@ -101,12 +101,21 @@ $frontpage-tab-count: 3;
       }
 
       input {
-        padding-left:1.8em;
+        padding-left:1.5em;
         z-index:1;
         position:absolute;
         left:0;
         top:0;
         width:100%;
+
+        &.loading {
+          background: {
+            image:url(../images/ajax-loader.gif);
+            repeat:no-repeat;
+            position:98% 50%;
+            size:27px;
+          }
+        }
       }
 
       .searchSuggestResults {
