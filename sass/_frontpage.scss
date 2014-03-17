@@ -160,6 +160,9 @@ $drawer-width:17em;
       display:inline-block;
       text-align: center;
       width:98% / $frontpage-tab-count;
+      border-bottom:3px solid white;
+      box-sizing:border-box;
+      -webkit-box-sizing:border-box;
 
       &.active {
         border-bottom:4px solid #9c9c9c;
