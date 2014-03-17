@@ -1,4 +1,4 @@
-var Favorites = require('../../favorites');
+var Favorites = require('../../data_services/favorites');
 var Toast = require('../../toast');
 var SavedPages = require('../../data_services/saved_pages');
 var autohideNav = require('../../autohide_nav');

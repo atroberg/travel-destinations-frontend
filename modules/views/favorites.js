@@ -1,5 +1,5 @@
 var template = require('../../templates/favorites.hbs');
-var FavoritesDataProvider = require('../favorites');
+var FavoritesDataProvider = require('../data_services/favorites');
 var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');

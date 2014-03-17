@@ -6,7 +6,7 @@ var AppHistory = require('../history');
 var Destination = require('./destination');
 var SavedPages = require('./saved_pages');
 var Search = require('../search');
-var Favorites = require('../favorites');
+var Favorites = require('../data_services/favorites');
 var FavoritesPage = require('./favorites');
 
 

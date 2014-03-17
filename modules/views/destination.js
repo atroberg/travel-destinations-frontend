@@ -6,7 +6,7 @@ var Wikivoyage = require('./subviews/wikivoyage');
 var DestinationTabs = require('../destination_tabs');
 var AppHistory = require('../history');
 var ActionBar = require('./subviews/action_bar');
-var Favorites = require('../favorites');
+var Favorites = require('../data_services/favorites');
 var settings = require('../settings');
 var Map = require('../map');
 
