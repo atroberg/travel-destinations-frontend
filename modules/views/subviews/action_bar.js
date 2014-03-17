@@ -103,7 +103,7 @@ var ActionBar = {
 
     actions: {
       save: function() {
-        var destination = $.extend(ActionBar.destination, {});
+        var destination = $.extend({}, ActionBar.destination);
 
         // Don't save photos
         if ( typeof destination.photos !== 'undefined' ) {
