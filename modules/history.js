@@ -1,10 +1,5 @@
 var AppHistory = {
 
-  // On page load, we will automatically get one
-  // state, and thus the first time we do replaceState
-  // instead of pushState. Tracked with this var.
-  noEntriesYet: true,
-
   popHandlers: {},
 
   // Need to keep track of this separately,
@@ -17,7 +12,10 @@ var AppHistory = {
 
   init: function() {
     window.onpopstate = function(event) {
-      AppHistory.currentIndex -= 1;
+
+      if ( AppHistory.currentIndex > 0 ) {
+        AppHistory.currentIndex -= 1;
+      }
 
       if ( event.state && AppHistory.popHandlers[event.state.popHandler] ) {
         AppHistory.popHandlers[event.state.popHandler](event.state);
@@ -36,9 +34,26 @@ var AppHistory = {
   gotoShortcut: function(name) {
     try {
       var addedPosition = this.shortcuts[name];
+
       var gotoIndex = addedPosition - AppHistory.currentIndex;
+
+      // Dirty hack to an occurring problem...
+      if ( gotoIndex >= 0 ) {
+        gotoIndex = -1;
+      }
+
       history.go(gotoIndex);
+
+      // Although should never happen, but ensure
+      // addedPosition is >= 1, because otherwise
+      // onPopState will decrement is < 0
+      if ( addedPosition < 1 ) {
+        addedPosition = 1;
+      }
+
       AppHistory.currentIndex = addedPosition;
+
+      delete this.shortcuts[name];
     }
     catch (e) {
       console.log(e);
@@ -52,15 +67,15 @@ var AppHistory = {
   push: function(state, title, options) {
     options = options || {};
 
-    if ( this.noEntriesYet || options.replaceState || this.currentIndex < 0 ) {
-      var fn = 'replaceState';
-      this.noEntriesYet = false;
-    }
-    else {
-      var fn = 'pushState';
+    var fn = 'pushState';
+
+    if ( options.replaceState || this.currentIndex <= 0 ) {
+      fn = 'replaceState';
     }
 
-    AppHistory.currentIndex += 1;
+    if ( !options.replaceState ) {
+      AppHistory.currentIndex += 1;
+    }
 
     history[fn](state, title);
 
