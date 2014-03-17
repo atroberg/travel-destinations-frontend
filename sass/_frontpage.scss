@@ -171,6 +171,10 @@ $drawer-width:17em;
     width:$frontpage-tab-count * 100%;
     transition:-webkit-transform $transition-duration;
 
+    &.noAnimation {
+      transition:all 0s;
+    }
+
     .noDestinationsMsg {
       margin-top:1em;
       font-size:1.2em;

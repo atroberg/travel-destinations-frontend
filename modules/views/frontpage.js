@@ -13,6 +13,8 @@ var FavoritesPage = require('./favorites');
 
 var Frontpage = {
 
+  currentTab: 0,
+
   init: function($frontpage) {
     if ( $frontpage ) {
       this.$frontpage = $frontpage;
@@ -165,7 +167,12 @@ var Frontpage = {
   },
 
   initSwipeTabs: function() {
-    this.currentTab = 0;
+
+    // Remember which tab was active
+    if ( this.currentTab > 0 ) {
+      this.focusToTab(this.currentTab, true);
+    }
+
     this.tabCount = this.$frontpage.find('#frontpage_tabs .tab').length;
 
     this.$frontpage.on('tap', '#frontpage_tabs_menu li', function(e) {
@@ -188,7 +195,10 @@ var Frontpage = {
     });
   },
 
-  focusToTab: function(index) {
+  focusToTab: function(index, force) {
+
+    var force = typeof force === 'undefined' ? false : force;
+
     if ( index < 0) {
       index = 0;
     }
@@ -196,7 +206,12 @@ var Frontpage = {
       index = this.tabCount - 1;
     }
 
-    if ( index === this.currentTab ) return;
+    if ( force ) {
+      this.$frontpage.find('#frontpage_tabs').addClass('noAnimation');
+    }
+    else if ( index === this.currentTab ) {
+      return;
+    }
 
     this.$frontpage.find('#frontpage_tabs_menu li.active').removeClass('active');
     this.$frontpage.find('#frontpage_tabs_menu li:eq(' + index + ')').addClass('active');
@@ -207,9 +222,14 @@ var Frontpage = {
 
     var $prevTab = this.$frontpage.find('#frontpage_tabs .tab:eq(' + this.currentTab + ')');
 
-    setTimeout(function() {
-      $prevTab.removeClass('active');
-    }, settings.animationDurations.tabs);
+    if ( force ) {
+      this.$frontpage.find('#frontpage_tabs').removeClass('noAnimation');
+    }
+    else {
+      setTimeout(function() {
+        $prevTab.removeClass('active');
+      }, settings.animationDurations.tabs);
+    }
 
     this.$frontpage.find('#frontpage_tabs .tab:eq(' + index + ')').addClass('active');
 
