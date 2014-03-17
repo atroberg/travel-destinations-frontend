@@ -7,6 +7,7 @@ var DestinationTabs = require('../destination_tabs');
 var AppHistory = require('../history');
 var ActionBar = require('./subviews/action_bar');
 var Favorites = require('../data_services/favorites');
+var RecentlyViewed = require('../data_services/recently_viewed');
 var settings = require('../settings');
 var Map = require('../map');
 
@@ -56,6 +57,11 @@ var Destination = {
           Photos.setWikiPhotos($wikivoyageTab);
           Destination.destination.photos = Photos.wikiPhotos;
           Destination.destination.firstP = $wikivoyageTab.find('p:first').text();
+
+          // Add to recently viewed
+          // not added in Wikivoyage.show-function, because we want to
+          // include images and those are available only after wikivoyage is loaded
+          RecentlyViewed.add(Destination.destination);
 
           Map.setCoordinates({
             destination: Destination.destination,

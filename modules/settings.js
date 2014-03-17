@@ -28,6 +28,9 @@ var settings = {
   frontpage: {
     destinationListLimit: 5,
   },
+  recentlyViewed: {
+    limit: 5,
+  },
 };
 
 module.exports = settings;
