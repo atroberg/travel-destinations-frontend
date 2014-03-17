@@ -7,6 +7,7 @@ var Destination = require('./destination');
 var SavedPages = require('./saved_pages');
 var Search = require('../search');
 var Favorites = require('../data_services/favorites');
+var RecentlyViewed = require('../data_services/recently_viewed');
 var FavoritesPage = require('./favorites');
 
 
@@ -68,10 +69,16 @@ var Frontpage = {
       var favoritesCount = null;
     }
 
+    var recent = RecentlyViewed.get();
+    if ( recent.length > settings.frontpage.destinationListLimit ) {
+      recent = recent.slice(0, settings.frontpage.destinationListLimit);
+    }
+
+
     var html = frontpageTemplate({
 
       recent: destinationsTemplate({
-        destinations: null,
+        destinations: recent,
         noDestinationsMsg: "Your recently viewed destinations will appear here.",
       }),
 

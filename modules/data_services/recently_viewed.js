@@ -10,7 +10,12 @@ var RecentlyViewed = {
 
   get: function() {
     this.init();
-    return this.destinations;
+
+    var destinations = $.extend([], this.destinations);
+
+    destinations.reverse();
+
+    return destinations;
   },
 
   add: function(destination) {
@@ -19,7 +24,7 @@ var RecentlyViewed = {
 
     // Only save 1st photo
     if ( destination.photos ) {
-      destination.photo = destination.photos[0];
+      destination.photo = destination.photos[0].src;
       delete destination.photos;
     }
 
