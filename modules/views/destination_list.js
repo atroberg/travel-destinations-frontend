@@ -6,7 +6,10 @@ var Destination = require('./destination');
 var DestinationList = {
 
   activate: function(options) {
-    options = options || {addHistoryEntry: true};
+
+    if ( typeof options.addHistoryEntry === 'undefined' ) {
+      options.addHistoryEntry = true;
+    }
 
     DestinationList.options = options;
 
@@ -19,10 +22,8 @@ var DestinationList = {
       AppHistory.push({}, options.title);
     }
 
-    var historyShortcut = options.title;
-
     this.$el.on('tap', 'nav .back', function(e) {
-      AppHistory.gotoShortcut(historyShortcut);
+      AppHistory.gotoShortcut('closeDestinationList');
     });
 
     this.$el.on('tap', '.destinationsList li span', function(e) {
@@ -34,7 +35,7 @@ var DestinationList = {
         Destination.deactivate();
       });
 
-      AppHistory.push({popHandler: 'closeDestination'}, options.title, {shortcut: historyShortcut, replaceState: true});
+      AppHistory.push({popHandler: 'closeDestination'}, options.title, {shortcut: 'closeDestination', replaceState: true});
 
       Destination.show($li.attr('data-uri'));
       DestinationList.deactivate('active');
