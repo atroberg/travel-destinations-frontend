@@ -8,8 +8,8 @@
 {{#if destinations}}
   <ul class="destinationsList">
     {{#each destinations}}
-      <li data-uri="{{this.uri}}" class="touchFeedback">
-        <span>{{this.title}}</span>
+      <li data-uri="{{this.uri}}">
+        <span class="touchFeedback">{{this.title}}</span>
         <i class="fa fa-times remove touchFeedback"></i>
       </li>
     {{/each}}

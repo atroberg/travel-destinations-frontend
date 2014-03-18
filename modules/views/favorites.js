@@ -23,9 +23,9 @@ var Favorites = {
       AppHistory.gotoShortcut('closeFavorites');
     });
 
-    this.$el.on('tap', '.destinationsList li', function(e) {
+    this.$el.on('tap', '.destinationsList li span', function(e) {
 
-      var $li = $(this);
+      var $li = $(this).parent();
 
       AppHistory.addPopHandler('closeDestination', function() {
         Favorites.activate({addHistoryEntry: false});
@@ -34,18 +34,15 @@ var Favorites = {
 
       AppHistory.push({popHandler: 'closeDestination'}, 'Favorites', {shortcut: 'closeDestination', replaceState: true});
 
-      var uri = $li.attr('data-uri');
+      Destination.show($li.attr('data-uri'));
+      Favorites.deactivate('active');
+    })
 
-      if ( $(e.target).hasClass('remove') ) {
-        var index = $li.index();
-        Favorites.deleteDestination(uri, index);
+    .on('tap', '.destinationsList li .remove', function(e) {
+      var $li = $(this).parent();
+      if ( confirm('Delete ' + $li.text().trim() + '?') ) {
+        Favorites.deleteDestination($li.attr('data-uri'), $li.index());
       }
-
-      else {
-        Destination.show(uri);
-        Favorites.deactivate('active');
-      }
-
     });
 
     this.updateView();

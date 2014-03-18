@@ -24,9 +24,9 @@ var SavedPages = {
       AppHistory.gotoShortcut('closeSavedPages');
     });
 
-    this.$el.on('tap', '.destinationsList li', function(e) {
+    this.$el.on('tap', '.destinationsList li span', function(e) {
 
-      var $li = $(this);
+      var $li = $(this).parent();
 
       AppHistory.addPopHandler('closeDestination', function() {
         SavedPages.activate({addHistoryEntry: false});
@@ -35,22 +35,15 @@ var SavedPages = {
 
       AppHistory.push({popHandler: 'closeDestination'}, 'Saved Pages', {shortcut: 'closeDestination', replaceState: true});
 
-      var uri = $li.attr('data-uri');
+      Destination.show($li.attr('data-uri'));
+      SavedPages.deactivate('active');
+    })
 
-      if ( $(e.target).hasClass('remove') ) {
-
-        var index = $li.index();
-
-        if ( confirm('Delete ' + $(this).text().trim() + '?') ) {
-          SavedPages.deleteDestination(uri, index);
-        }
+    .on('tap', '.destinationsList li .remove', function(e) {
+      var $li = $(this).parent();
+      if ( confirm('Delete ' + $li.text().trim() + '?') ) {
+        SavedPages.deleteDestination($li.attr('data-uri'), $li.index());
       }
-
-      else {
-        Destination.show(uri);
-        SavedPages.deactivate('active');
-      }
-
     });
 
     SavedPagesDataProvider.get({callback: function(error, destinations) {
@@ -71,8 +64,6 @@ var SavedPages = {
     SavedPagesDataProvider.deleteDestination({
       uri: uri,
       callback: function(result) {
-        console.log(result);
-
         if ( result.success ) {
           SavedPages.destinations.splice(indexInArray, 1);
           SavedPages.updateView();
