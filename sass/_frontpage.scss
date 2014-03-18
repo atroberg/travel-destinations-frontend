@@ -234,6 +234,8 @@ $drawer-width:17em;
           width:12em;
           max-width:40%;
           height:7.5em;
+          // Default bg if no photo found
+          background: #E8E8E8;
           background-repeat:no-repeat;
           background-size:cover;
           background-position:50% 50%;

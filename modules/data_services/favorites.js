@@ -18,7 +18,7 @@ var Favorites = {
     };
 
     // Only store 1st photo
-    if ( destination.photos ) {
+    if ( destination.photos && destination.photos.length > 0 ) {
       entry.photo = destination.photos[0].src;
     }
 

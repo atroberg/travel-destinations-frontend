@@ -23,7 +23,7 @@ var RecentlyViewed = {
     destination = $.extend({}, destination);
 
     // Only save 1st photo
-    if ( destination.photos ) {
+    if ( destination.photos && destination.photos.length > 0 ) {
       destination.photo = destination.photos[0].src;
       delete destination.photos;
     }
