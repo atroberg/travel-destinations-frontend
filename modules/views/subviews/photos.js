@@ -27,6 +27,7 @@ var Photos = {
   clear: function() {
     this.photos = [];
     this.wikiPhotos = [];
+    this.flickrSearchDone = false;
   },
 
   activate: function(options) {
@@ -38,7 +39,16 @@ var Photos = {
   },
 
   updateView: function() {
-    var html = photosTabTemplate({photos:this.photos});
+
+    var photos = this.photos;
+
+    // If no wikivoyage photos found, wait until Flickr
+    // finishes before updating view
+    if ( photos.length === 0 && this.flickrSearchDone === false) {
+      return;
+    }
+
+    var html = photosTabTemplate({photos:photos});
     this.$el.html(html);
   },
 
@@ -56,6 +66,8 @@ var Photos = {
   showFlickrPhotos: function(keyword) {
 
     Flickr.search({keyword: keyword}, function(error, photos) {
+
+      Photos.flickrSearchDone = true;
 
       // Only show error, if Flickr failer AND no other photos to show
       if ( error && Photos.photos.length === 0 ) {
