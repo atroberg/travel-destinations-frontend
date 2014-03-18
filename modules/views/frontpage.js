@@ -7,6 +7,7 @@ var Destination = require('./destination');
 var Search = require('../search');
 var DestinationList = require('./destination_list');
 
+var Featured = require('../data_services/featured');
 var Favorites = require('../data_services/favorites');
 var RecentlyViewed = require('../data_services/recently_viewed');
 var SavedPagesDataProvider = require('../data_services/saved_pages');
@@ -61,6 +62,18 @@ var Frontpage = {
   },
 
   updateView: function() {
+
+    Featured.get(function(error, featured) {
+
+      if (error) {
+        // TODO
+      }
+      else {
+        // TODO: ensure frontpage is active while inserting the DOM
+        var html = destinationsTemplate({destinations: featured});
+        Frontpage.$frontpage.find('#featuredDestinations').html(html);
+      }
+    });
 
     var favorites = Favorites.get();
     if ( favorites.length > settings.frontpage.destinationListLimit ) {

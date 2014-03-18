@@ -3,6 +3,8 @@ var settings = {
   youtubeApiKey: 'AIzaSyDaS1ZttUF_kl-geMgtEy9X5_eqV3UWEXs',
   youtubeApiURI: 'http://td.alexistroberg.com/youtube',
   openWeatherMapKey: 'ea3739d944e0f931dee8b175958316c0',
+  featuredURI: 'http://td.alexistroberg.com/static/featured.json',
+  popularURI: 'http://td.alexistroberg.com/static/popular.json',
   animationDurations: {
     page: 500,
     tabs: 200,

@@ -33,6 +33,19 @@ body {
   margin-right:.8em;
 }
 
+
+.ajax_loading {
+  text-align:center;
+  margin-top:2em;
+
+  .ajax_spinner {
+    font-size:3em;
+    display:block;
+    margin:auto;
+    -webkit-animation:spin 1s infinite linear;
+  }
+}
+
 @import 'nav_header';
 @import 'destination';
 @import 'popup_gallery_fullscreen';
