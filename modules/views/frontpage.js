@@ -4,12 +4,12 @@ var destinationsTemplate = require('../../templates/frontpage_destination_list.h
 var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');
-var SavedPages = require('./saved_pages');
 var Search = require('../search');
+var DestinationList = require('./destination_list');
+
 var Favorites = require('../data_services/favorites');
 var RecentlyViewed = require('../data_services/recently_viewed');
-var FavoritesPage = require('./favorites');
-
+var SavedPagesDataProvider = require('../data_services/saved_pages');
 
 var Frontpage = {
 
@@ -97,6 +97,14 @@ var Frontpage = {
     this.$frontpage.html(html);
   },
 
+  addDestinationListHistory: function() {
+    AppHistory.addPopHandler('closeDestinationList', function() {
+      Frontpage.activate();
+      DestinationList.deactivate();
+    });
+    AppHistory.push({popHandler: 'closeDestinationList'}, 'Frontpage', {shortcut: 'closeDestinationList'});
+  },
+
   menu: {
     isVisible: false,
 
@@ -112,15 +120,33 @@ var Frontpage = {
 
     actions: {
       savedPages: function() {
-        AppHistory.addPopHandler('closeSavedPages', function() {
-          Frontpage.activate();
-          SavedPages.deactivate();
-        });
-        AppHistory.push({popHandler: 'closeSavedPages'}, 'Frontpage', {shortcut: 'closeSavedPages'});
-
+        Frontpage.addDestinationListHistory();
         Frontpage.menu.hide();
         Frontpage.deactivate();
-        SavedPages.activate();
+
+        DestinationList.activate({
+          title: 'Saved Pages',
+          getDestinations: function(callback) {
+            SavedPagesDataProvider.get({
+              callback: function(error, destinations) {
+                callback(error, destinations);
+              },
+            });
+          },
+          deleteDestination: function(uri, callback) {
+            SavedPagesDataProvider.deleteDestination({
+              uri: uri,
+              callback: function(result) {
+                callback(null, result.success);
+              }
+            })
+          },
+          noDestinations: {
+            title: 'No Saved Pages',
+            text: "You can save pages from the menu when you are viewing a destination."
+                  + " Saved pages are available also when you don't have internet connectivity.",
+          }
+        });
       },
 
       destinationFinder: function() {
@@ -128,15 +154,24 @@ var Frontpage = {
       },
 
       favorites: function() {
-        AppHistory.addPopHandler('closeFavorites', function() {
-          Frontpage.activate();
-          FavoritesPage.deactivate();
-        });
-        AppHistory.push({popHandler: 'closeFavorites'}, 'Frontpage', {shortcut: 'closeFavorites'});
-
+        Frontpage.addDestinationListHistory();
         Frontpage.menu.hide();
         Frontpage.deactivate();
-        FavoritesPage.activate();
+
+        DestinationList.activate({
+          title: 'Favorites',
+          getDestinations: function(callback) {
+            callback(null, Favorites.get());
+          },
+          deleteDestination: function(uri, callback) {
+            Favorites.remove(uri);
+            callback(null, true);
+          },
+          noDestinations: {
+            title: 'No Favorites',
+            text: "You can favorite destinations by clicking the star icon on a destination's page.",
+          }
+        });
       },
     },
 

@@ -1,9 +1,6 @@
 <nav>
   <i class="back fa fa-chevron-left touchFeedback"></i>
-  <h1>Favorites</h1>
-  <div class="right">
-    <i class="menu fa fa-ellipsis-v menuBtn touchFeedback"></i>
-  </div>
+  <h1>{{title}}</h1>
 </nav>
 {{#if destinations}}
   <ul class="destinationsList">
@@ -16,7 +13,7 @@
   <ul>
 {{else}}
   <div class="alert alert-info">
-    <h3>No favorites</h3>
-    You can favorite destinations by clicking the star icon on a destination's page.
+    <h3>{{noDestinations.title}}</h3>
+    {{noDestinations.text}}
   </div>
 {{/if}}

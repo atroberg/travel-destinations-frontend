@@ -77,6 +77,8 @@ var AppHistory = {
       AppHistory.currentIndex += 1;
     }
 
+    console.log(fn, state, title);
+
     history[fn](state, title);
 
     if ( options.shortcut ) {
