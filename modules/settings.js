@@ -11,7 +11,8 @@ var settings = {
   tabSwipeVelocity: 0.2,
   hammer: {
     tap_max_distance: 20,
-    tap_max_touchtime: 400
+    tap_max_touchtime: 400,
+    swipe_velocity: 0.1,
   },
   toastMsgDuration: 2000,
   map: {

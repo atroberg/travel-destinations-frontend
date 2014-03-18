@@ -179,10 +179,13 @@ var Frontpage = {
       Frontpage.focusToTab($(this).index());
     });
 
-    this.$frontpage.trobisHammer().on('trobisHammer.swiperight', function(e) {
+    this.$frontpage.on('dragleft dragright', function(e) {
+      e.gesture.preventDefault();
+    })
+    .on('swipeleft', function(e) {
       Frontpage.focusToTab(Frontpage.currentTab + 1);
     })
-    .on('trobisHammer.swipeleft', function(e) {
+    .on('swiperight', function(e) {
       Frontpage.focusToTab(Frontpage.currentTab - 1);
     });
 

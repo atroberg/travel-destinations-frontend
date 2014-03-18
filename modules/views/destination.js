@@ -100,18 +100,6 @@ var Destination = {
 
   },
 
-  initEventHandlers: function() {
-    this.$el.on('tap', 'nav #tabs_menu li', function(e) {
-      DestinationTabs.focusToTab($(this).index());
-    });
-    this.$el.trobisHammer().on('trobisHammer.swiperight', function(e) {
-      DestinationTabs.nextTab();
-    })
-    .on('trobisHammer.swipeleft', function(e) {
-      DestinationTabs.prevTab();
-    });
-  },
-
   updateView: function() {
     this.$el.html(destinationTemplate({
       destination:{
@@ -135,7 +123,6 @@ var Destination = {
       return;
     }
 
-    this.initEventHandlers();
     this.$el.addClass('animate active');
     setTimeout(function(){
       Destination.$el.removeClass('animate');

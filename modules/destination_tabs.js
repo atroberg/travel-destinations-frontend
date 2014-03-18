@@ -5,6 +5,66 @@ var DestinationTabs = {
   init: function() {
     this.clearCache();
     this.currentTab = 0;
+    this.initEventHandlers();
+  },
+
+  initEventHandlers: function() {
+    this.$container.on('tap', 'nav #tabs_menu li', function(e) {
+      DestinationTabs.focusToTab($(this).index());
+    });
+    this.$container.on('dragleft dragright', function(e) {
+      // Need to prevent default behavior in order
+      // to make swipe gestures to be sensitive enough
+      e.gesture.preventDefault();
+    })
+    .on('swiperight', function(e) {
+      DestinationTabs.prevTab();
+    })
+    .on('swipeleft', function(e) {
+      DestinationTabs.nextTab();
+    });
+
+
+    // Scrolling for tab menu (if all links don't fit on screen)
+    var maxDelta = 0;
+    var startOffset = 0;
+    var allLinksFitOnScreen = true;
+
+    this.$container.on('dragstart', '#tabs_menu', function(e) {
+      var $lastLi = $(this).find('li:last');
+      var $firstLi = $(this).find('li:first');
+
+      maxDelta = - ($lastLi.offset().left + $lastLi.outerWidth() - $(window).width());
+      startOffset = $(this).offset().left;
+      var ulWidth = $lastLi.outerWidth() + $lastLi.offset().left - $firstLi.offset().left;
+      allLinksFitOnScreen = $(window).width() >= ulWidth;
+    })
+
+    .on('dragleft dragright', '#tabs_menu', function(e) {
+
+      e.gesture.preventDefault();
+      e.gesture.stopPropagation();
+
+      var deltaX = e.gesture.deltaX;
+      var $ul = $(this);
+
+      if ( allLinksFitOnScreen ) {
+        var newPos = 0;
+      }
+
+      else {
+        var newPos = startOffset + deltaX;
+
+        if ( newPos < maxDelta + startOffset ) {
+          newPos = maxDelta + startOffset;
+        }
+        else if ( newPos > 0 ) {
+          newPos = 0;
+        }
+      }
+
+      $ul.css('transform', 'translate3d(' + newPos + 'px,0,0)');
+    });
   },
 
   setElement: function setElement($el) {

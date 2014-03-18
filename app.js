@@ -2,7 +2,6 @@ var Destination = require('./modules/views/destination');
 var Frontpage = require('./modules/views/frontpage');
 
 var AppHistory = require('./modules/history');
-var trobisHammer = require('./modules/trobis.hammer.js');
 var settings = require('./modules/settings');
 var PageUtils = require('./modules/page_utils');
 var Ajax = require('./modules/ajax');

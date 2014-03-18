@@ -50,10 +50,13 @@ var FullscreenPhotoGallery = {
       $(this).toggleClass('hide_photo_title');
     });
 
-    popup.trobisHammer().on('trobisHammer.swiperight', function(e) {
+    popup.on('dragleft dragright', function(e) {
+      e.gesture.preventDefault();
+    })
+    .on('swipeleft', function(e) {
       focusToPhoto(currentIndex + 1);
     })
-    .on('trobisHammer.swipeleft', function(e) {
+    .on('swiperight', function(e) {
       focusToPhoto(currentIndex - 1);
     });
 
