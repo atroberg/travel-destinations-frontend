@@ -24,9 +24,15 @@ var Frontpage = {
     this.menu.init();
     this.initSwipeTabs();
     this.initSearch();
+    this.initEventHandlers();
+  },
 
+  initEventHandlers: function() {
     this.$frontpage.on('tap', '.destination', function(e) {
       Frontpage.openDestination($(this).attr('data-url'));
+    });
+    this.$frontpage.on('tap', '#featuredDestinations .retryBtn', function(e) {
+      Frontpage.updateViewFeatured();
     });
   },
 
@@ -61,19 +67,27 @@ var Frontpage = {
     }, settings.animationDurations.page);
   },
 
-  updateView: function() {
+  updateViewFeatured: function() {
+
+    var $el = Frontpage.$frontpage.find('#featuredDestinations');
+
+    // Show loading
+    $el.html('<p class="ajax_loading"><i class="ajax_spinner fa fa-spinner fa-spin"></i></p>');
 
     Featured.get(function(error, featured) {
 
       if (error) {
-        // TODO
+        $el.html(require('../../templates/ajax_failed.hbs')());
       }
       else {
         // TODO: ensure frontpage is active while inserting the DOM
         var html = destinationsTemplate({destinations: featured});
-        Frontpage.$frontpage.find('#featuredDestinations').html(html);
+        $el.html(html);
       }
     });
+  },
+
+  updateView: function() {
 
     var favorites = Favorites.get();
     if ( favorites.length > settings.frontpage.destinationListLimit ) {
@@ -88,7 +102,6 @@ var Frontpage = {
     if ( recent.length > settings.frontpage.destinationListLimit ) {
       recent = recent.slice(0, settings.frontpage.destinationListLimit);
     }
-
 
     var html = frontpageTemplate({
 
@@ -108,6 +121,8 @@ var Frontpage = {
 
     });
     this.$frontpage.html(html);
+
+    this.updateViewFeatured();
   },
 
   addDestinationListHistory: function() {
