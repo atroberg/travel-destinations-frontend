@@ -121,7 +121,7 @@ var MediawikiMobileParser = {
           return photo;
         }
 
-        $.extend(photo, MediawikiMobileParser.parseSrcSet($img.attr('srcset')));
+        $.extend(photo, window.MediawikiMobileParser.parseSrcSet($img.attr('srcset')));
 
         return photo;
       }
@@ -136,3 +136,9 @@ var MediawikiMobileParser = {
 };
 
 module.exports = MediawikiMobileParser;
+
+// Expose this also in the global scope, so that
+// it can easily be overriden by another script
+// (which is important if wikvoyage changes the markup etc.
+// and we need new parsing rules)
+window.MediawikiMobileParser = MediawikiMobileParser;

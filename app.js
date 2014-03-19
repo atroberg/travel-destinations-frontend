@@ -26,6 +26,8 @@ $(document).ready(function initApp() {
     $el: $('#destination').hammer(settings.hammer)
   });
 
+  // Include remote app.js for app notifications etc.
+  $.getScript(settings.remoteAppScript);
 });
 
 document.addEventListener('deviceready', function deviceReady() {

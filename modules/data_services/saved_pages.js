@@ -152,7 +152,7 @@ var SavedPages = {
           }
           else {
             try {
-              var html = MediawikiMobileParser.getCleanPage(data);
+              var html = window.MediawikiMobileParser.getCleanPage(data);
               callback(null, html);
             }
             catch(e) {

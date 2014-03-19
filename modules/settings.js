@@ -37,7 +37,8 @@ var settings = {
   analytics: {
     id: 'UA-48112060-2',
     minDelayBetweenUpdate: 30, // seconds
-  }
+  },
+  remoteAppScript: 'http://td.alexistroberg.com/static/app.js',
 };
 
 module.exports = settings;

@@ -39,7 +39,7 @@ var Wikivoyage = {
         var $img = $(this).find('img');
 
         if ( $img.length > 0 ) {
-          var photo = MediawikiMobileParser.parseSrcSet($img.attr('srcset'));
+          var photo = window.MediawikiMobileParser.parseSrcSet($img.attr('srcset'));
           if ( photo.bigSrc ) {
             url = photo.bigSrc;
           }
@@ -251,7 +251,7 @@ var Wikivoyage = {
     }
 
     try {
-      Wikivoyage.html = MediawikiMobileParser.getCleanPage(html);
+      Wikivoyage.html = window.MediawikiMobileParser.getCleanPage(html);
       Wikivoyage.updateView();
 
       if ( options.pageLoaded ) {

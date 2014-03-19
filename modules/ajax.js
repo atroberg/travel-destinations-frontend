@@ -39,7 +39,13 @@ var Ajax = {
       // Only cache GET requests
       if ( ajaxOptions.dataType === 'GET' ) return;
 
-      var responseText = XMLHttpRequest.responseText.trim();
+      try {
+        var responseText = XMLHttpRequest.responseText.trim();
+      }
+      catch(e) {
+        // Failed caching, but not a big deal...
+        return;
+      }
 
       // Don't cache responseText if response is too short
       // (because it's higly probable that response was wrong...)

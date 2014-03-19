@@ -53,7 +53,7 @@ var Photos = {
   },
 
   setWikiPhotos: function($wiki) {
-    this.wikiPhotos = MediawikiMobileParser.parsePhotos($wiki);
+    this.wikiPhotos = window.MediawikiMobileParser.parsePhotos($wiki);
   },
 
   showWikiPhotos: function() {
