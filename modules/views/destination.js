@@ -130,8 +130,8 @@ var Destination = {
   },
 
   deactivate: function() {
-    this.$el.removeClass('active');
-    this.$el.addClass('animate');
+    this.$el.attr('class', 'animate');
+
     setTimeout(function(){
       Destination.$el.off().html('');
       Destination.$el.removeClass('animate');

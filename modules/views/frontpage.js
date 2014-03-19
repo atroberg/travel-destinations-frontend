@@ -41,8 +41,8 @@ var Frontpage = {
 
   openDestination: function(url) {
     AppHistory.addPopHandler('closeDestination', function() {
-      Frontpage.activate();
       Destination.deactivate();
+      Frontpage.activate();
     });
 
     AppHistory.push({popHandler: 'closeDestination'}, 'Frontpage', {shortcut: 'closeDestination'});
