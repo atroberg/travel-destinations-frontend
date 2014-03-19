@@ -56,7 +56,7 @@ var AppHistory = {
       delete this.shortcuts[name];
     }
     catch (e) {
-      console.log(e);
+      //console.error(e);
     }
   },
 
@@ -69,12 +69,13 @@ var AppHistory = {
 
     var fn = 'pushState';
 
-    if ( options.replaceState || this.currentIndex <= 0 ) {
+    if ( !this.prevWasReplace && ( options.replaceState || this.currentIndex <= 0 ) ) {
       fn = 'replaceState';
+      this.prevWasReplace = true;
     }
-
-    if ( !options.replaceState ) {
+    else {
       AppHistory.currentIndex += 1;
+      this.prevWasReplace = false;
     }
 
     history[fn](state, title);
