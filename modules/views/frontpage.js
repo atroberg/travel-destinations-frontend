@@ -7,6 +7,7 @@ var Destination = require('./destination');
 var Search = require('../search');
 var DestinationList = require('./destination_list');
 
+var Popular = require('../data_services/popular');
 var Featured = require('../data_services/featured');
 var Favorites = require('../data_services/favorites');
 var RecentlyViewed = require('../data_services/recently_viewed');
@@ -198,6 +199,21 @@ var Frontpage = {
           noDestinations: {
             title: 'No Favorites',
             text: "You can favorite destinations by clicking the star icon on a destination's page.",
+          }
+        });
+      },
+
+      popular: function() {
+        Frontpage.addDestinationListHistory();
+        Frontpage.menu.hide();
+        Frontpage.deactivate();
+
+        DestinationList.activate({
+          title: 'Popular',
+          getDestinations: function(callback) {
+            Popular.get(function(error, popular) {
+              callback(error, popular);
+            });
           }
         });
       },
