@@ -7,13 +7,13 @@ var PageUtils = {
       var $el = $(this);
 
       setTimeout(function() {
-        $el.removeClass('touchdown');
+        $el.removeClass('touchdown active');
       }, settings.buttonTouchFeedbackTimeout)
 
-      $el.addClass('touchdown');
+      $el.addClass('touchdown active');
     })
     .on('touchend', '.touchFeedback', function(e) {
-      $(this).removeClass('touchdown');
+      $(this).removeClass('touchdown active');
     });
   },
 

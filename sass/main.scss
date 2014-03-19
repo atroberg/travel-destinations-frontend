@@ -14,6 +14,7 @@ $nav-border-bottom-color:#9c9c9c;
 
 html, body {
   min-height:100%;
+  width:100%;
 }
 
 body {
@@ -21,11 +22,16 @@ body {
   -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
   -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
   font-family:'RobotoLight';
-  //font-size:18px;
 }
 
 .touchFeedback.touchdown, a.touchdown {
   background:#d3d3d3;
+}
+
+// Bootstrap buttons
+.btn.touchFeedback.touchdown {
+  background-color: #2d6ca2;
+  border-color: #2b669a;
 }
 
 .alert.alert-info {
