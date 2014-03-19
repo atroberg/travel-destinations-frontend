@@ -210,6 +210,7 @@ var Frontpage = {
 
         DestinationList.activate({
           title: 'Popular',
+          showLoading: true,
           getDestinations: function(callback) {
             Popular.get(function(error, popular) {
               callback(error, popular);

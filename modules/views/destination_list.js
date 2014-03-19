@@ -63,19 +63,25 @@ var DestinationList = {
       });
     }
 
+    if ( options.showLoading ) {
+      this.updateView({showLoading:true});
+    }
+
     options.getDestinations(function(error, destinations) {
       DestinationList.destinations = destinations;
       DestinationList.updateView();
     });
   },
 
-  updateView: function() {
-    var html = template({
+  updateView: function(data) {
+    data = $.extend({}, data, {
       destinations: DestinationList.destinations,
       title: DestinationList.options.title,
       noDestinations: DestinationList.options.noDestinations,
       deleteDestinations: typeof DestinationList.options.deleteDestination !== 'undefined',
     });
+
+    var html = template(data);
     DestinationList.$el.html(html);
     DestinationList.$el.addClass('active');
   },

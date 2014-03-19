@@ -2,20 +2,26 @@
   <i class="back fa fa-chevron-left touchFeedback"></i>
   <h1>{{title}}</h1>
 </nav>
-{{#if destinations}}
-  <ul class="destinationsList">
-    {{#each destinations}}
-      <li data-uri="{{this.uri}}">
-        <span class="touchFeedback">{{this.title}}</span>
-        {{#if ../deleteDestinations}}
-          <i class="fa fa-times remove touchFeedback"></i>
-        {{/if}}
-      </li>
-    {{/each}}
-  <ul>
+{{#if showLoading}}
+  <p class="ajax_loading">
+    <i class="ajax_spinner fa fa-spinner fa-spin"></i>
+  </p>
 {{else}}
-  <div class="alert alert-info">
-    <h3>{{noDestinations.title}}</h3>
-    {{noDestinations.text}}
-  </div>
+  {{#if destinations}}
+    <ul class="destinationsList">
+      {{#each destinations}}
+        <li data-uri="{{this.uri}}">
+          <span class="touchFeedback">{{this.title}}</span>
+          {{#if ../deleteDestinations}}
+            <i class="fa fa-times remove touchFeedback"></i>
+          {{/if}}
+        </li>
+      {{/each}}
+    <ul>
+  {{else}}
+    <div class="alert alert-info">
+      <h3>{{noDestinations.title}}</h3>
+      {{noDestinations.text}}
+    </div>
+  {{/if}}
 {{/if}}
