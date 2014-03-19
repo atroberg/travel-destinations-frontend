@@ -7,6 +7,7 @@ var Destination = require('./destination');
 var Search = require('../search');
 var DestinationList = require('./destination_list');
 
+var Featured = require('../data_services/featured');
 var Favorites = require('../data_services/favorites');
 var RecentlyViewed = require('../data_services/recently_viewed');
 var SavedPagesDataProvider = require('../data_services/saved_pages');
@@ -23,9 +24,15 @@ var Frontpage = {
     this.menu.init();
     this.initSwipeTabs();
     this.initSearch();
+    this.initEventHandlers();
+  },
 
+  initEventHandlers: function() {
     this.$frontpage.on('tap', '.destination', function(e) {
       Frontpage.openDestination($(this).attr('data-url'));
+    });
+    this.$frontpage.on('tap', '#featuredDestinations .retryBtn', function(e) {
+      Frontpage.updateViewFeatured();
     });
   },
 
@@ -60,6 +67,26 @@ var Frontpage = {
     }, settings.animationDurations.page);
   },
 
+  updateViewFeatured: function() {
+
+    var $el = Frontpage.$frontpage.find('#featuredDestinations');
+
+    // Show loading
+    $el.html('<p class="ajax_loading"><i class="ajax_spinner fa fa-spinner fa-spin"></i></p>');
+
+    Featured.get(function(error, featured) {
+
+      if (error) {
+        $el.html(require('../../templates/ajax_failed.hbs')());
+      }
+      else {
+        // TODO: ensure frontpage is active while inserting the DOM
+        var html = destinationsTemplate({destinations: featured});
+        $el.html(html);
+      }
+    });
+  },
+
   updateView: function() {
 
     var favorites = Favorites.get();
@@ -75,7 +102,6 @@ var Frontpage = {
     if ( recent.length > settings.frontpage.destinationListLimit ) {
       recent = recent.slice(0, settings.frontpage.destinationListLimit);
     }
-
 
     var html = frontpageTemplate({
 
@@ -95,6 +121,8 @@ var Frontpage = {
 
     });
     this.$frontpage.html(html);
+
+    this.updateViewFeatured();
   },
 
   addDestinationListHistory: function() {

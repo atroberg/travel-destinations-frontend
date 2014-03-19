@@ -148,11 +148,9 @@ var Destination = {
 
     this.activate();
 
-    DestinationTabs.init();
+    this.setDestinationFromPath(path);
 
-    // TODO: fix URI
-    Destination.destination.uri = path;
-    Destination.destination.title = decodeURIComponent(path.replace(/^\/wiki\//, '').replace(/_/g, ' '));
+    DestinationTabs.init();
 
     this.updateView();
 
@@ -164,6 +162,19 @@ var Destination = {
     // Init default tab
     DestinationTabs.focusToTab(0, {forceRefresh: true});
 
+  },
+
+  setDestinationFromPath: function(path) {
+    Destination.destination.uri = path;
+
+    var parts = path.split('/');
+    var pagePart = parts[parts.length - 1];
+
+    var baseURI = parts[0] + '/' + parts[1] + '/' + parts[2];
+
+    Destination.baseURI = baseURI;
+
+    Destination.destination.title = decodeURIComponent(pagePart.replace(/^\/wiki\//, '').replace(/_/g, ' '));
   },
 
   showAjaxFailed: function() {

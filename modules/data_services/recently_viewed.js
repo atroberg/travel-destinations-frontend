@@ -1,3 +1,4 @@
+var DestinationHelper = require('../destination_helper');
 var settings = require('../settings');
 
 var RecentlyViewed = {
@@ -20,13 +21,7 @@ var RecentlyViewed = {
 
   add: function(destination) {
 
-    destination = $.extend({}, destination);
-
-    // Only save 1st photo
-    if ( destination.photos && destination.photos.length > 0 ) {
-      destination.photo = destination.photos[0].src;
-      delete destination.photos;
-    }
+    destination = DestinationHelper.getDestinationForStoring(destination);
 
     this.init();
 

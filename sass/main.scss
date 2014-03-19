@@ -33,6 +33,31 @@ body {
   margin-right:.8em;
 }
 
+.ajaxError {
+  margin:.5em 1.1em;
+  margin-top:0;
+  text-align:center;
+
+  button {
+    margin-top:1em;
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+  }
+}
+
+.ajax_loading {
+  text-align:center;
+  margin-top:2em;
+
+  .ajax_spinner {
+    font-size:3em;
+    display:block;
+    margin:auto;
+    -webkit-animation:spin 1s infinite linear;
+  }
+}
+
 @import 'nav_header';
 @import 'destination';
 @import 'popup_gallery_fullscreen';

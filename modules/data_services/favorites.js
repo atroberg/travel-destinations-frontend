@@ -1,3 +1,5 @@
+var DestinationHelper = require('../destination_helper');
+
 var Favorites = {
 
   init: function() {
@@ -12,18 +14,8 @@ var Favorites = {
   },
 
   add: function(destination) {
-    var entry = {
-      title: destination.title,
-      firstP: destination.firstP,
-    };
-
-    // Only store 1st photo
-    if ( destination.photos && destination.photos.length > 0 ) {
-      entry.photo = destination.photos[0].src;
-    }
-
     this.init();
-    this.favorites[destination.uri] = entry;
+    this.favorites[destination.uri] = DestinationHelper.getDestinationForStoring(destination);
     this.save();
   },
 
