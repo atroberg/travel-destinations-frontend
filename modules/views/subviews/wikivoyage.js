@@ -30,11 +30,28 @@ var Wikivoyage = {
 
       var url = $el.attr('href');
 
+      // Check if link to an image
+      if ( url.match(/\.(jpe?g|gif|png|tiff|svg)$/i) ) {
+
+        // Parse srcset and open full size image with external browser
+        var $img = $(this).find('img');
+
+        if ( $img.length > 0 ) {
+          var photo = MediawikiMobileParser.parseSrcSet($img.attr('srcset'));
+          if ( photo.bigSrc ) {
+            url = photo.bigSrc;
+          }
+        }
+
+        // Open with external browser
+        window.open(url, '_system');
+        return;
+      }
+
       // Check if relative url => load from wikivoyage
       if ( url.match(/^\/\//) === null
             && url.match(/:\/\//) === null ) {
         e.preventDefault();
-
 
         // Remember state (= scrollTop and open divs)
         // for this article

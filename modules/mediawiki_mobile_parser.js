@@ -56,6 +56,36 @@ var MediawikiMobileParser = {
     return html.replace(/src="(\/\/[^"]*)"/g, 'data-fakesrc="http:\$1"');
   },
 
+  parseSrcSet: function(srcset) {
+    srcset = srcset || '';
+
+    var sizes = srcset.split(/,\s+/g);
+    var photo = {};
+
+    if ( sizes && sizes.length > 0 ) {
+      var parsedSizes = {};
+
+      $.each(sizes, function(i, entry) {
+        entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
+
+        if ( entry ) {
+          parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
+        }
+
+      });
+
+      if ( parsedSizes['2x'] ) {
+        photo.bigSrc = parsedSizes['2x'];
+      }
+
+      else if ( parsedSizes['1.5x'] ) {
+        photo.bigSrc = parsedSizes['1.5x'];
+      }
+    }
+
+    return photo;
+  },
+
   parsePhotos: function($el) {
     return $el.find('.thumbinner').map(function(i, thumbinner) {
       $thumbinner = $(thumbinner);
@@ -91,30 +121,7 @@ var MediawikiMobileParser = {
           return photo;
         }
 
-        var sizes = $img.attr('srcset')
-                      ? $img.attr('srcset').split(/,\s+/g)
-                      : null;
-
-        if ( sizes && sizes.length > 0 ) {
-          var parsedSizes = {};
-
-          $.each(sizes, function(i, entry) {
-            entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
-
-            if ( entry ) {
-              parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
-            }
-
-          });
-
-          if ( parsedSizes['2x'] ) {
-            photo.bigSrc = parsedSizes['2x'];
-          }
-          else if ( parsedSizes['1.5x'] ) {
-            photo.bigSrc = parsedSizes['1.5x'];
-          }
-
-        }
+        $.extend(photo, MediawikiMobileParser.parseSrcSet($img.attr('srcset')));
 
         return photo;
       }
