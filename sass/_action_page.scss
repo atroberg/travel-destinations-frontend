@@ -10,7 +10,7 @@
   width:100%;
   min-height:100%;
   background:white;
-  padding:66px .5em .5em .5em;
+  padding:56px .5em .5em .5em;
   transition:opacity $transition-duration;
 
   &.active {
@@ -20,5 +20,9 @@
 
   &.animate {
     visibility:visible;
+  }
+
+  nav {
+    height:50px;
   }
 }
