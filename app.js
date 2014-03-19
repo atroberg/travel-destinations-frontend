@@ -20,7 +20,7 @@ $(document).ready(function initApp() {
     $('.opening_external_app').removeClass('opening_external_app');
   }, false);
 
-  Frontpage.init($('#frontpage').hammer(settings.hammer));
+  Frontpage.activate($('#frontpage').hammer(settings.hammer));
 
   Destination.init({
     $el: $('#destination').hammer(settings.hammer)

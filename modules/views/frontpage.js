@@ -18,10 +18,7 @@ var Frontpage = {
 
   currentTab: 0,
 
-  init: function($frontpage) {
-    if ( $frontpage ) {
-      this.$frontpage = $frontpage;
-    }
+  init: function() {
     this.updateView();
     this.menu.init();
     this.initSwipeTabs();
@@ -61,7 +58,10 @@ var Frontpage = {
     });
   },
 
-  activate: function() {
+  activate: function($frontpage) {
+    if ( $frontpage ) {
+      this.$frontpage = $frontpage;
+    }
     this.init();
     this.$frontpage.removeClass('inactive');
   },
