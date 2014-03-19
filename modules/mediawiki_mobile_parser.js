@@ -23,8 +23,6 @@ var MediawikiMobileParser = {
   getActualContent: function() {
     this.$el.html(this.$el.find('#content').html());
     return this;
-
-    // TODO: checks if parsing worked
   },
 
   removeBanner: function() {
