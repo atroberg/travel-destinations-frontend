@@ -12,7 +12,6 @@ var Weather = {
     this.$el.on('click', '#weatherIconLicense', function(e) {
       e.preventDefault();
     }).on('tap', '#weatherIconLicense', function(e) {
-      console.log('sdf');
       window.open($(this).attr('href'), '_system');
     });
   },
