@@ -159,8 +159,17 @@ var Wikivoyage = {
     this.state = state;
   },
 
+  getLicenceText: function() {
+    return '<div id="wikiLicence">'
+              + 'Content on this page is available under the '
+              + '<a href="http://creativecommons.org/licenses/by-sa/3.0/">'
+              + 'Creative Commons Attribution-ShareAlike 3.0 licence</a>.</div>';
+  },
+
   updateView: function() {
-    this.$el.hide().html(this.html);
+
+    this.$el.hide().html(this.html + this.getLicenceText());
+
     // Accordion chevron
     this.$el.find('> h2').prepend('<i class="fa fa-chevron-right"></i>');
 
