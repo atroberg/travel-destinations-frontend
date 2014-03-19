@@ -21,8 +21,7 @@ var FullscreenPhotoGallery = {
 
     var popupWidth = photos.length * 100;
     popup.css({
-      'width': popupWidth + '%',
-      'top': $(window).scrollTop(),
+      'width': popupWidth + '%'
     })
     .find('div.photo_container').css('width', 100 / photos.length + '%');
 
