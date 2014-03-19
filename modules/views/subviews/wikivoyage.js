@@ -26,6 +26,8 @@ var Wikivoyage = {
 
     // Handle them with the tap-event instead
     this.$el.on('tap', 'a', function(e) {
+      e.preventDefault();
+
       $el = $(this);
 
       var url = $el.attr('href');
@@ -51,7 +53,24 @@ var Wikivoyage = {
       // Check if relative url => load from wikivoyage
       if ( url.match(/^\/\//) === null
             && url.match(/:\/\//) === null ) {
-        e.preventDefault();
+
+        // Check if section link
+        var matches = null;
+        if ( matches = url.match(/#.+/) ) {
+          var $target = $(matches[0]);
+
+          if ( $target.length > 0 ) {
+            $(window).scrollTop($target.offset().top);
+            $target.parents('h2:first').addClass('expanded');
+          }
+
+          // Shouldn't happen, so open with external browser?
+          else {
+            window.open(options.Destination.baseURI + url, '_system');
+          }
+
+          return;
+        }
 
         // Remember state (= scrollTop and open divs)
         // for this article
@@ -70,11 +89,12 @@ var Wikivoyage = {
         }, options.Destination.destination.title);
 
         options.Destination.show(options.Destination.baseURI + url);
+
+        return;
       }
-      // open in external browser
-      else {
-        window.open(url, '_system');
-      }
+
+      // Default open in external browser
+      window.open(url, '_system');
     });
 
     // Touch feedback
