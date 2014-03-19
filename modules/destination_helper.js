@@ -4,6 +4,7 @@ var DestinationHelper = {
     var entry = {
       title: destination.title,
       firstP: destination.firstP,
+      uri: destination.uri,
     };
 
     // Only store 1st photo
