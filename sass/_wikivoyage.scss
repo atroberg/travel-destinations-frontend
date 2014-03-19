@@ -119,4 +119,13 @@
     font-size:.8em;
   }
 
+  // Override wikivoyage css
+  // Sometimes it's possible to trigger the hover
+  // state of a link without receiving the touch-event.
+  // In this case the link shouldn't be highlighted,
+  // because the user might think the link was triggered
+  a:hover {
+    text-decoration:none;
+  }
+
 }
