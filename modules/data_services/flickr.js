@@ -18,6 +18,7 @@ var Flickr = {
       type: 'GET',
       data: {
         api_key: settings.flickrApiKey,
+        tags: 'travel,vacation,trip,voyage',
         text: keyword,
         per_page: 8,
         sort: 'relevance',
