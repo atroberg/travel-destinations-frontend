@@ -4,11 +4,6 @@ var SavedPagesDataProvider = require('../../data_services/saved_pages');
 var UserSettings = require('../../user_settings');
 var AppHistory = require('../../history');
 
-// TODO: this must probably be changed to work some other way
-// because we must be able to support other languages as well
-// (and their base url is different)
-var BASE_URL = 'http://en.m.wikivoyage.org';
-
 var Wikivoyage = {
 
   activate: function(options) {
@@ -57,8 +52,7 @@ var Wikivoyage = {
           },
         }, options.Destination.destination.title);
 
-
-        options.Destination.show(url);
+        options.Destination.show(options.Destination.baseURI + url);
       }
       // open in external browser
       else {
@@ -160,7 +154,7 @@ var Wikivoyage = {
 
   showDestination: function(options) {
     WikivoyageService.get({
-      url: BASE_URL + options.destination.uri,
+      url: options.destination.uri,
       callback: function(error, data) {
         // Show 100% loading status
         Wikivoyage.$loadingStatus.css('width', '100%');

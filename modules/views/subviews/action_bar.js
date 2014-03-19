@@ -130,8 +130,7 @@ var ActionBar = {
       },
 
       share: function() {
-        // TODO: fix this
-        var link = 'http://en.m.wikivoyage.org' + ActionBar.destination.uri;
+        var link = ActionBar.destination.uri;
         var msg = ActionBar.destination.title + ': ' + link;
         var subject = 'Travel Destination: ' + ActionBar.destination.title;
 

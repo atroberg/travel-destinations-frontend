@@ -31,7 +31,7 @@ var Search = {
       }
 
       var destinationTitle = $li.text();
-      var destinationURL = '/wiki/' + Wikivoyage.titleToURL(destinationTitle);
+      var destinationURL = 'http://en.m.wikivoyage.org/wiki/' + Wikivoyage.titleToURL(destinationTitle);
       Search.Frontpage.openDestination(destinationURL);
     });
 

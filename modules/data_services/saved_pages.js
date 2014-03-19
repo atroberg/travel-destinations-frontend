@@ -2,11 +2,6 @@ var WikivoyageService= require('./wikivoyage');
 var MediawikiMobileParser = require('../mediawiki_mobile_parser');
 var settings = require('../settings');
 
-// TODO: this must probably be changed to work some other way
-// because we must be able to support other languages as well
-// (and their base url is different)
-var BASE_URL = 'http://en.m.wikivoyage.org';
-
 var SavedPages = {
 
     init: function() {
@@ -150,7 +145,7 @@ var SavedPages = {
 
     getWikivoyagePage: function(uri, callback) {
       WikivoyageService.get({
-        url: BASE_URL + uri,
+        url: uri,
         callback: function(error, data) {
           if ( error ) {
             callback(error);
