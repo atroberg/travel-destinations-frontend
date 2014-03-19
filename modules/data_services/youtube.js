@@ -7,7 +7,9 @@ var Youtube = {
       // Connect to my AWS instance
       url: settings.youtubeApiURI + '/search',
       data: {
-        q: options.keyword,
+        q: options.keyword + ' travel',
+        type: 'video',
+        maxResults: 10,
       },
       type: 'GET',
       dataType: 'json',
