@@ -110,6 +110,8 @@ var ActionBar = {
           delete destination.photos;
         }
 
+        Toast.show('Saving page');
+
         SavedPages.save({
           destination: destination,
           callback: function (error, success) {
@@ -122,7 +124,6 @@ var ActionBar = {
             }
           },
         });
-        Toast.show('Saving page');
       },
 
       showOnMap: function() {
