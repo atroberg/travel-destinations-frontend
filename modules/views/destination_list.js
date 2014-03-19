@@ -54,8 +54,7 @@ var DestinationList = {
         if ( confirm('Delete ' + $li.text().trim() + '?') ) {
           options.deleteDestination($li.attr('data-uri'), function(error, success) {
             if ( error ) {
-              // TODO
-              console.error(error);
+              alert("Unable to delete destination");
             }
             else {
               DestinationList.destinations.splice(indexInArray, 1);

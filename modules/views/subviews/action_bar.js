@@ -119,8 +119,7 @@ var ActionBar = {
           destination: destination,
           callback: function (error, success) {
             if ( error ) {
-              // TODO
-              console.log(error);
+              alert("Error saving destination.");
             }
             else {
               Toast.show(ActionBar.destination.title + ' saved');

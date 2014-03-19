@@ -86,9 +86,11 @@ var Frontpage = {
         $el.html(require('../../templates/ajax_failed.hbs')());
       }
       else {
-        // TODO: ensure frontpage is active while inserting the DOM
-        var html = destinationsTemplate({destinations: featured});
-        $el.html(html);
+        // Ensure frontpage is active while inserting the DOM (so $el exists in DOM)
+        if ( $.contains(document.body, $el.get(0)) ) {
+          var html = destinationsTemplate({destinations: featured});
+          $el.html(html);
+        }
       }
     });
   },

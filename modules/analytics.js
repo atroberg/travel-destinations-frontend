@@ -10,12 +10,12 @@ var Analytics = {
 
   successHandler: function(msg) {
     // Do nothing
-    console.log(msg);
+    // console.log(msg);
   },
 
   errorHandler: function(msg) {
-    console.error(msg);
-    // TODO: Do nothing?
+    // console.error(msg);
+    // Do nothing
   },
 
   trackPage: function(path) {
