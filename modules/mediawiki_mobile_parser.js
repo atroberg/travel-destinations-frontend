@@ -58,67 +58,67 @@ var MediawikiMobileParser = {
 
   parsePhotos: function($el) {
     return $el.find('.thumbinner').map(function(i, thumbinner) {
-        $thumbinner = $(thumbinner);
-        var $img = $thumbinner.find('img:first');
+      $thumbinner = $(thumbinner);
+      var $img = $thumbinner.find('img:first');
+
+      try {
+        var matches = $img.attr('src').match(/(\.jpe?g$)|(^data:image\/jpeg)/i);
+      }
+      catch(e) {
+        var matches = null;
+      }
+
+      if ( matches ) {
+
+        var isDataURLPhoto = typeof(matches[2]) !== 'undefined';
 
         try {
-          var matches = $img.attr('src').match(/(\.jpe?g$)|(^data:image\/jpeg)/i);
+          var title = $thumbinner.find('.thumbcaption').text().trim();
         }
-        catch(e) {
-          var matches = null;
+        catch(e){
+          var title = '';
         }
 
-        if ( matches ) {
+        var src = $img.attr('src');
 
-          var isDataURLPhoto = typeof(matches[2]) !== 'undefined';
+        var photo = {
+          src: src,
+          title: title,
+          bigSrc: src,
+        };
 
-          try {
-            var title = $thumbinner.find('.thumbcaption').text().trim();
-          }
-          catch(e){
-            var title = '';
-          }
-
-          var src = $img.attr('src');
-
-          var photo = {
-            src: src,
-            title: title,
-            bigSrc: src,
-          };
-
-          if ( isDataURLPhoto ) {
-            return photo;
-          }
-
-          var sizes = $img.attr('srcset')
-                        ? $img.attr('srcset').split(/,\s+/g)
-                        : null;
-
-          if ( sizes && sizes.length > 0 ) {
-            var parsedSizes = {};
-
-            $.each(sizes, function(i, entry) {
-              entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
-
-              if ( entry ) {
-                parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
-              }
-
-            });
-
-            if ( parsedSizes['2x'] ) {
-              photo.bigSrc = parsedSizes['2x'];
-            }
-            else if ( parsedSizes['1.5x'] ) {
-              photo.bigSrc = parsedSizes['1.5x'];
-            }
-
-          }
-
+        if ( isDataURLPhoto ) {
           return photo;
         }
-      }).get();
+
+        var sizes = $img.attr('srcset')
+                      ? $img.attr('srcset').split(/,\s+/g)
+                      : null;
+
+        if ( sizes && sizes.length > 0 ) {
+          var parsedSizes = {};
+
+          $.each(sizes, function(i, entry) {
+            entry = entry.match(/(.*?)\s+([0-9]{1}(\.[0-9]{1})?x)/i);
+
+            if ( entry ) {
+              parsedSizes[entry[2]] = entry[1].replace(/^\/\//, 'http://');
+            }
+
+          });
+
+          if ( parsedSizes['2x'] ) {
+            photo.bigSrc = parsedSizes['2x'];
+          }
+          else if ( parsedSizes['1.5x'] ) {
+            photo.bigSrc = parsedSizes['1.5x'];
+          }
+
+        }
+
+        return photo;
+      }
+    }).get();
   },
 
   getCleanPage: function(rawHtml) {
