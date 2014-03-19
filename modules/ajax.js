@@ -15,7 +15,7 @@ var Ajax = {
         return;
       }
 
-      if ( ajaxOptions.dataType === 'json' ) {
+      if ( ajaxOptions.dataType === 'json' && typeof cacheEntry.response === 'string' ) {
         cacheEntry.response = JSON.parse(cacheEntry.response);
       }
 
