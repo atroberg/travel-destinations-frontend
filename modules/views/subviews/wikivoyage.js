@@ -186,7 +186,7 @@ var Wikivoyage = {
 
       // Need a small timeout, because otherwise it seems
       // like DOM isn't always ready and therefore the document
-      // isn't high enought to go to wanted scrollTop
+      // isn't long enough to go to wanted scrollTop
       setTimeout(function() {
         Wikivoyage.$el.css('visibility', 'visible');
         $(window).scrollTop(Wikivoyage.state.scrollTop);
