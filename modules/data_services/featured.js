@@ -12,7 +12,7 @@ var Featured = {
       },
       error: function(e, textStatus) {
         if ( textStatus === 'abort' ) return;
-        callback('error_fetching_photos');
+        callback('error_fetching_featured');
       }
     })
   },
