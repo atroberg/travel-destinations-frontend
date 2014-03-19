@@ -135,7 +135,7 @@ var ActionBar = {
         var msg = ActionBar.destination.title + ': ' + link;
         var subject = 'Travel Destination: ' + ActionBar.destination.title;
 
-        msg += '\n\nAndroid App: ' + settings.playStoreLink;
+        msg += '\n\nShared via: ' + settings.playStoreLink;
 
         var shareIntentSent = false;
 
