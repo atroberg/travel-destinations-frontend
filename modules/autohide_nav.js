@@ -3,10 +3,11 @@ module.exports = function autohideNav($el) {
   var scrollTop = 0;
   var menuVisible = true;
   var menuHeight = $el.outerHeight();
+  var el = $el.get(0);
 
   // Binding to onscroll is resource intensive,
   // use interval instead (250ms is suitable update interval)
-  window.setInterval(function() {
+  var interval = window.setInterval(function() {
     var newScrollTop = $(window).scrollTop();
 
     // User scrolled down the screen => hide nav
@@ -21,6 +22,11 @@ module.exports = function autohideNav($el) {
     }
 
     scrollTop = newScrollTop;
+
+    // Clear timer if element is no longer in DOM
+    if ( ! $.contains(document.body, el) ) {
+      clearInterval(interval);
+    }
 
   }, 250);
 
