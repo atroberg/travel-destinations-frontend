@@ -1,6 +1,7 @@
 var Wikivoyage = require('./data_services/wikivoyage');
 var settings = require('./settings');
 var template = require('../templates/search_suggest.hbs');
+var Analytics = require('./analytics');
 
 var Search = {
 
@@ -103,6 +104,7 @@ var Search = {
     activate: function() {
       Search.$el.addClass('active');
       this.isActive = true;
+      Analytics.trackEvent('ui_action', 'button_press', 'focus_frontpage_search');
     },
 
     deactivate: function() {

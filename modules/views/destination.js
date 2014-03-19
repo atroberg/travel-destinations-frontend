@@ -28,6 +28,7 @@ var Destination = {
 
     // Tabs
     DestinationTabs.setElement(this.$el);
+    DestinationTabs.setDestinationObject(this);
 
     var onError = function onError(e) {
       Destination.showAjaxFailed();
@@ -159,7 +160,7 @@ var Destination = {
     }
 
     // Init default tab
-    DestinationTabs.focusToTab(0, {forceRefresh: true});
+    DestinationTabs.focusToTab(0, {forceRefresh: true, forceAnalyticsTrack: true});
 
   },
 

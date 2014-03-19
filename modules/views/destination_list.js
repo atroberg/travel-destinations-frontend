@@ -2,6 +2,7 @@ var template = require('../../templates/destination_list.hbs');
 var settings = require('../settings');
 var AppHistory = require('../history');
 var Destination = require('./destination');
+var Analytics = require('../analytics');
 
 var DestinationList = {
 
@@ -10,6 +11,8 @@ var DestinationList = {
     if ( typeof options.addHistoryEntry === 'undefined' ) {
       options.addHistoryEntry = true;
     }
+
+    Analytics.trackPage('/destination_list/' + options.title);
 
     DestinationList.options = options;
 

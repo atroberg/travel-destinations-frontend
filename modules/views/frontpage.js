@@ -6,6 +6,7 @@ var AppHistory = require('../history');
 var Destination = require('./destination');
 var Search = require('../search');
 var DestinationList = require('./destination_list');
+var Analytics = require('../analytics');
 
 var Popular = require('../data_services/popular');
 var Featured = require('../data_services/featured');
@@ -26,6 +27,10 @@ var Frontpage = {
     this.initSwipeTabs();
     this.initSearch();
     this.initEventHandlers();
+
+    if ( this.currentTab === 0 ) {
+      Analytics.trackPage('/frontpage/' + this.$frontpage.find('#frontpage_tabs_menu li:first').text());
+    }
   },
 
   initEventHandlers: function() {
@@ -215,6 +220,10 @@ var Frontpage = {
             Popular.get(function(error, popular) {
               callback(error, popular);
             });
+          },
+          noDestinations: {
+            title: "Connection Problem",
+            text: "There was a problem connecting to the service. Retry later."
           }
         });
       },
@@ -297,7 +306,9 @@ var Frontpage = {
     }
 
     this.$frontpage.find('#frontpage_tabs_menu li.active').removeClass('active');
-    this.$frontpage.find('#frontpage_tabs_menu li:eq(' + index + ')').addClass('active');
+    var $nextTabLi = this.$frontpage.find('#frontpage_tabs_menu li:eq(' + index + ')').addClass('active');
+
+    Analytics.trackPage('/frontpage/' + $nextTabLi.text());
 
     var tabCount = this.$frontpage.find('#frontpage_tabs .tab').length;
     var xpos = -(100 / tabCount * index) + '%';

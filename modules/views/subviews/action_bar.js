@@ -5,6 +5,7 @@ var autohideNav = require('../../autohide_nav');
 var AppHistory = require('../../history');
 var Map = require('../../map');
 var settings = require('../../settings');
+var Analytics = require('../../analytics');
 
 
 var ActionBar = {
@@ -103,6 +104,8 @@ var ActionBar = {
 
     actions: {
       save: function() {
+        Analytics.trackEvent('ui_action', 'button_press', 'save_destination');
+
         var destination = $.extend({}, ActionBar.destination);
 
         // Don't save photos
@@ -127,10 +130,13 @@ var ActionBar = {
       },
 
       showOnMap: function() {
+        Analytics.trackEvent('ui_action', 'button_press', 'show_on_map');
         Map.openExternalApp();
       },
 
       share: function() {
+        Analytics.trackEvent('ui_action', 'button_press', 'share_destination');
+
         var link = ActionBar.destination.uri;
         var msg = ActionBar.destination.title + ': ' + link;
         var subject = 'Travel Destination: ' + ActionBar.destination.title;
@@ -173,6 +179,7 @@ var ActionBar = {
       },
 
       openInBrowser: function() {
+        Analytics.trackEvent('ui_action', 'button_press', 'open_in_browser');
         window.open(ActionBar.destination.uri, '_system');
       },
     }

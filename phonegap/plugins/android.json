@@ -7,7 +7,8 @@
         "res/xml/config.xml": {
             "/*": {
                 "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>": 1,
-                "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>": 1
+                "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>": 1,
+                "<feature name=\"GAPlugin\"><param name=\"android-package\" value=\"com.adobe.plugins.GAPlugin\" /></feature>": 1
             }
         },
         "AndroidManifest.xml": {
@@ -21,6 +22,9 @@
             "PACKAGE_NAME": "com.trobis.travelDestinations"
         },
         "nl.x-services.plugins.socialsharing": {
+            "PACKAGE_NAME": "com.trobis.travelDestinations"
+        },
+        "com.adobe.plugins.GAPlugin": {
             "PACKAGE_NAME": "com.trobis.travelDestinations"
         }
     },

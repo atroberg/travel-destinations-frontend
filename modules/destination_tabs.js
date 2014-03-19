@@ -1,4 +1,5 @@
 var settings = require('./settings');
+var Analytics = require('./analytics');
 
 var DestinationTabs = {
 
@@ -67,6 +68,10 @@ var DestinationTabs = {
     });
   },
 
+  setDestinationObject: function(Destination) {
+    this.Destination = Destination;
+  },
+
   setElement: function setElement($el) {
     this.$container = $el;
   },
@@ -119,6 +124,11 @@ var DestinationTabs = {
       }
 
       var $nextTab = $viewport.find('.tab:eq(' + index + ')');
+
+      if ( !options.forceRefresh || options.forceAnalyticsTrack ) {
+        var analyticsURI = DestinationTabs.Destination.destination.uri + '/' + $nextTab.attr('data-tab-function');
+        Analytics.trackPage(analyticsURI);
+      }
 
       if ( this.htmlCache[index] ) {
         // Need to delay DOM manipulation

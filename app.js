@@ -1,6 +1,7 @@
 var Destination = require('./modules/views/destination');
 var Frontpage = require('./modules/views/frontpage');
 
+var Analytics = require('./modules/analytics');
 var AppHistory = require('./modules/history');
 var settings = require('./modules/settings');
 var PageUtils = require('./modules/page_utils');
@@ -26,3 +27,7 @@ $(document).ready(function initApp() {
   });
 
 });
+
+document.addEventListener('deviceready', function deviceReady() {
+  Analytics.init();
+}, false);

@@ -34,6 +34,10 @@ var settings = {
   recentlyViewed: {
     limit: 5,
   },
+  analytics: {
+    id: 'UA-48112060-2',
+    minDelayBetweenUpdate: 30, // seconds
+  }
 };
 
 module.exports = settings;
