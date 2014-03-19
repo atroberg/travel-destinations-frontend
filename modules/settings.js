@@ -6,7 +6,7 @@ var settings = {
   featuredURI: 'http://td.alexistroberg.com/static/featured.json',
   popularURI: 'http://td.alexistroberg.com/static/popular.json',
   animationDurations: {
-    page: 500,
+    page: 200,
     tabs: 200,
     toastMsg: 200,
   },
