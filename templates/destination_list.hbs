@@ -7,7 +7,9 @@
     {{#each destinations}}
       <li data-uri="{{this.uri}}">
         <span class="touchFeedback">{{this.title}}</span>
-        <i class="fa fa-times remove touchFeedback"></i>
+        {{#if ../deleteDestinations}}
+          <i class="fa fa-times remove touchFeedback"></i>
+        {{/if}}
       </li>
     {{/each}}
   <ul>

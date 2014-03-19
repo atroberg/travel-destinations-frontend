@@ -74,6 +74,7 @@ var DestinationList = {
       destinations: DestinationList.destinations,
       title: DestinationList.options.title,
       noDestinations: DestinationList.options.noDestinations,
+      deleteDestinations: typeof DestinationList.options.deleteDestination !== 'undefined',
     });
     DestinationList.$el.html(html);
     DestinationList.$el.addClass('active');
