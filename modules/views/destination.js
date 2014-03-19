@@ -51,12 +51,11 @@ var Destination = {
           // be able to access the DOM when weather tab is loaded
           // (because the DOM is removed and instead just the html
           // is preserved when changing tabs)
-          var $wikivoyageTab = Destination.$el.find('#wikivoyage_tab');
-          Weather.setClimateTable($wikivoyageTab);
+          Weather.setClimateTable($tab);
 
-          Photos.setWikiPhotos($wikivoyageTab);
+          Photos.setWikiPhotos($tab);
           Destination.destination.photos = Photos.wikiPhotos;
-          Destination.destination.firstP = $wikivoyageTab.find('p:first').text();
+          Destination.destination.firstP = $tab.find('p:first').text();
 
           // Add to recently viewed
           // not added in Wikivoyage.show-function, because we want to
@@ -65,7 +64,7 @@ var Destination = {
 
           Map.setCoordinates({
             destination: Destination.destination,
-            $el: $wikivoyageTab
+            $el: $tab
           });
         },
       });
@@ -181,10 +180,10 @@ var Destination = {
     var html = ajaxErrorTemplate();
     var $activeTab = this.$el.find('#destination_tabs > .tab:eq('
                         + DestinationTabs.currentTab + ')');
-    $activeTab.addClass('loadingFailed');
     $activeTab.html(html);
 
     $activeTab.on('tap', '.retryBtn', function(e) {
+      $activeTab.html('<p class="ajax_loading"><i class="ajax_spinner fa fa-spinner fa-spin"></i></p>');
       DestinationTabs.focusToTab(DestinationTabs.currentTab, {forceRefresh: true});
     });
   },

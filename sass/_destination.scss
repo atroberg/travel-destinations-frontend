@@ -129,6 +129,10 @@ $number-of-tabs:4;
     margin-top:92px;
   }
 
+  .tabNotLoaded {
+    display:none;
+  }
+
   @import 'wikivoyage';
   @import 'photos';
   @import 'videos';
