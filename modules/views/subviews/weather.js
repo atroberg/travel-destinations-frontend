@@ -8,6 +8,13 @@ var Weather = {
     this.$el = options.$el;
     this.showForecast(options.keyword);
     this.onError = options.onError;
+
+    this.$el.on('click', '#weatherIconLicense', function(e) {
+      e.preventDefault();
+    }).on('tap', '#weatherIconLicense', function(e) {
+      console.log('sdf');
+      window.open($(this).attr('href'), '_system');
+    });
   },
 
   updateView: function(options) {
