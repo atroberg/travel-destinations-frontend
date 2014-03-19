@@ -12,22 +12,17 @@ $number-of-tabs:4;
   overflow:hidden;
   background:white;
   min-height: 100%;
-  -webkit-transform:translate3d(100%,0,0);
-  transition:-webkit-transform $page-transition-duration;
+  transition: opacity $page-transition-duration;
   visibility: hidden;
+  opacity:0;
 
   &.active {
     visibility:visible;
-    // Otherwise autohiding nav doesn't work
-    -webkit-transform:none;
+    opacity:1;
   }
 
   &.animate {
     visibility:visible;
-  }
-
-  &.animate.active {
-    -webkit-transform:translate3d(0,0,0);
   }
 
   #destinationMenu {
