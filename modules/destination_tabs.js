@@ -144,8 +144,10 @@ var DestinationTabs = {
         // Remove event listeners
         $nextTab.off();
 
+        // Show loading
+        $nextTab.html('<p class="ajax_loading"><i class="ajax_spinner fa fa-spinner fa-spin"></i></p>');
+
         try {
-          // Clear possible event listeners
           this.tabFunctions[$nextTab.attr('data-tab-function')]($nextTab);
         }
         catch(e) {
