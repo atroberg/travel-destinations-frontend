@@ -109,7 +109,7 @@ var Destination = {
     }));
     ActionBar.init({
       $el: this.$el,
-      destination: Destination.destination
+      Destination: Destination
     });
   },
 

@@ -36,6 +36,24 @@ $number-of-tabs:4;
     text-align:left;
     box-shadow:0px 10px 22px 0px #717171;
 
+    &.isFavorite {
+      .addFavorite {
+        display:none;
+      }
+
+      .removeFavorite {
+        display:block;
+      }
+    }
+
+    .addFavorite {
+      display:block;
+    }
+
+    .removeFavorite {
+      display:none;
+    }
+
     &.active {
       display:block;
     }
@@ -63,6 +81,31 @@ $number-of-tabs:4;
   nav {
     border-bottom:0;
     text-align:left;
+
+    &.search {
+      .searchInput {
+        display:block;
+      }
+
+      h1 {
+        display:none;
+      }
+
+      .right, .back {
+        visibility:hidden;
+      }
+    }
+
+    .searchInput {
+      display:none;
+      left:2%;
+      width:96%;
+    }
+
+    label.searchBtn {
+      font-size: 2em;
+      padding: .3em .4em;
+    }
 
     h1 {
       width:67%;

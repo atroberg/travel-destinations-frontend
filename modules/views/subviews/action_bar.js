@@ -6,12 +6,14 @@ var AppHistory = require('../../history');
 var Map = require('../../map');
 var settings = require('../../settings');
 var Analytics = require('../../analytics');
+var Search = require('../../search');
 
 
 var ActionBar = {
 
   init: function(options) {
-    this.destination = options.destination;
+    this.Destination = options.Destination;
+    this.destination = this.Destination.destination;
     this.$el = options.$el.find('nav:first');
     this.$menu = options.$el.find('#destinationMenu');
 
@@ -21,29 +23,21 @@ var ActionBar = {
       AppHistory.gotoShortcut('closeDestination');
     });
 
-    this.$el.on('tap', '.favoriteBtn', function(e) {
-      var $btn = $(this);
+    this.$el.on('tap', '.searchBtn', function(e) {
 
-      var favoriteClass = 'fa-star';
-      var notFavoriteClass = 'fa-star-o';
-      var isFavorite = Favorites.isFavorite(ActionBar.destination);
+      ActionBar.$el.addClass('search');
 
-      if ( isFavorite ) {
-        var addClass = notFavoriteClass;
-        var removeClass = favoriteClass;
-        var msg = ActionBar.destination.title + " removed from favorites";
-        Favorites.remove(ActionBar.destination);
-      }
-      else {
-        var addClass = favoriteClass;
-        var removeClass = notFavoriteClass;
-        var msg = ActionBar.destination.title + " added to favorites";
-        Favorites.add(ActionBar.destination);
-      }
-
-      Toast.show(msg);
-
-      $btn.removeClass(removeClass).addClass(addClass);
+      $searchInput = ActionBar.$el.find('.searchInput');
+      Search.init({
+        $el: $searchInput,
+        callback: function(uri) {
+          ActionBar.Destination.show(uri);
+        },
+        deactivateCallback: function() {
+          ActionBar.$el.removeClass('search');
+        },
+        analyticsLabel: 'focus_destinationPage_search'
+      });
     });
 
     this.menu.init();
@@ -180,6 +174,18 @@ var ActionBar = {
       openInBrowser: function() {
         Analytics.trackEvent('ui_action', 'button_press', 'open_in_browser');
         window.open(ActionBar.destination.uri, '_system');
+      },
+
+      favorite: function() {
+        ActionBar.$el.parent().find('#destinationMenu').addClass('isFavorite');
+        Favorites.add(ActionBar.destination);
+        Toast.show(ActionBar.destination.title + " added to favorites");
+      },
+
+      unfavorite: function() {
+        ActionBar.$el.parent().find('#destinationMenu').removeClass('isFavorite');
+        Favorites.remove(ActionBar.destination);
+        Toast.show(ActionBar.destination.title + " removed from favorites");
       },
     }
   }

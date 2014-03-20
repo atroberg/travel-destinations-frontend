@@ -7,22 +7,41 @@ var Search = {
 
   init: function(options) {
     this.$el = options.$el;
-    this.Frontpage = options.Frontpage;
+    this.callback = options.callback;
+    this.deactivateCallback  = options.deactivateCallback;
+    this.analyticsLabel = options.analyticsLabel;
+
+    // Remove previous event listeners
+    this.$el.off();
 
     this.$el.on('focus', 'input', function(e) {
       e.stopPropagation();
       Search.input.activate();
     });
 
-    $('body').hammer(settings.hammer).on('tap', function(e) {
-      e.stopPropagation;
+    if ( !this.hasBeenInited ) {
+      this.hasBeenInited = true;
 
-      if ( $(e.target).is('input.search') ) {
-        return;
-      }
+      $('body').hammer(settings.hammer).on('tap', function(e) {
+        e.stopPropagation;
 
-      Search.deactivate();
-    });
+        if ( $(e.target).is('input.search') ) {
+          return;
+        }
+
+        Search.deactivate();
+      });
+
+      // If window size changes, it's probably because
+      // keyboard was closen => deactivate input
+      var windowHeight = $(window).height();
+      $(window).on('resize', function(e) {
+        if ( Search.input.isActive && windowHeight < $(window).height() ) {
+          Search.deactivate();
+        }
+        windowHeight = $(window).height();
+      });
+    }
 
     this.$el.on('tap', '.searchSuggestResults li', function(e) {
       var $li = $(this);
@@ -33,7 +52,8 @@ var Search = {
 
       var destinationTitle = $li.text();
       var destinationURL = 'http://en.m.wikivoyage.org/wiki/' + Wikivoyage.titleToURL(destinationTitle);
-      Search.Frontpage.openDestination(destinationURL);
+
+      Search.callback(destinationURL);
     });
 
     var searchXHR = null;
@@ -69,19 +89,16 @@ var Search = {
 
       }
     });
-
-    // If window size changes, it's probably because
-    // keyboard was closen => deactivate input
-    var windowHeight = $(window).height();
-    $(window).on('resize', function(e) {
-      if ( Search.input.isActive && windowHeight < $(window).height() ) {
-        Search.deactivate();
-      }
-      windowHeight = $(window).height();
-    });
   },
 
   deactivate: function() {
+    if ( !this.input.isActive ) {
+      return;
+    }
+
+    if ( this.deactivateCallback ) {
+      this.deactivateCallback();
+    }
     Search.prevKeyword = null;
     Search.input.deactivate();
     Search.removeSuggestResults();
@@ -104,7 +121,7 @@ var Search = {
     activate: function() {
       Search.$el.addClass('active');
       this.isActive = true;
-      Analytics.trackEvent('ui_action', 'button_press', 'focus_frontpage_search');
+      Analytics.trackEvent('ui_action', 'button_press', Search.analyticsLabel);
     },
 
     deactivate: function() {

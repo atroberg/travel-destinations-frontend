@@ -1,4 +1,6 @@
-<div id="destinationMenu">
+<div id="destinationMenu" {{#if destination.isFavorite}}class="isFavorite"{{/if}}>
+  <i class="touchFeedback fa fa-star-o removeFavorite" data-action="unfavorite">Delete favorite</i>
+  <i class="touchFeedback fa fa-star addFavorite" data-action="favorite">Add favorite</i>
   <i class="fa fa-share touchFeedback" data-action="share">Share destination</i>
   <i class="fa fa-download touchFeedback" data-action="save">Save destination</i>
   <i class="fa fa-map-marker touchFeedback" data-action="showOnMap">Show on map</i>
@@ -6,9 +8,13 @@
 </div>
 <nav>
   <i class="back fa fa-chevron-left touchFeedback"></i>
+  <div class="searchInput">
+    <i class="fa fa-search searchIcon"></i>
+    <input id="searchInput" class="search" type="text" placeholder="Search for a destination">
+  </div>
   <h1>{{destination.title}}</h1>
   <div class="right">
-    <i class="touchFeedback fa {{#if destination.isFavorite}}fa-star{{else}}fa-star-o{{/if}} favoriteBtn"></i>
+    <label class="touchFeedback fa fa-search searchBtn" for="searchInput"></label>
     <i class="menu fa fa-ellipsis-v menuBtn touchFeedback"></i>
   </div>
   <ul id="tabs_menu">

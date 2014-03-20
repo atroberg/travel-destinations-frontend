@@ -88,65 +88,6 @@ $drawer-width:17em;
 
   nav {
     text-align:left;
-
-    .searchInput {
-      position:absolute;
-      top:.2em;
-      left:13%;
-      width:86%;
-      font-size:1.5em;
-      transition:all $transition-duration;
-
-      &.active {
-        width:96%;
-        left:2%;
-      }
-
-      .searchIcon {
-        position:absolute;
-        top:2px;
-        left:1px;
-        font-size:.95em;
-        z-index:2;
-      }
-
-      input {
-        padding-left:1.5em;
-        z-index:1;
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-
-        &.loading {
-          background: {
-            image:url(../images/ajax-loader.gif);
-            repeat:no-repeat;
-            position:98% 50%;
-            size:27px;
-          }
-        }
-      }
-
-      .searchSuggestResults {
-        margin:38px 0 0 0;
-        padding:0;
-        background:#efefef;
-        box-shadow:0px 10px 22px 0px #717171;
-        position:relative;
-        overflow:auto;
-
-        li:first-child {
-          border-top:0;
-        }
-
-        li {
-          padding:.7em 1em;
-          border-top:1px solid #d7d7d7;
-        }
-      }
-    }
-
   }
 
   #frontpage_tabs_menu {
