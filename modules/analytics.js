@@ -3,7 +3,6 @@ var settings = require('./settings');
 var Analytics = {
 
   init: function() {
-    console.log('init');
     this.tracker = window.plugins.gaPlugin;
     this.tracker.init(this.successHandler, this.errorHandler, settings.analytics.id, settings.analytics.minDelayBetweenUpdate);
   },
