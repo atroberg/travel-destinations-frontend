@@ -94,6 +94,12 @@ var Wikivoyage = {
       }
 
       // Default open in external browser
+
+      // ensure path contains protocol
+      if ( url.substring(0, 2) === '//' ) {
+        url = 'http:' + url;
+      }
+
       window.open(url, '_system');
     });
 

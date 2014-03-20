@@ -20,6 +20,13 @@
     span {
       padding:.7em 0 .7em 1em;
       display:block;
+
+      .distance {
+        display:inline;
+        padding:0;
+        margin-left:.5em;
+        color:gray;
+      }
     }
 
     i {

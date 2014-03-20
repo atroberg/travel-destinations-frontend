@@ -63,6 +63,10 @@ var Weather = {
     });
   },
 
+  clearClimateTable: function() {
+    this.climateTable = null;
+  },
+
   // Parse html from wikivoyage and return table as an array
   setClimateTable: function setClimateTable($el) {
     var $weatherTable = $el.find('#climate_table');

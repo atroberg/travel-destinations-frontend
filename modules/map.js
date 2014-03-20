@@ -21,6 +21,10 @@ var Map = {
       }
     },
 
+    getCoordinates: function() {
+      return this.coordinates;
+    },
+
     openExternalApp: function() {
       if ( this.coordinates ) {
         var url = 'geo:' + this.coordinates.latitude + ',' + this.coordinates.longitude

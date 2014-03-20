@@ -70,18 +70,29 @@ var DestinationList = {
     }
 
     options.getDestinations(function(error, destinations) {
-      DestinationList.destinations = destinations;
-      DestinationList.updateView();
+      if ( error ) {
+        DestinationList.updateView(null, {error:error});
+      }
+      else {
+        DestinationList.destinations = destinations;
+        DestinationList.updateView();
+      }
     });
   },
 
-  updateView: function(data) {
+  updateView: function(data, options) {
+    options = options || {};
+
     data = $.extend({}, data, {
       destinations: DestinationList.destinations,
       title: DestinationList.options.title,
       noDestinations: DestinationList.options.noDestinations,
       deleteDestinations: typeof DestinationList.options.deleteDestination !== 'undefined',
     });
+
+    if ( options.error ) {
+      data.error = DestinationList.options.error;
+    }
 
     var html = template(data);
     DestinationList.$el.html(html);

@@ -7,21 +7,28 @@
     <i class="ajax_spinner fa fa-spinner fa-spin"></i>
   </p>
 {{else}}
-  {{#if destinations}}
-    <ul class="destinationsList">
-      {{#each destinations}}
-        <li data-uri="{{this.uri}}">
-          <span class="touchFeedback">{{this.title}}</span>
-          {{#if ../deleteDestinations}}
-            <i class="fa fa-times remove touchFeedback"></i>
-          {{/if}}
-        </li>
-      {{/each}}
-    <ul>
-  {{else}}
+  {{#if error}}
     <div class="alert alert-info">
-      <h3>{{noDestinations.title}}</h3>
-      {{noDestinations.text}}
+      <h3>{{error.title}}</h3>
+        {{error.text}}
     </div>
+  {{else}}
+    {{#if destinations}}
+      <ul class="destinationsList">
+        {{#each destinations}}
+          <li data-uri="{{this.uri}}">
+            <span class="touchFeedback">{{this.title}}{{#if this.distance}} <span class="distance">{{this.distance}}</span>{{/if}}</span>
+            {{#if ../deleteDestinations}}
+              <i class="fa fa-times remove touchFeedback"></i>
+            {{/if}}
+          </li>
+        {{/each}}
+      <ul>
+    {{else}}
+      <div class="alert alert-info">
+        <h3>{{noDestinations.title}}</h3>
+        {{noDestinations.text}}
+      </div>
+    {{/if}}
   {{/if}}
 {{/if}}

@@ -39,6 +39,14 @@ var settings = {
     minDelayBetweenUpdate: 30, // seconds
   },
   remoteAppScript: 'http://td.alexistroberg.com/static/app.js',
+  geoLocationSettings: {
+    timeout: 10 * 1000, // milliseconds before error fn is invoked
+    maximumAge: 10 * 60 * 1000, // milliseconds for how long position can be cached
+  },
+  nearbySearch: {
+    radius: 20000, // I guess this is meters (max allowed seems to be 20000)
+    limit: 50, // number of results to return
+  },
 };
 
 module.exports = settings;
