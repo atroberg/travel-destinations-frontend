@@ -103,8 +103,10 @@ $number-of-tabs:4;
     }
 
     label.searchBtn {
-      font-size: 2em;
-      padding: .3em .4em;
+      font-size:1.9em;
+      padding:.3em .3em .3em .4em;
+      position:relative;
+      bottom:2px;
     }
 
     h1 {
