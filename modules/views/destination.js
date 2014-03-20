@@ -165,6 +165,10 @@ var Destination = {
   },
 
   setDestinationFromPath: function(path) {
+
+    // Ensure we are using mobile wikivoyage
+    path = path.replace(/\/\/en\.wikivoyage\.org/, '//en.m.wikivoyage.org');
+
     Destination.destination.uri = path;
 
     var parts = path.split('/');

@@ -9,6 +9,7 @@ var DestinationList = require('./destination_list');
 var Analytics = require('../analytics');
 
 var Popular = require('../data_services/popular');
+var Nearby = require('../data_services/nearby');
 var Featured = require('../data_services/featured');
 var Favorites = require('../data_services/favorites');
 var RecentlyViewed = require('../data_services/recently_viewed');
@@ -232,6 +233,30 @@ var Frontpage = {
           }
         });
       },
+
+      nearby: function() {
+        Frontpage.addDestinationListHistory();
+        Frontpage.menu.hide();
+        Frontpage.deactivate();
+
+        DestinationList.activate({
+          title: 'Nearby',
+          showLoading: true,
+          getDestinations: function(callback) {
+            Nearby.get(function(error, nearby) {
+              callback(error, nearby);
+            });
+          },
+          error: {
+            title: "Unable to find nearby places",
+            text: "Unable to get GPS position."
+          },
+          noDestinations: {
+            title: "No destinations",
+            text: "No nearby destinations found.",
+          }
+        });
+      }
     },
 
     initActions: function() {

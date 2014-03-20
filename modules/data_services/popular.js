@@ -14,7 +14,7 @@ var Popular = {
         if ( textStatus === 'abort' ) return;
         callback('error_fetching_popular');
       }
-    })
+    });
   },
 
 };
