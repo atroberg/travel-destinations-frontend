@@ -100,6 +100,7 @@ $number-of-tabs:5;
       display:none;
       left:2%;
       width:96%;
+      z-index:100;
     }
 
     label.searchBtn {
@@ -126,6 +127,10 @@ $number-of-tabs:5;
 
       // Prevent menu from overflowing on multiple lines
       white-space:nowrap;
+
+      &.animate {
+        transition:-webkit-transform $transition-duration;
+      }
     }
 
     #tabs_menu li {

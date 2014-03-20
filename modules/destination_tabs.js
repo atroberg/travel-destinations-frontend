@@ -19,26 +19,32 @@ var DestinationTabs = {
       e.gesture.preventDefault();
     })
     .on('swiperight', function(e) {
+      $target = $(e.target);
+      if ( $target.is('nav') || $target.parents('nav').length > 0 ) {
+        return;
+      }
+
       DestinationTabs.prevTab();
     })
     .on('swipeleft', function(e) {
+      $target = $(e.target);
+      if ( $target.is('nav') || $target.parents('nav').length > 0 ) {
+        return;
+      }
+
       DestinationTabs.nextTab();
     });
 
 
     // Scrolling for tab menu (if all links don't fit on screen)
-    var maxDelta = 0;
-    var startOffset = 0;
-    var allLinksFitOnScreen = true;
+    var overflowInfo = {
+      maxDelta: 0,
+      startOffset: 0,
+      allLinksFitOnScreen: true,
+    };
 
     this.$container.on('dragstart', '#tabs_menu', function(e) {
-      var $lastLi = $(this).find('li:last');
-      var $firstLi = $(this).find('li:first');
-
-      maxDelta = - ($lastLi.offset().left + $lastLi.outerWidth() - $(window).width());
-      startOffset = $(this).offset().left;
-      var ulWidth = $lastLi.outerWidth() + $lastLi.offset().left - $firstLi.offset().left;
-      allLinksFitOnScreen = $(window).width() >= ulWidth;
+      overflowInfo = DestinationTabs.menu.getOverflowInfo($(this));
     })
 
     .on('dragleft dragright', '#tabs_menu', function(e) {
@@ -49,15 +55,15 @@ var DestinationTabs = {
       var deltaX = e.gesture.deltaX;
       var $ul = $(this);
 
-      if ( allLinksFitOnScreen ) {
+      if ( overflowInfo.allLinksFitOnScreen ) {
         var newPos = 0;
       }
 
       else {
-        var newPos = startOffset + deltaX;
+        var newPos = overflowInfo.startOffset + deltaX;
 
-        if ( newPos < maxDelta + startOffset ) {
-          newPos = maxDelta + startOffset;
+        if ( newPos < overflowInfo.maxDelta + overflowInfo.startOffset ) {
+          newPos = overflowInfo.maxDelta + overflowInfo.startOffset;
         }
         else if ( newPos > 0 ) {
           newPos = 0;
@@ -66,6 +72,25 @@ var DestinationTabs = {
 
       $ul.css('transform', 'translate3d(' + newPos + 'px,0,0)');
     });
+  },
+
+  menu: {
+    getOverflowInfo: function($el) {
+      var startOffset = $el.offset().left;
+      var $lastLi = $el.find('li:last');
+      var $firstLi = $el.find('li:first');
+
+      var maxDelta = $lastLi.offset().left + $lastLi.outerWidth() - $(window).width();
+      var overflowWidth = -startOffset + maxDelta;
+      var allLinksFitOnScreen = overflowWidth <= 0;
+
+      return {
+        startOffset: startOffset,
+        maxDelta: -maxDelta,
+        allLinksFitOnScreen: allLinksFitOnScreen,
+        overflowWidth: overflowWidth,
+      };
+    }
   },
 
   setDestinationObject: function(Destination) {
@@ -105,6 +130,19 @@ var DestinationTabs = {
 
     var value = 100 / tabCount * index;
     $viewport.css('transform', 'translate3d(' + (-value) + '%,0,0)');
+
+    // Move tab links in case they don't fully fit the viewport
+    var overflowInfo = DestinationTabs.menu.getOverflowInfo($menu);
+    if ( !overflowInfo.allLinksFitOnScreen ) {
+
+      var moveX = overflowInfo.overflowWidth / (tabCount - 1) * index;
+
+      $menu.addClass('animate');
+      $menu.css('transform', 'translate3d(' + (-moveX) + 'px,0,0)');
+      setTimeout(function() {
+        $menu.removeClass('animate');
+      }, settings.animationDurations.tabs);
+    }
 
     if ( index !== this.currentTab || options.forceRefresh ) {
 
