@@ -1,0 +1,14 @@
+{{#if destinations}}
+  <ul class="destinationsList">
+    {{#each destinations}}
+      <li data-uri="{{this.uri}}">
+        <span class="touchFeedback">{{this.title}} <span class="distance">{{this.distance}}</span></span>
+      </li>
+    {{/each}}
+  <ul>
+{{else}}
+  <div class="alert alert-info">
+    <h3>No destinations</h3>
+    No nearby destinations could be found.
+  </div>
+{{/if}}

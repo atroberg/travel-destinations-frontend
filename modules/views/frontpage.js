@@ -243,7 +243,7 @@ var Frontpage = {
           title: 'Nearby',
           showLoading: true,
           getDestinations: function(callback) {
-            Nearby.get(function(error, nearby) {
+            Nearby.getNearUserLocation(function(error, nearby) {
               callback(error, nearby);
             });
           },

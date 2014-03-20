@@ -14,69 +14,81 @@ var Nearby = {
     );
   },
 
-  get: function(callback) {
-
+  getNearUserLocation: function(callback) {
     this.getUserPosition(function(error, position) {
       if ( error ) {
         callback(error);
       }
       else {
-        var origoCoords = position.coords;
+        Nearby.get(position.coords, callback);
+      }
+    });
+  },
 
-        $.ajax({
-          url: 'http://en.m.wikivoyage.org/w/api.php',
-          data: {
-            format: 'json',
-            action: 'query',
-            colimit: 'max',
-            prop: 'info|coordinates',
-            inprop: 'url',
-            generator: 'geosearch',
-            ggscoord: '' + origoCoords.latitude + '|' + origoCoords.longitude,
-            ggsradius: settings.nearbySearch.radius,
-            ggsnamespace: 0,
-            ggslimit: settings.nearbySearch.limit,
-          },
-          type: 'GET',
-          dataType: 'json',
-          success: function(data) {
+  get: function(origoCoords, callback) {
+    Nearby.ajax(origoCoords, function(error, data) {
 
-            var destinations = [];
+      if ( error ) {
+        callback(error);
+        return;
+      }
 
-            if ( data.query && data.query.pages ) {
+      var destinations = [];
 
-              $.each(data.query.pages, function(id, page) {
+      if ( data.query && data.query.pages ) {
 
-                var coords = {
-                  latitude: page.coordinates[0].lat,
-                  longitude: page.coordinates[0].lon,
-                };
+        $.each(data.query.pages, function(id, page) {
 
-                var distance = Nearby.distanceBetweenTwoPoints(origoCoords, coords);
+          var coords = {
+            latitude: page.coordinates[0].lat,
+            longitude: page.coordinates[0].lon,
+          };
 
-                distanceInKm = distance / 1000;
-                // Round into two decimals
-                distanceInKm = Math.round(distanceInKm * 10) / 10;
+          var distance = Nearby.distanceBetweenTwoPoints(origoCoords, coords);
 
-                destinations.push({
-                  uri: page.fullurl,
-                  distanceInKm: distanceInKm,
-                  distance: Nearby.getShownDistance(distanceInKm),
-                  title: page.title,
-                });
-              });
-            }
+          distanceInKm = distance / 1000;
+          // Round into two decimals
+          distanceInKm = Math.round(distanceInKm * 10) / 10;
 
-            destinations = Nearby.sortDestinations(destinations);
-
-            callback(null, destinations);
-          },
-          error: function(e, textStatus) {
-            if ( textStatus === 'abort' ) return;
-            callback('error_fetching_popular');
-          }
+          destinations.push({
+            uri: page.fullurl,
+            distanceInKm: distanceInKm,
+            distance: Nearby.getShownDistance(distanceInKm),
+            title: page.title,
+          });
         });
       }
+
+      destinations = Nearby.sortDestinations(destinations);
+
+      callback(null, destinations);
+    });
+  },
+
+  ajax: function(origoCoords, callback) {
+    $.ajax({
+      url: 'http://en.m.wikivoyage.org/w/api.php',
+      data: {
+        format: 'json',
+        action: 'query',
+        colimit: 'max',
+        prop: 'info|coordinates',
+        inprop: 'url',
+        generator: 'geosearch',
+        ggscoord: '' + origoCoords.latitude + '|' + origoCoords.longitude,
+        ggsradius: settings.nearbySearch.radius,
+        ggsnamespace: 0,
+        ggslimit: settings.nearbySearch.limit,
+      },
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        callback(null, data);
+      },
+      error: function(e, textStatus) {
+        if ( textStatus === 'abort' ) return;
+        callback('error_fetching_popular');
+      },
     });
   },
 

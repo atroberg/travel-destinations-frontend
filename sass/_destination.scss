@@ -1,7 +1,7 @@
 $accordion-title-bgcolor:white;
 $accordion-title-color:#474747;
 $accordion-title-border-color:#e7e7e7;
-$number-of-tabs:4;
+$number-of-tabs:5;
 
 #destination {
   z-index:2;
@@ -158,7 +158,7 @@ $number-of-tabs:4;
   }
 
   #destination_tabs > .tab {
-    width:25%;
+    width:100% / $number-of-tabs;
     float:left;
     margin-top:92px;
   }

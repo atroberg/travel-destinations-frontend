@@ -2,6 +2,7 @@ var Photos = require('./subviews/photos');
 var Videos = require('./subviews/videos');
 var Weather = require('./subviews/weather');
 var Wikivoyage = require('./subviews/wikivoyage');
+var Nearby = require('./subviews/nearby');
 
 var DestinationTabs = require('../destination_tabs');
 var AppHistory = require('../history');
@@ -23,7 +24,14 @@ var Destination = {
     this.destination = {};
 
     AppHistory.addPopHandler('loadDestination', function(state) {
-      Destination.show(state.url, {addHistoryEntry:false, state: state.wikivoyageState});
+
+      var options = {
+        addHistoryEntry:false,
+        state: state.wikivoyageState,
+        nearbyHtml: state.nearbyHtml,
+      };
+
+      Destination.show(state.url, options);
     });
 
     // Tabs
@@ -98,6 +106,15 @@ var Destination = {
       });
     });
 
+    // Nearby tab
+    DestinationTabs.bindTabFunction('nearby', function($tab) {
+      Nearby.activate({
+        $el: $tab,
+        Destination: Destination,
+        onError: onError,
+      });
+    });
+
   },
 
   updateView: function() {
@@ -159,9 +176,22 @@ var Destination = {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.destination.title);
     }
 
-    // Init default tab
-    DestinationTabs.focusToTab(0, {forceRefresh: true, forceAnalyticsTrack: true});
 
+    if ( options.nearbyHtml ) {
+      var initTab = 4;
+      Nearby.setCached(options.nearbyHtml);
+      // Need to clear wiki photos and weather, because wikivoyage tab hasn't
+      // loaded and therefore some info is still from previous page
+      Photos.clear();
+      Weather.clearClimateTable();
+    }
+    else {
+      var initTab = 0;
+      Nearby.clearCached();
+    }
+
+    // Init tab
+    DestinationTabs.focusToTab(initTab, {forceRefresh: true, forceAnalyticsTrack: true});
   },
 
   setDestinationFromPath: function(path) {
