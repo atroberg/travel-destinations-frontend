@@ -54,7 +54,10 @@ var Frontpage = {
   initSearch: function() {
     Search.init({
       $el: this.$frontpage.find('.searchInput'),
-      Frontpage: Frontpage,
+      callback: function(uri) {
+        Frontpage.openDestination(uri);
+      },
+      analyticsLabel: 'focus_frontpage_search',
     });
   },
 
