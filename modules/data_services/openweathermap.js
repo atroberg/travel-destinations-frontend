@@ -26,15 +26,17 @@ var iconConversions = {
 var OpenWeatherMap = {
 
   getForecast: function(options, callback) {
-    $.ajax({
-      url: 'http://api.openweathermap.org/data/2.5/forecast/daily',
-      data: {
-        q: options.q,
+
+    var data = $.extend({
         mode: 'json',
         units: 'metric',
-        cnt: options.days || 4,
-        APPID: settings.openWeatherMapKey,
-      },
+        cnt: 4,
+        APPID: settings.openWeatherMapKey
+    }, options);
+
+    $.ajax({
+      url: 'http://api.openweathermap.org/data/2.5/forecast/daily',
+      data: data,
       type: 'GET',
       dataType: 'json',
       success: function(data) {

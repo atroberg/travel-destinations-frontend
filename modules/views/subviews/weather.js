@@ -1,6 +1,7 @@
 var OpenWeatherMap = require('../../data_services/openweathermap');
 var weatherTemplate = require('../../../templates/weather.hbs');
 var moment = require('moment');
+var Map = require('../../map');
 
 var Weather = {
 
@@ -39,10 +40,20 @@ var Weather = {
 
   showForecast: function(keyword) {
 
-    OpenWeatherMap.getForecast({
-        q: keyword,
-      },
-      function(error, forecastList) {
+    var params = {};
+
+    var coordinates = Map.getCoordinates();
+
+    if ( coordinates ) {
+      params.lat = coordinates.latitude;
+      params.lon = coordinates.longitude;
+    }
+    // Use title
+    else {
+      params.q = keyword;
+    }
+
+    OpenWeatherMap.getForecast(params, function(error, forecastList) {
 
         if ( error ) {
           Weather.forecastList = null;
