@@ -3,10 +3,15 @@ var Analytics = require('./analytics');
 
 var DestinationTabs = {
 
-  init: function() {
+  init: function(options) {
+    this.Destination = options.Destination;
+    this.$container = options.$el;
+    this.initEventHandlers();
+  },
+
+  clear: function() {
     this.clearCache();
     this.currentTab = 0;
-    this.initEventHandlers();
   },
 
   initEventHandlers: function() {
@@ -91,14 +96,6 @@ var DestinationTabs = {
         overflowWidth: overflowWidth,
       };
     }
-  },
-
-  setDestinationObject: function(Destination) {
-    this.Destination = Destination;
-  },
-
-  setElement: function setElement($el) {
-    this.$container = $el;
   },
 
   tabFunctions: {},

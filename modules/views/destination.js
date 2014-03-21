@@ -34,10 +34,6 @@ var Destination = {
       Destination.show(state.url, options);
     });
 
-    // Tabs
-    DestinationTabs.setElement(this.$el);
-    DestinationTabs.setDestinationObject(this);
-
     var onError = function onError(e) {
       Destination.showAjaxFailed();
     };
@@ -144,6 +140,12 @@ var Destination = {
     setTimeout(function(){
       Destination.$el.removeClass('animate');
     }, settings.animationDurations.page);
+
+    // Tabs
+    DestinationTabs.init({
+      $el: this.$el,
+      Destination: this,
+    });
   },
 
   deactivate: function() {
@@ -167,7 +169,7 @@ var Destination = {
 
     this.setDestinationFromPath(path);
 
-    DestinationTabs.init();
+    DestinationTabs.clear();
 
     this.updateView();
 
@@ -175,7 +177,6 @@ var Destination = {
     if ( options.addHistoryEntry ) {
       AppHistory.push({url:path, popHandler: 'loadDestination'}, Destination.destination.title);
     }
-
 
     if ( options.nearbyHtml ) {
       var initTab = 4;
