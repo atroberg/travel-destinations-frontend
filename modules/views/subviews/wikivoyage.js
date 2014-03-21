@@ -51,7 +51,7 @@ var Wikivoyage = {
       }
 
       // Check if relative url => load from wikivoyage
-      if ( url.match(/^\/\//) === null
+      if ( url.match(/^\/\//) === null && url.match(/^[a-z]+:/i) === null
             && url.match(/:\/\//) === null ) {
 
         // Check if section link
