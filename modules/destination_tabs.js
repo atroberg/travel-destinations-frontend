@@ -152,7 +152,7 @@ var DestinationTabs = {
       var $prevTab = $viewport.find('.tab:eq(' + this.currentTab + ')');
 
       // If not retrying to load the same tab
-      if ( this.currentTab !== index && $prevTab.find('> .tabNotLoaded').length === 0 ) {
+      if ( this.currentTab !== index && $prevTab.find('> .tabNotLoaded, > .ajaxError').length === 0 ) {
         this.htmlCache[this.currentTab] = $prevTab.html();
 
         // Delete contents only after animation is complete
