@@ -53,6 +53,8 @@ var Search = {
       var destinationTitle = $li.text();
       var destinationURL = 'http://en.m.wikivoyage.org/wiki/' + Wikivoyage.titleToURL(destinationTitle);
 
+      Search.input.allowScrolling();
+
       Search.callback(destinationURL);
     });
 
@@ -108,7 +110,7 @@ var Search = {
     var html = template({results: results});
     this.removeSuggestResults();
 
-    var height = $(window).height() - this.$el.parent().height();
+    var height = $(window).height() - ( this.$el.find('input').outerHeight() + 2* this.$el.position().top );
     this.$el.append(html);
     this.$el.find('.searchSuggestResults').css('max-height', height + 'px');
   },
@@ -119,12 +121,20 @@ var Search = {
 
   input: {
     activate: function() {
+      // Prevent scrolling
+      $('body, #frontpage').addClass('noScrolling');
+
       Search.$el.addClass('active');
       this.isActive = true;
       Analytics.trackEvent('ui_action', 'button_press', Search.analyticsLabel);
     },
 
+    allowScrolling: function() {
+      $('body, #frontpage').removeClass('noScrolling');
+    },
+
     deactivate: function() {
+      this.allowScrolling();
       Search.$el.removeClass('active');
       Search.$el.find('input').val('').blur();
       this.isActive = false;

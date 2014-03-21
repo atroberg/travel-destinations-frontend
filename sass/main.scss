@@ -24,6 +24,10 @@ body {
   font-family:'RobotoLight';
 }
 
+.noScrolling {
+  overflow:hidden !important;
+}
+
 .touchFeedback.touchdown, a.touchdown {
   background:#d3d3d3;
 }
