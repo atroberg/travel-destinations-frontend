@@ -1,4 +1,7 @@
 <ul class="searchSuggestResults">
+  {{#if error}}
+    <li class="noResults touchFeedback"><i class="fa fa-exclamation-circle"></i> Can't connect to server</li>
+  {{else}}
     {{#if results}}
       {{#each results}}
         <li class="touchFeedback">{{this}}</li>
@@ -6,4 +9,5 @@
     {{else}}
       <li class="noResults touchFeedback">No results</li>
     {{/if}}
+  {{/if}}
 </ul>

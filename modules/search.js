@@ -84,7 +84,7 @@ var Search = {
         searchXHR = Wikivoyage.search({
           keyword: keyword,
           callback: function(error, results) {
-            Search.updateView(results);
+            Search.updateView(error, results);
             Search.input.hideLoading();
           }
         });
@@ -106,8 +106,8 @@ var Search = {
     Search.removeSuggestResults();
   },
 
-  updateView: function(results) {
-    var html = template({results: results});
+  updateView: function(error, results) {
+    var html = template({error: error, results: results});
     this.removeSuggestResults();
 
     var height = $(window).height() - ( this.$el.find('input').outerHeight() + 2* this.$el.position().top );

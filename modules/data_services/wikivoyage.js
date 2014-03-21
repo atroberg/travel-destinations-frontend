@@ -81,7 +81,8 @@ var Wikivoyage = {
       success: function(data) {
         options.callback(null, data[1]);
       },
-      error: function(msg) {
+      error: function(msg, textStatus) {
+        if ( textStatus === 'abort' ) return;
         options.callback(msg);
       },
     });
