@@ -47,6 +47,7 @@ var settings = {
     radius: 20000, // I guess this is meters (max allowed seems to be 20000)
     limit: 50, // number of results to return
   },
+  ajaxCache: true, // use custom ajax caching (see issue #22)
 };
 
 module.exports = settings;

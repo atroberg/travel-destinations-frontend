@@ -14,7 +14,9 @@ $(document).ready(function initApp() {
 
   AppHistory.init();
 
-  Ajax.init();
+  if ( settings.ajaxCache ) {
+    Ajax.init();
+  }
 
   document.addEventListener('resume', function onResume() {
     $('.opening_external_app').removeClass('opening_external_app');
